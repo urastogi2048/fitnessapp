@@ -71,5 +71,5 @@ yarn-error.log*
 ############################
 # Environment / Secrets
 ############################
-.env
-.env.*
+**/.env
+**/.env.*
