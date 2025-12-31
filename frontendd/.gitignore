@@ -1,0 +1,75 @@
+############################
+# Miscellaneous
+############################
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
+
+############################
+# IDEs
+############################
+# IntelliJ / Android Studio
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# VS Code (keep commented if you want settings tracked)
+.vscode/
+
+############################
+# Flutter / Dart
+############################
+.dart_tool/
+.packages
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub/
+.pub-cache/
+build/
+coverage/
+**/doc/api/
+
+############################
+# iOS
+############################
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/ephemeral/
+ios/Flutter/.last_build_id
+
+############################
+# Android
+############################
+android/.gradle/
+android/local.properties
+android/key.properties
+android/app/debug.keystore
+
+# Android build outputs
+android/app/debug/
+android/app/profile/
+android/app/release/
+
+############################
+# Node / Backend
+############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+############################
+# Environment / Secrets
+############################
+.env
+.env.*
