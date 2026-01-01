@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/core/onboardingstorage.dart';
@@ -6,6 +7,7 @@ import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/signup.dart';
 import 'package:frontendd/features/home/homescreen.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
+import 'package:frontendd/features/auth/authstate.dart';
 
 void main() {
   runApp(
@@ -41,6 +43,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     Future.microtask(() {
       ref.read(authProvider.notifier).checkAuthStatus();
     });
+    
   }
 
   @override
@@ -62,12 +65,27 @@ class _AuthGateState extends ConsumerState<AuthGate> {
         if (!authState.isAuthenticated) {
           return LoginPage();
         }
-        if (authState.onboardingCompleted == false) {
-          return QuestionnairePage();
-        }
-        return const HomeScreen();
+//       if (authState.onboardingCompleted == null) {
+// //          ////////////////////////////////// ref.read(authProvider.notifier).fetchCurrentUser();
+//    return const Scaffold(
+//      body: Center(child: Text("Loading...")),
+//    );
+//  }
+if (authState.onboardingCompleted == null) {
+    return const Scaffold(
+      body: Center(child: CircularProgressIndicator()),
+    );
+  }
+
+if (authState.onboardingCompleted == false) {
+  return QuestionnairePage();
+}
+
+return const HomeScreen();
+
       
     
   }
 }
 
+  

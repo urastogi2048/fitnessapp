@@ -2,13 +2,13 @@ class AuthState {
   final bool isLoading;
   final bool isuserloading;
   final bool isAuthenticated;
-  final bool? onboardingCompleted;
+  final bool ?onboardingCompleted;
   final String?error;
   AuthState({
     this.isLoading=false,
     this.isuserloading=false,
     this.isAuthenticated=false,
-    this.onboardingCompleted=null,
+    this.onboardingCompleted,
 
     this.error,
      });

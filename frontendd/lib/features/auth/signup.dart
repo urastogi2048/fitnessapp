@@ -122,7 +122,7 @@ class SignUpPage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: () async {
                               final email = emailCtrl.text.trim();
                                 final password = passwordCtrl.text;
                                 final username = usernameCtrl.text.trim();
@@ -150,7 +150,7 @@ class SignUpPage extends ConsumerWidget {
                                       return;
                                     }
 
-                              ref.read(authProvider.notifier).signup(
+                              await ref.read(authProvider.notifier).signup(
                                 usernameCtrl.text,
                                
                                 emailCtrl.text,

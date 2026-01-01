@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontendd/components/customappbar.dart';
+import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/qprovider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/qrepo.dart';
@@ -22,13 +23,19 @@ class QuestionnairePage extends ConsumerWidget {
     try{
       final qrepo = QRepo();
       await qrepo.saveProfile(age: qstate.age!, gender: qstate.gender!, weight: qstate.weight!, height: qstate.height!, bodyType: qstate.bodyType!, goal: qstate.goal!);
-      await OnboardingStorage.markCompleted();
+      //await OnboardingStorage.markCompleted();
       //await onboardingCompleted=true;
+     // await ref.read(authProvider.notifier).fetchCurrentUser();
+    await ref.read(authProvider.notifier).markOnboardingComplete();
+
+
+     // await ref.read(authProvider.notifier).fetchCurrentUser();
+
     
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const HomeScreen()),
-    );
+    // Navigator.pushReplacement(
+    //   context,
+    //   MaterialPageRoute(builder: (_) => const HomeScreen()),
+    //  );
   }
   catch(e){
     ScaffoldMessenger.of(context).showSnackBar(

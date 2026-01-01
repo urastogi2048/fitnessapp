@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 class ApiService{
-  static const String baseUrl="http://192.168.29.239:5000";
+  static const String baseUrl="https://fitnessapp-backend-fpmk.onrender.com";
   Future<Map<String, dynamic>> post(
     String endpoint, 
     Map<String,dynamic> body,  {

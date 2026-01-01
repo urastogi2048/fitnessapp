@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/core/onboardingstorage.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
+import 'package:frontendd/features/auth/authstate.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
 import 'package:frontendd/features/auth/signup.dart';
 import 'package:frontendd/features/home/homescreen.dart';
@@ -23,18 +24,18 @@ Widget build(BuildContext context, WidgetRef ref) {
       );
     }
     if (authstate.isAuthenticated)  {
-      final onboardingCompleted = await  OnboardingStorage.isCompleted();
-      if(!onboardingCompleted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => QuestionnairePage()),
-        );
-        return;
-      }
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeScreen()),
-      );
+      final onboardingCompleted = authstate.onboardingCompleted!;
+      // if(!onboardingCompleted) {
+      //   Navigator.pushReplacement(
+      //     context,
+      //     MaterialPageRoute(builder: (_) => QuestionnairePage()),
+      //   );
+      //   return;
+      // }
+      // Navigator.pushReplacement(
+      //   context,
+      //   MaterialPageRoute(builder: (_) => const HomeScreen()),
+      // );
     }
   });
 
