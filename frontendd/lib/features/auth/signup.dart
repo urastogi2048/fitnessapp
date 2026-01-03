@@ -123,46 +123,33 @@ class SignUpPage extends ConsumerWidget {
                               ),
                             ),
                             onPressed: () async {
-                              final email = emailCtrl.text.trim();
-                                final password = passwordCtrl.text;
-                                final username = usernameCtrl.text.trim();
+  final email = emailCtrl.text.trim();
+  final password = passwordCtrl.text;
+  final username = usernameCtrl.text.trim();
 
-                                if (username.isEmpty) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("Username cannot be empty")),
-                                  );
-                                  return;
-                                }
+  if (username.isEmpty || !isValidEmail(email) || !isValidPassword(password)) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Please fill all fields correctly")),
+    );
+    return;
+  }
 
-                                if (!isValidEmail(email)) {
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    const SnackBar(content: Text("Please enter a valid email address")),
-                                  );
-                                  return;
-                                }
+  await ref.read(authProvider.notifier).signup(username, email, password);
 
-                                    if (!isValidPassword(password)) {
-                                      ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                          content: Text("Password must be at least 6 characters long"),
-                                        ),
-                                      );
-                                      return;
-                                    }
-
-                              await ref.read(authProvider.notifier).signup(
-                                usernameCtrl.text,
-                               
-                                emailCtrl.text,
-                                passwordCtrl.text,
-                              );
-                              if ( authstate.error == null) {
-                                      Navigator.pushReplacement(
-                                        context,
-                                        MaterialPageRoute(builder: (_) => LoginPage()),
-                                      );
-                                    }
-                              },
+  // Use the latest state to check if signup was successful
+  final currentState = ref.read(authProvider);
+  if (currentState.error == null && !currentState.isLoading) {
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Account created! Please Log In.")),
+      );
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => LoginPage()),
+      );
+    }
+  }
+},
                             child:  Text(
                               "Sign Up",
                               style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily,),

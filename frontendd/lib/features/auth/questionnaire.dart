@@ -17,66 +17,49 @@ class QuestionnairePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    ref.listen<Qstate>(qprovider, (prev, next) async {
+      // ✅ LAST STEP IS 5, NOT 6
+      if (prev?.step != 5 && next.step == 6) {
+        try {
+          await QRepo().saveProfile(
+            age: next.age!,
+            gender: next.gender!,
+            weight: next.weight!,
+            height: next.height!,
+            bodyType: next.bodyType!,
+            goal: next.goal!,
+          );
+          await OnboardingStorage.markCompleted();
+          // 🔥 THIS IS WHAT UNBLOCKS AUTHGATE
+          await ref
+              .read(authProvider.notifier)
+              .fetchUser();
+
+        } catch (e) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(e.toString())),
+          );
+        }
+      }
+    });
+
     final qstate = ref.watch(qprovider);
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-  if (qstate.step > 5 ) {
-    try{
-      final qrepo = QRepo();
-      await qrepo.saveProfile(age: qstate.age!, gender: qstate.gender!, weight: qstate.weight!, height: qstate.height!, bodyType: qstate.bodyType!, goal: qstate.goal!);
-      //await OnboardingStorage.markCompleted();
-      //await onboardingCompleted=true;
-     // await ref.read(authProvider.notifier).fetchCurrentUser();
-    await ref.read(authProvider.notifier).markOnboardingComplete();
 
-
-     // await ref.read(authProvider.notifier).fetchCurrentUser();
-
-    
-    // Navigator.pushReplacement(
-    //   context,
-    //   MaterialPageRoute(builder: (_) => const HomeScreen()),
-    //  );
-  }
-  catch(e){
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString())),
-      );
-  }
-}});
-
-    
     return Scaffold(
-     appBar: CustomAppBar(
-  title: "Questionnaire",
-  actions: [
-    IconButton(
-      icon: const Icon(Icons.notifications, color: Colors.white),
-      onPressed: () {},
-    ),
-  ],
-),
-
-      body:
-      
-
-         
-          Center(
-          
-          child: qstate.step == 0 ? 
-          AgeQuestion(qstate: qstate, ref: ref) : qstate.step ==1 ? 
-          GenderQuestion(qstate: qstate, ref: ref) : qstate.step ==2 ? 
-          WeightQuestion(qstate: qstate, ref: ref) : qstate.step ==3 ?
-          HeightQuestion(qstate: qstate, ref: ref) : qstate.step ==4 ?
-          BodyTypeQuestion(qstate: qstate, ref: ref) :
-          GoalQuestion(qstate: qstate, ref: ref)
-          
-               ),
-       
-
+      appBar: CustomAppBar(title: "Questionnaire"),
+      body: switch (qstate.step) {
+        0 => AgeQuestion(qstate: qstate, ref: ref),
+        1 => GenderQuestion(qstate: qstate, ref: ref),
+        2 => WeightQuestion(qstate: qstate, ref: ref),
+        3 => HeightQuestion(qstate: qstate, ref: ref),
+        4 => BodyTypeQuestion(qstate: qstate, ref: ref),
+        _ => GoalQuestion(qstate: qstate, ref: ref, context: context),
+      },
     );
   }
-
 }
+
 Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
   final age = qstate.age ?? 18;
 
@@ -628,7 +611,7 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
     ),
   );
 }
-Widget GoalQuestion({required Qstate qstate, required WidgetRef ref}) {
+Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required BuildContext context}) {
   final selected = qstate.goal;
 
   Widget option(String label) {
@@ -725,27 +708,35 @@ Widget GoalQuestion({required Qstate qstate, required WidgetRef ref}) {
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                ),
-                onPressed: () {
-                  ref.read(qprovider.notifier).nextStep();
-                },
-                child: Text(
-                  'Next',
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
+              child: // Inside GoalQuestion widget
+ElevatedButton(
+  onPressed: () async {
+    // 1. Manually trigger the save
+    try {
+      final currentQ = ref.read(qprovider);
+      await QRepo().saveProfile(
+        age: currentQ.age!,
+        gender: currentQ.gender!,
+        weight: currentQ.weight!,
+        height: currentQ.height!,
+        bodyType: currentQ.bodyType!,
+        goal: currentQ.goal!, // Ensure the goal is set before clicking
+      );
+
+      // 2. Mark locally
+      await OnboardingStorage.markCompleted();
+
+      // 3. Refresh Auth State - This is what makes HomeScreen appear
+      await ref.read(authProvider.notifier).fetchUser();
+      
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error saving: $e"))
+      );
+    }
+  },
+  child: const Text("Finish"),
+)
             ),
           ],
         ),

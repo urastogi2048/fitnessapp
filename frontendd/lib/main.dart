@@ -1,21 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontendd/core/onboardingstorage.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/login.dart';
-import 'package:frontendd/features/auth/signup.dart';
-import 'package:frontendd/features/home/homescreen.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
-import 'package:frontendd/features/auth/authstate.dart';
+import 'package:frontendd/features/home/homescreen.dart';
 
-void main() {
-  runApp(
-  const ProviderScope(
-    child: MainApp(),
-  ),
-  );
-
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 class MainApp extends StatelessWidget {
@@ -23,12 +15,13 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
       home: AuthGate(),
     );
   }
 }
+
 class AuthGate extends ConsumerStatefulWidget {
   const AuthGate({super.key});
 
@@ -37,55 +30,33 @@ class AuthGate extends ConsumerStatefulWidget {
 }
 
 class _AuthGateState extends ConsumerState<AuthGate> {
+  bool _initialized = false;
+
   @override
-  void initState() {
-    super.initState();
-    Future.microtask(() {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_initialized) {
       ref.read(authProvider.notifier).checkAuthStatus();
-    });
-    
+      _initialized = true;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final authState = ref.watch(authProvider);
+    final auth = ref.watch(authProvider);
 
-   
-     
-     
-        
-        if (authState.isLoading || authState.isuserloading ) {
-          return const Scaffold(
-            body: Center(
-              child: CircularProgressIndicator(),
-            ),
-          );
-        }
-       // final onboardingDone = snapshot.data ?? false;
-        if (!authState.isAuthenticated) {
-          return LoginPage();
-        }
-//       if (authState.onboardingCompleted == null) {
-// //          ////////////////////////////////// ref.read(authProvider.notifier).fetchCurrentUser();
-//    return const Scaffold(
-//      body: Center(child: Text("Loading...")),
-//    );
-//  }
-if (authState.onboardingCompleted == null) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
-  }
+    if (auth.isLoading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
-if (authState.onboardingCompleted == false) {
-  return QuestionnairePage();
-}
+    if (!auth.isAuthenticated) {
+      return LoginPage();
+    }
 
-return const HomeScreen();
+    if (!auth.onboardingCompleted) {
+      return const QuestionnairePage();
+    }
 
-      
-    
+    return const HomeScreen();
   }
 }
-
-  

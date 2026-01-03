@@ -17,6 +17,7 @@ dependencies:
   flutter_ruler_picker: ^1.0.6
   flutter_scale_ruler: ^1.0.0
   numberpicker: ^2.1.2
+  state_notifier: ^1.0.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

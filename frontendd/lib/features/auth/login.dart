@@ -1,54 +1,42 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:frontendd/core/onboardingstorage.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
-import 'package:frontendd/features/auth/authstate.dart';
-import 'package:frontendd/features/auth/questionnaire.dart';
 import 'package:frontendd/features/auth/signup.dart';
-import 'package:frontendd/features/home/homescreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class LoginPage extends ConsumerWidget {
-   LoginPage({super.key});
+  LoginPage({super.key});
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-@override
-Widget build(BuildContext context, WidgetRef ref) {
-  
-  final authstate = ref.watch(authProvider);
-  WidgetsBinding.instance.addPostFrameCallback((_) async {
-    if (authstate.error != null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(authstate.error!)),
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    // Watch the auth state to react to changes
+    final authstate = ref.watch(authProvider);
+
+    // Handle Errors (Show SnackBar if login fails)
+    ref.listen<String?>(authProvider.select((s) => s.error), (previous, next) {
+      if (next != null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(next), backgroundColor: Colors.redAccent),
+        );
+      }
+    });
+
+    // If loading, show a full-screen indicator
+    if (authstate.isLoading) {
+      return const Scaffold(
+        backgroundColor: Colors.black,
+        body: Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 145, 3, 3))),
       );
     }
-    if (authstate.isAuthenticated)  {
-      final onboardingCompleted = authstate.onboardingCompleted!;
-      // if(!onboardingCompleted) {
-      //   Navigator.pushReplacement(
-      //     context,
-      //     MaterialPageRoute(builder: (_) => QuestionnairePage()),
-      //   );
-      //   return;
-      // }
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (_) => const HomeScreen()),
-      // );
-    }
-  });
 
-  if (authstate.isLoading) {
-    return const Scaffold(
-      body: Center(child: CircularProgressIndicator()),
-    );
-  }
-
-  return Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
-         
+          // Background Image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -58,7 +46,7 @@ Widget build(BuildContext context, WidgetRef ref) {
             ),
           ),
 
-          
+          // Gradient Overlay
           Container(
             decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -72,7 +60,7 @@ Widget build(BuildContext context, WidgetRef ref) {
             ),
           ),
 
-         
+          // Login Form Card
           Align(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -102,11 +90,13 @@ Widget build(BuildContext context, WidgetRef ref) {
                           ),
                         ),
                         const SizedBox(height: 8),
-                         Text(
+                        Text(
                           "Build strength. Stay consistent.",
-                          style: TextStyle(color: Colors.white70, fontFamily: GoogleFonts.poppins().fontFamily,),
+                          style: TextStyle(
+                            color: Colors.white70,
+                            fontFamily: GoogleFonts.poppins().fontFamily,
+                          ),
                         ),
-
                         const SizedBox(height: 24),
                         
                         _inputField("Email", emailController),
@@ -126,14 +116,26 @@ Widget build(BuildContext context, WidgetRef ref) {
                               ),
                             ),
                             onPressed: () {
-                              ref.read(authProvider.notifier).login(
-                            emailController.text.trim(),
-                                  passwordController.text.trim(),
-                               );
+                              // Perform Login
+                              final email = emailController.text.trim();
+                              final password = passwordController.text.trim();
+
+                              if (email.isEmpty || password.isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(content: Text("Please fill in all fields")),
+                                );
+                                return;
+                              }
+
+                              ref.read(authProvider.notifier).login(email, password);
                             },
-                            child:  Text(
+                            child: Text(
                               "Login",
-                              style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily,),
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.white,
+                                fontFamily: GoogleFonts.poppins().fontFamily,
+                              ),
                             ),
                           ),
                         ),
@@ -144,14 +146,15 @@ Widget build(BuildContext context, WidgetRef ref) {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              
                               Text(
                                 "Don't have an account? ",
-                                style: TextStyle(color: Colors.white70, fontFamily: GoogleFonts.poppins().fontFamily,),
+                                style: TextStyle(
+                                  color: Colors.white70,
+                                  fontFamily: GoogleFonts.poppins().fontFamily,
+                                ),
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  // Navigate to signup page
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(builder: (context) => SignUpPage()),
@@ -181,14 +184,20 @@ Widget build(BuildContext context, WidgetRef ref) {
     );
   }
 
-  static Widget _inputField(String hint, TextEditingController controller,{bool isPassword = false}) {
+  static Widget _inputField(String hint, TextEditingController controller, {bool isPassword = false}) {
     return TextField(
       controller: controller,
       obscureText: isPassword,
-      style:  TextStyle(color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily,),
+      style: TextStyle(
+        color: Colors.white,
+        fontFamily: GoogleFonts.poppins().fontFamily,
+      ),
       decoration: InputDecoration(
         hintText: hint,
-        hintStyle: TextStyle(color: Colors.white60, fontFamily: GoogleFonts.poppins().fontFamily,),
+        hintStyle: TextStyle(
+          color: Colors.white60,
+          fontFamily: GoogleFonts.poppins().fontFamily,
+        ),
         filled: true,
         fillColor: Colors.white.withOpacity(0.15),
         border: OutlineInputBorder(
