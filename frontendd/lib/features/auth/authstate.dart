@@ -1,13 +1,17 @@
 class AuthState {
-  final bool isLoading;        // true until auth fully resolved
+  final bool isLoading;        
   final bool isAuthenticated;
   final bool onboardingCompleted;
+  final String? username;
+
   final String? error;
+  //final UserState? user;
 
   const AuthState({
     this.isLoading = true,
     this.isAuthenticated = false,
     this.onboardingCompleted = false,
+    this.username,
     this.error,
   });
 
@@ -15,6 +19,7 @@ class AuthState {
     bool? isLoading,
     bool? isAuthenticated,
     bool? onboardingCompleted,
+    String? username,
     String? error,
   }) {
     return AuthState(
@@ -22,6 +27,7 @@ class AuthState {
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       onboardingCompleted:
           onboardingCompleted ?? this.onboardingCompleted,
+      username: username ?? this.username,
       error: error,
     );
   }

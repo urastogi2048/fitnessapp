@@ -18,6 +18,9 @@ dependencies:
   flutter_scale_ruler: ^1.0.0
   numberpicker: ^2.1.2
   state_notifier: ^1.0.0
+  lottie: ^3.3.2
+  intl: ^0.20.2
+  infinite_carousel: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -28,3 +31,4 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/lottie/

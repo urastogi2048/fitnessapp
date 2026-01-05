@@ -54,9 +54,9 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     }
 
     if (!auth.onboardingCompleted) {
-      return const QuestionnairePage();
+      return  QuestionnairePage();
     }
 
-    return const HomeScreen();
+    return  HomeScreen();
   }
 }

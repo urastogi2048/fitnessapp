@@ -56,11 +56,13 @@ class AuthNotifier extends StateNotifier<AuthState> {
       
       final bool localOnboarding = await OnboardingStorage.isCompleted();
       final bool serverOnboarding = data['onboardingCompleted'] == true;
+       final String? username = data['username']; 
 
       state = AuthState(
         isLoading: false,
         isAuthenticated: true,
         onboardingCompleted: serverOnboarding || localOnboarding,
+        username: username,
         error: null,
       );
     } catch (e) {
