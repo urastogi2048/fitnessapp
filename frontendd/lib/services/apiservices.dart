@@ -30,6 +30,9 @@ class ApiService{
       String? token,
     }
   ) async {
+    print('🔵 API GET: $baseUrl$endpoint');
+    print('🔑 Token: ${token != null ? "Present (${token.substring(0, 20)}...)" : "Missing"}');
+    
     final response = await http.get(
       Uri.parse("$baseUrl$endpoint"),
       headers: {
@@ -37,6 +40,10 @@ class ApiService{
         if(token!=null) "Authorization": "Bearer $token",
       },
     );
+    
+    print('📡 Response status: ${response.statusCode}');
+    print('📦 Response body: ${response.body}');
+    
     final data = jsonDecode(response.body) as Map<String,dynamic>;
     if(response.statusCode>=400){
       throw Exception(data["error"] ?? 'Error: ${response.statusCode}');

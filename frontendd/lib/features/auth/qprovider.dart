@@ -1,10 +1,6 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'qstate.dart';
 import 'package:flutter_riverpod/legacy.dart';
-final qprovider = StateNotifierProvider<QNotifier,Qstate>((ref){
-  return QNotifier();
-});
+import 'qstate.dart';
+
 class QNotifier extends StateNotifier<Qstate> {
   QNotifier() : super(Qstate());
   void setAge(int age){
@@ -61,3 +57,7 @@ class QNotifier extends StateNotifier<Qstate> {
 
   
 }
+
+final qprovider = StateNotifierProvider<QNotifier, Qstate>((ref) {
+  return QNotifier();
+});

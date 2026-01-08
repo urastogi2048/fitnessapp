@@ -27,4 +27,10 @@ class QRepo {
 
     );
   }
+  Future<Map<String, dynamic>> fetchProfile() async {
+    return await _api.get(
+      "/user/profile",
+      token: await TokenStorage.getToken(),
+    );
+  }
 }

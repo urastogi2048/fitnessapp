@@ -7,6 +7,14 @@ import '../../core/tokenstorage.dart';
 import '../../core/onboardingstorage.dart';
 import 'authstate.dart';
 
+/// Shared service providers
+final apiServiceProvider = Provider<ApiService>((ref) => ApiService());
+
+final authServiceProvider = Provider<AuthService>((ref) {
+  final api = ref.read(apiServiceProvider);
+  return AuthService(api);
+});
+
 class AuthNotifier extends StateNotifier<AuthState> {
   final AuthService authService;
 
@@ -49,32 +57,51 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  /// 4. FETCH USER & ONBOARDING STATUS
-  Future<void> fetchUser() async {
-    try {
-      final data = await authService.getMe();
-      
-      final bool localOnboarding = await OnboardingStorage.isCompleted();
-      final bool serverOnboarding = data['onboardingCompleted'] == true;
-       final String? username = data['username']; 
-
-      state = AuthState(
-        isLoading: false,
-        isAuthenticated: true,
-        onboardingCompleted: serverOnboarding || localOnboarding,
-        username: username,
-        error: null,
-      );
-    } catch (e) {
-      await TokenStorage.deleteToken();
-      state = const AuthState(isLoading: false, isAuthenticated: false);
-    }
+  /// 4. LOGOUT
+  Future<void> logout() async {
+    await TokenStorage.deleteToken();
+    await OnboardingStorage.clearCompleted();
+    state = state.copyWith(
+      isLoading: false,
+      isAuthenticated: false,
+      onboardingCompleted: false,
+      username: null,
+      error: null,
+    );
   }
+
+  /// 5. FETCH USER & ONBOARDING STATUS
+ Future<void> fetchUser() async {
+  try {
+    final data = await authService.getMe();
+
+    final Map<String, dynamic> userData = data['user'];
+
+    final String? fetchedUsername = userData['username'];
+    final bool serverOnboarding = userData['onboardingCompleted'] == true;
+    final bool localOnboarding = await OnboardingStorage.isCompleted();
+
+    state = state.copyWith(
+      isLoading: false,
+      isAuthenticated: true,
+      onboardingCompleted: serverOnboarding || localOnboarding,
+      username: fetchedUsername,
+      error: null,
+    );
+  } catch (e) {
+    await TokenStorage.deleteToken();
+    state = state.copyWith(
+      isLoading: false,
+      isAuthenticated: false,
+      username: null,
+    );
+  }
+}
+
 }
 
 /// GLOBAL PROVIDER (Moved to bottom to ensure AuthNotifier is fully recognized)
 final authProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
-  final apiService = ApiService();
-  final authService = AuthService(apiService);
+  final authService = ref.read(authServiceProvider);
   return AuthNotifier(authService);
 });

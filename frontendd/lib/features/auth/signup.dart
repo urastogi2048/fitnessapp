@@ -2,8 +2,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/login.dart';
-import 'package:frontendd/features/auth/questionnaire.dart';
-import 'package:frontendd/features/home/homescreen.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 

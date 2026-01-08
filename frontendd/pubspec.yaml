@@ -21,6 +21,8 @@ dependencies:
   lottie: ^3.3.2
   intl: ^0.20.2
   infinite_carousel: ^1.1.1
+  sidebarx: ^0.17.2
+  sliding_clipped_nav_bar: ^3.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

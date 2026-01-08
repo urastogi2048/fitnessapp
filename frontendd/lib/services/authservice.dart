@@ -1,5 +1,4 @@
 import 'package:frontendd/core/tokenstorage.dart';
-import 'package:http/http.dart';
 
 import 'apiservices.dart';
 class AuthService{
@@ -30,6 +29,14 @@ class AuthService{
     }
    Future<Map<String, dynamic>> getMe() async {
   final token = await TokenStorage.getToken();
+  
+  print('🔐 AuthService.getMe() called');
+  print('🔑 Token from storage: ${token != null ? "EXISTS (${token.substring(0, 30)}...)" : "NULL/MISSING"}');
+  
+  if (token == null) {
+    throw Exception('No authentication token found. Please login again.');
+  }
+  
   return await api.get(
     "/user/me",
     token: token,

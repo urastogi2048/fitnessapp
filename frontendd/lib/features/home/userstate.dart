@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:frontendd/features/auth/qstate.dart';
 class UserState {
   final String Username;

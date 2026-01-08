@@ -11,4 +11,8 @@ class OnboardingStorage{
     final prefs = await SharedPreferences.getInstance();
     return prefs.getBool(_key) ?? false;
   }
+  static Future<void> clearCompleted() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.remove(_key);
+  }
 }

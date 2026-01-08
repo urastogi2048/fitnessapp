@@ -5,12 +5,8 @@ import 'package:frontendd/features/auth/qprovider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/qrepo.dart';
 import 'package:frontendd/features/auth/qstate.dart';
-import 'package:frontendd/features/home/homescreen.dart';
 import 'package:frontendd/core/onboardingstorage.dart';
-import 'package:flutter_ruler_picker/flutter_ruler_picker.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:frontendd/components/customappbar.dart';
-import 'package:flutter_scale_ruler/flutter_scale_ruler.dart';
 import 'package:numberpicker/numberpicker.dart';
 class QuestionnairePage extends ConsumerWidget {
   const QuestionnairePage({super.key});

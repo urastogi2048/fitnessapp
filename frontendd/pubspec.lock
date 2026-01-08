@@ -608,11 +608,27 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "3.0.0"
+  sidebarx:
+    dependency: "direct main"
+    description:
+      name: sidebarx
+      sha256: "970cba4be128f217b0f714322203e6933fb3a12602fef0c39248f5800184068e"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.17.2"
   sky_engine:
     dependency: transitive
     description: flutter
     source: sdk
     version: "0.0.0"
+  sliding_clipped_nav_bar:
+    dependency: "direct main"
+    description:
+      name: sliding_clipped_nav_bar
+      sha256: f43ba9856d25515faa012f4f3763080f8a93fa6edf11a3c3ca358b8982de6411
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.1.1"
   source_map_stack_trace:
     dependency: transitive
     description:
