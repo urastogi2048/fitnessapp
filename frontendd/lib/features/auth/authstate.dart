@@ -26,7 +26,7 @@ class AuthState {
       isLoading: isLoading ?? this.isLoading,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
       onboardingCompleted:
-          onboardingCompleted ?? this.onboardingCompleted,
+      onboardingCompleted ?? this.onboardingCompleted,
       username: username ?? this.username,
       error: error,
     );

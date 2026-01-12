@@ -1,5 +1,37 @@
 import mongoose from "mongoose";
 
+const workoutstatschema =new mongoose.Schema(
+    {
+        day: {
+            type: Date,
+            required: true,
+
+        },
+        duration: {
+            type: Number, //mai seconds me kr rha
+            required: true,
+            min:1,
+        },
+        bodyPart: {
+            type: String,
+            required: true,
+            enum: [
+                "chest",
+                "back",
+                "legs",
+                "arms",
+                "shoulders",
+                "cardio",
+                "core",
+
+
+            ],
+        }
+
+    },
+    {_id:false}
+
+)
 const UserSchema = new mongoose.Schema(
 {
     username: {
@@ -33,11 +65,17 @@ const UserSchema = new mongoose.Schema(
         bodyType: String,
         goal: String,
     },
-
+    
+   
     onboardingCompleted: {
         type: Boolean,
         default: false,
     },
+    workoutstat: {
+        type: [workoutstatschema],
+        default: [],
+
+    }
 },
 { timestamps: true }
 );

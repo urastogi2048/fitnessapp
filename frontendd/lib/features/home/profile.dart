@@ -163,7 +163,6 @@ class ProfileScreen extends ConsumerWidget {
     
   }
 
-  /// ---------------- COMPONENTS ----------------
 
   Widget _header(UserProfile profile) {
     final displayName = profile.username.isNotEmpty ? profile.username : 'User';

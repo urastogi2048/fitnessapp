@@ -7,8 +7,8 @@ const router = express.Router();
 router.get("/me", protect, (req, res) => {
   const user = req.user;
   
-  console.log('🔍 /user/me called for user:', user._id);
-  console.log('📋 User data:', {
+  console.log('/user/me called for user:', user._id);
+  console.log('User data:', {
     id: user._id,
     username: user.username,
     email: user.email,
@@ -26,6 +26,8 @@ router.get("/me", protect, (req, res) => {
     },
   });
 });
+
 router.post("/profile", protect, saveProfile);
+
 
 export default router;

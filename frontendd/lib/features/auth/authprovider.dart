@@ -43,16 +43,25 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// 3. LOGIN
   Future<void> login(String email, String password) async {
+    print('🔐 LOGIN: Starting login for $email');
     state = state.copyWith(isLoading: true, error: null);
     try {
+      print('📡 LOGIN: Calling authService.login...');
       final data = await authService.login(email, password);
+      print('✅ LOGIN: Received response: ${data.keys}');
+      
       if (data['token'] != null) {
+        print('🔑 LOGIN: Token received, saving...');
         await TokenStorage.saveToken(data['token']);
+        print('👤 LOGIN: Fetching user data...');
         await fetchUser();
+        print('✅ LOGIN: Login complete! Auth state: ${state.isAuthenticated}');
       } else {
+        print('❌ LOGIN: No token in response');
         state = state.copyWith(isLoading: false, error: "Token not received");
       }
     } catch (e) {
+      print('❌ LOGIN: Error during login: $e');
       state = state.copyWith(isLoading: false, error: e.toString(), isAuthenticated: false);
     }
   }
@@ -72,15 +81,20 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
   /// 5. FETCH USER & ONBOARDING STATUS
  Future<void> fetchUser() async {
+  print('👤 FETCH_USER: Starting...');
   try {
     final data = await authService.getMe();
+    print('📦 FETCH_USER: Received data keys: ${data.keys}');
 
     final Map<String, dynamic> userData = data['user'];
+    print('👤 FETCH_USER: User data keys: ${userData.keys}');
 
     final String? fetchedUsername = userData['username'];
     final bool serverOnboarding = userData['onboardingCompleted'] == true;
     final bool localOnboarding = await OnboardingStorage.isCompleted();
 
+    print('✅ FETCH_USER: Success - username: $fetchedUsername, onboarding: $serverOnboarding');
+    
     state = state.copyWith(
       isLoading: false,
       isAuthenticated: true,
@@ -89,11 +103,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       error: null,
     );
   } catch (e) {
+    print('❌ FETCH_USER: Error - $e');
+    print('🗑️ FETCH_USER: Deleting token due to error');
     await TokenStorage.deleteToken();
     state = state.copyWith(
       isLoading: false,
       isAuthenticated: false,
       username: null,
+      error: 'Failed to fetch user data: $e',
     );
   }
 }
