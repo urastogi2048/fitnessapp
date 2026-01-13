@@ -23,10 +23,13 @@ dependencies:
   infinite_carousel: ^1.1.1
   sidebarx: ^0.17.2
   sliding_clipped_nav_bar: ^3.1.1
+  freezed_annotation: ^2.4.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^5.0.0
+  freezed: ^2.4.5
+  build_runner: ^2.4.6
 
 flutter:
   uses-material-design: true

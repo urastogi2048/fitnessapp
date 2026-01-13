@@ -5,6 +5,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/components/homeappbar.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/home/profile.dart';
+import 'package:frontendd/features/weeklyworkout/exercisedata.dart';
+import 'package:frontendd/features/weeklyworkout/exercisemodel.dart';
+import 'package:frontendd/features/weeklyworkout/exerciseui.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
@@ -219,12 +222,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           ProfileScreen(),
 
-          const Center(
-            child: Text(
-              "Workouts Page",
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
+          Consumer(builder: (context,ref,child) {
+            return ListView(
+                padding : const EdgeInsets.all(16.0),
+                children:[
+                   _buildWorkoutCard(
+          context,
+          'Chest Workout',
+          BodyPart.chest,
+          Icons.fitness_center,
+        ),
+        _buildWorkoutCard(
+          context,
+          'Leg Workout',
+          BodyPart.legs,
+          Icons.directions_run,
+        ),
+        _buildWorkoutCard(
+          context,
+          'Back Workout',
+          BodyPart.back,
+          Icons.self_improvement,
+        ),
+        _buildWorkoutCard(
+          context,
+          'Arms Workout',
+          BodyPart.arms,
+          Icons.sports_martial_arts,
+        ),
+                ]
+            );
+          })
         ],
       ),
 
@@ -316,6 +344,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+  Widget _buildWorkoutCard(
+    BuildContext context,
+    String title,
+    BodyPart bodyPart,
+    IconData icon,
+    
+  ){
+    return Card(
+      color: Colors.blue,
+      margin: EdgeInsets.only(bottom:16),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: ListTile(
+        leading: Icon(icon, color: Colors.red, size: 40),
+        title: Text(title, style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),),
+        trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
+        onTap: () {
+          // Navigate to workout detail page
+          final exercises = ExerciseData.getExercises(bodyPart);
+          Navigator.push(context, MaterialPageRoute(
+            builder: (context)=> ExerciseExecutionPage(
+              exercises: exercises,
+              bodyPart: bodyPart,
+            ),
+          ));
+          
+        },
       ),
     );
   }

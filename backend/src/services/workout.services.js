@@ -1,4 +1,4 @@
-import User from "../models/user.model.js";
+import User from "../models/user.models.js";
 const normaliseDate = (date) => 
     new Date(date.getFullYear(), date.getMonth(), date.getDate());
 
