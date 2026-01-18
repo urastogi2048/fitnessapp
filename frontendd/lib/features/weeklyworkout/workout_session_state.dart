@@ -14,6 +14,8 @@ class WorkoutSessionState with _$WorkoutSessionState {
     required bool isCompleted,
     required BodyPart bodyPart,
     required Map<String, int> exerciseTimings,
+    required bool isInCooldown,
+    required int cooldownTimeRemaining,
   }) = _WorkoutSessionState;
 
   factory WorkoutSessionState.initial({
@@ -30,5 +32,7 @@ class WorkoutSessionState with _$WorkoutSessionState {
         isCompleted: false,
         bodyPart: bodyPart,
         exerciseTimings: {},
+        isInCooldown: false,
+        cooldownTimeRemaining: 15,
       );
 }

@@ -28,14 +28,137 @@ class ExerciseExecutionPage extends ConsumerWidget {
     if (sessionState.isCompleted) {
       return _buildCompletionScreen(context, sessionState);
     }
-
+    if(sessionState.isInCooldown==true){
+      final minutes = sessionState.cooldownTimeRemaining ~/60;
+      final seconds = sessionState.cooldownTimeRemaining %60;
+      final progress= sessionState.cooldownTimeRemaining/15;
+      return Scaffold(
+        backgroundColor: Colors.black,
+        appBar: AppBar(
+        backgroundColor: const Color.fromARGB(255, 128, 5, 5),
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.close, color: Colors.white),
+          onPressed: () => _showExitDialog(context, sessionNotifier),
+        ),
+        title: Text(
+          '${bodyPart.name.toUpperCase()} WORKOUT',
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
+      ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Text(
+                  "Rest Time!",
+                  style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 28),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all( 20.0),
+                child: Text(
+                  "Take a deep breath and be ready!",
+                  style: GoogleFonts.poppins(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
+              ),
+              SizedBox(height: 10),
+              Lottie.asset(
+                'assets/lottie/relax.json',
+                width: 250,
+                height: 250,
+              ),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+          SizedBox(
+            width: 200,
+            height: 200,
+            child: CircularProgressIndicator(
+              value: progress,
+              strokeWidth: 12,
+              backgroundColor: Colors.grey[800],
+              valueColor: AlwaysStoppedAnimation<Color>(
+                progress > 0.3 ? const Color.fromARGB(255, 220, 50, 50) : Colors.redAccent,
+              ),
+            ),
+          ),
+          Column(
+            children: [
+              Text(
+                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 48,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              Text(
+                sessionState.isPlaying ? 'In Progress' : 'Paused',
+                style: GoogleFonts.oswald(
+                  color: sessionState.isPlaying ? const Color.fromARGB(255, 220, 50, 50) : Colors.orange,
+                  fontSize: 14,
+                ),
+              ),
+            ],
+          ),
+                ],
+              ),
+              const SizedBox(height: 10),
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(30),
+                  boxShadow: [
+                    BoxShadow(
+                      color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.3),
+                      blurRadius: 15,
+                      spreadRadius: 2,
+                    ),
+                  ],
+                ),
+                child: ElevatedButton.icon(
+                  onPressed: () {
+                    sessionNotifier.nextExercise();
+                  },
+                  icon: const Icon(Icons.skip_next, size: 24),
+                  label: Text(
+                    "Skip Rest",
+                    style: GoogleFonts.poppins(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color.fromARGB(255, 155, 4, 4),
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    elevation: 8,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
     final currentExercise = sessionState.exercises[sessionState.currentExerciseIndex];
     final progress = (sessionState.currentExerciseIndex + 1) / sessionState.exercises.length;
 
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 17, 1, 1),
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: const Color.fromARGB(255, 128, 5, 5),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
@@ -52,6 +175,8 @@ class ExerciseExecutionPage extends ConsumerWidget {
       ),
       body: SafeArea(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
            
             _buildProgressBar(progress, sessionState),
@@ -114,13 +239,13 @@ class ExerciseExecutionPage extends ConsumerWidget {
               value: progress,
               minHeight: 8,
               backgroundColor: Colors.grey[800],
-              valueColor: const AlwaysStoppedAnimation<Color>(Colors.greenAccent),
+              valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 220, 50, 50)),
             ),
           ),
           const SizedBox(height: 8),
           Text(
             'Total time: ${_formatTime(sessionState.totalTimeSpent)}',
-            style: GoogleFonts.poppins(
+            style: GoogleFonts.oswald(
               color: Colors.grey[500],
               fontSize: 12,
             ),
@@ -147,7 +272,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
             strokeWidth: 12,
             backgroundColor: Colors.grey[800],
             valueColor: AlwaysStoppedAnimation<Color>(
-              progress > 0.3 ? Colors.greenAccent : Colors.redAccent,
+              progress > 0.3 ? const Color.fromARGB(255, 48, 253, 17) : Colors.redAccent,
             ),
           ),
         ),
@@ -155,7 +280,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
           children: [
             Text(
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: GoogleFonts.orbitron(
+              style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
@@ -163,8 +288,8 @@ class ExerciseExecutionPage extends ConsumerWidget {
             ),
             Text(
               sessionState.isPlaying ? 'In Progress' : 'Paused',
-              style: GoogleFonts.poppins(
-                color: sessionState.isPlaying ? Colors.greenAccent : Colors.orange,
+              style: GoogleFonts.oswald(
+                color: sessionState.isPlaying ? const Color.fromARGB(255, 220, 50, 50) : Colors.orange,
                 fontSize: 14,
               ),
             ),
@@ -197,7 +322,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 ? sessionNotifier.pauseTimer
                 : sessionNotifier.startTimer,
             size: 70,
-            color: Colors.greenAccent,
+            color: const Color.fromARGB(255, 155, 4, 4),
           ),
           _buildCircularButton(
             icon: Icons.skip_next,
@@ -285,7 +410,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 ElevatedButton(
                   onPressed: () => Navigator.of(context).pop(),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.greenAccent,
+                    backgroundColor: const Color.fromARGB(255, 163, 68, 68),
                     foregroundColor: Colors.black,
                     padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
                     shape: RoundedRectangleBorder(
@@ -314,7 +439,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
       decoration: BoxDecoration(
         color: Colors.grey[900],
         borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.greenAccent.withOpacity(0.3)),
+        border: Border.all(color: const Color.fromARGB(255, 109, 1, 1).withOpacity(0.3)),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -357,7 +482,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
             onPressed: () => Navigator.of(context).pop(),
             child: Text(
               'Continue',
-              style: GoogleFonts.poppins(color: Colors.greenAccent),
+              style: GoogleFonts.poppins(color: const Color.fromARGB(255, 220, 50, 50)),
             ),
           ),
           TextButton(

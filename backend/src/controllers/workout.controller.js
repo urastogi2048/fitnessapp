@@ -35,3 +35,13 @@ export const getbodypartstats=async (req,res)=> {
         res.status(500).json({message: error.message});
     }
 }
+export const getStreak=async(req,res)=> {
+    try{
+        const data=await workoutService.getStreak(req.user.id);
+        res.status(200).json({streak:data});
+    
+    }
+    catch(error){
+        res.status(500).json({message:error.message});
+    }
+}

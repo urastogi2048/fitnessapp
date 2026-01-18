@@ -22,36 +22,63 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       if(state.isCompleted) return;
       state = state.copyWith(isPlaying: true);
       timer?.cancel();
-      timer=Timer.periodic(Duration(seconds: 1), (timer) {
-        if(state.timeRemaining>0){
-          state = state.copyWith(
-          timeRemaining: state.timeRemaining - 1,
-          totalTimeSpent: state.totalTimeSpent + 1,);
-          final currentExercise = state.exercises[state.currentExerciseIndex];
-          final currentTiming = state.exerciseTimings[currentExercise.name] ?? 0;
-          state = state.copyWith(
-            exerciseTimings: {
-              ...state.exerciseTimings,
-              currentExercise.name: currentTiming + 1,
-            },
-          );
-
-
-
-
-        }
-        else {
-          pauseTimer();
-          if(state.currentExerciseIndex<state.exercises.length -1){
-            nextExercise();
-            startTimer();
-
+      
+      timer = Timer.periodic(Duration(seconds: 1), (timer) {
+        
+        if(state.isInCooldown){
+          if(state.cooldownTimeRemaining > 0){
+            state = state.copyWith(
+              cooldownTimeRemaining: state.cooldownTimeRemaining - 1,
+              totalTimeSpent: state.totalTimeSpent + 1,
+            );
+          } else {
+            
+            if(state.currentExerciseIndex < state.exercises.length - 1){
+              final nextIndex = state.currentExerciseIndex + 1;
+              state = state.copyWith(
+                currentExerciseIndex: nextIndex,
+                timeRemaining: state.exercises[nextIndex].duration,
+                isInCooldown: false,
+                cooldownTimeRemaining: 15,
+                isPlaying: true,
+              );
+            }
           }
-          else completeWorkout();
         }
-    });
-
-
+        // Handle exercise mode
+        else {
+          if(state.timeRemaining > 0){
+            state = state.copyWith(
+              timeRemaining: state.timeRemaining - 1,
+              totalTimeSpent: state.totalTimeSpent + 1,
+            );
+            
+            // Update per-exercise timing
+            final currentExercise = state.exercises[state.currentExerciseIndex];
+            final currentTiming = state.exerciseTimings[currentExercise.name] ?? 0;
+            state = state.copyWith(
+              exerciseTimings: {
+                ...state.exerciseTimings,
+                currentExercise.name: currentTiming + 1,
+              },
+            );
+          } else {
+            // Exercise finished, check if more exercises
+            if(state.currentExerciseIndex < state.exercises.length - 1){
+              // Enter cooldown mode
+              state = state.copyWith(
+                isInCooldown: true,
+                cooldownTimeRemaining: 15,
+                isPlaying: true,
+              );
+            } else {
+              // Last exercise done, complete workout
+              timer.cancel();
+              completeWorkout();
+            }
+          }
+        }
+      });
     }
     void pauseTimer(){
       timer?.cancel();
@@ -66,6 +93,8 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
           currentExerciseIndex: nextIndex,
           timeRemaining: state.exercises[nextIndex].duration,
           isPlaying: false,
+          isInCooldown: false,
+          cooldownTimeRemaining: 15,
         );
       }
     }
@@ -80,6 +109,14 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
         );
       }
     }
+    void entercooldown(){
+      state = state.copyWith(
+        isInCooldown: true,
+        cooldownTimeRemaining: 15,
+      );
+    }
+
+      
     Future<void> completeWorkout() async {
       timer?.cancel();
       state = state.copyWith(isCompleted: true);

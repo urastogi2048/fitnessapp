@@ -53,3 +53,63 @@ export const getBodyPartStats = async (userId) => {
     });
     return result;
 };
+export const getStreak=async(userId)=> {
+    const user=await User.findById(userId);
+    if(!user) throw new Error("User not found");
+    const workouts=user.workoutstat;
+    if(workouts.length===0) {
+        return {streak:0};
+    }
+    const workoutDaysSet=new Set();
+    workouts.forEach((stat) => {
+        const d=normaliseDate(stat.day);
+        workoutDaysSet.add(d.getTime());
+    });
+    const workoutDays=Array.from(workoutDaysSet).map(time=>new Date(time)).sort((a,b)=>a-b);
+    const today=normaliseDate(new Date());
+    let currentStreak=0;
+    let checkDate=new Date(today);
+    while(true){
+        const found= workoutDays.some(d=>d.getTime()===checkDate.getTime());
+        if(found){
+            currentStreak++;
+            checkDate.setDate(checkDate.getDate()-1);
+        }
+        else break;
+        
+    }
+    const todayHasWorkout=workoutDays.some(d=>d.getTime()===today.getTime());
+    if(!todayHasWorkout){
+        currentStreak=0;
+    }
+    let longestStreak=1;
+    let tempStreak=1;
+    for(let i=1;i<workoutDays.length;i++){
+        const prevDay= workoutDays[i-1];
+        const currDay= workoutDays[i];
+        const diffTime=currDay.getTime()- prevDay.getTime();
+        const diffDays= diffTime/(1000*3600*24);
+        if(diffDays===1){
+            tempStreak++;
+            longestStreak=Math.max(longestStreak,tempStreak);
+
+        }
+        else {
+            tempStreak=1;
+        }
+
+    }
+    if(workoutDays.length===1){
+        longestStreak=1;
+    }
+    const lastWorkoutDay= workoutDays[workoutDays.length-1];
+    return {
+        currentStreak,
+        longestStreak,
+        lastWorkoutDay: lastWorkoutDay.toISOString().slice('T')[0],
+    }
+
+
+
+
+}

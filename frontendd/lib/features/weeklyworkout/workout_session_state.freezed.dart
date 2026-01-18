@@ -25,6 +25,8 @@ mixin _$WorkoutSessionState {
   bool get isCompleted => throw _privateConstructorUsedError;
   BodyPart get bodyPart => throw _privateConstructorUsedError;
   Map<String, int> get exerciseTimings => throw _privateConstructorUsedError;
+  bool get isInCooldown => throw _privateConstructorUsedError;
+  int get cooldownTimeRemaining => throw _privateConstructorUsedError;
 
   /// Create a copy of WorkoutSessionState
   /// with the given fields replaced by the non-null parameter values.
@@ -49,6 +51,8 @@ abstract class $WorkoutSessionStateCopyWith<$Res> {
     bool isCompleted,
     BodyPart bodyPart,
     Map<String, int> exerciseTimings,
+    bool isInCooldown,
+    int cooldownTimeRemaining,
   });
 }
 
@@ -75,6 +79,8 @@ class _$WorkoutSessionStateCopyWithImpl<$Res, $Val extends WorkoutSessionState>
     Object? isCompleted = null,
     Object? bodyPart = null,
     Object? exerciseTimings = null,
+    Object? isInCooldown = null,
+    Object? cooldownTimeRemaining = null,
   }) {
     return _then(
       _value.copyWith(
@@ -110,6 +116,14 @@ class _$WorkoutSessionStateCopyWithImpl<$Res, $Val extends WorkoutSessionState>
                 ? _value.exerciseTimings
                 : exerciseTimings // ignore: cast_nullable_to_non_nullable
                       as Map<String, int>,
+            isInCooldown: null == isInCooldown
+                ? _value.isInCooldown
+                : isInCooldown // ignore: cast_nullable_to_non_nullable
+                      as bool,
+            cooldownTimeRemaining: null == cooldownTimeRemaining
+                ? _value.cooldownTimeRemaining
+                : cooldownTimeRemaining // ignore: cast_nullable_to_non_nullable
+                      as int,
           )
           as $Val,
     );
@@ -134,6 +148,8 @@ abstract class _$$WorkoutSessionStateImplCopyWith<$Res>
     bool isCompleted,
     BodyPart bodyPart,
     Map<String, int> exerciseTimings,
+    bool isInCooldown,
+    int cooldownTimeRemaining,
   });
 }
 
@@ -159,6 +175,8 @@ class __$$WorkoutSessionStateImplCopyWithImpl<$Res>
     Object? isCompleted = null,
     Object? bodyPart = null,
     Object? exerciseTimings = null,
+    Object? isInCooldown = null,
+    Object? cooldownTimeRemaining = null,
   }) {
     return _then(
       _$WorkoutSessionStateImpl(
@@ -194,6 +212,14 @@ class __$$WorkoutSessionStateImplCopyWithImpl<$Res>
             ? _value._exerciseTimings
             : exerciseTimings // ignore: cast_nullable_to_non_nullable
                   as Map<String, int>,
+        isInCooldown: null == isInCooldown
+            ? _value.isInCooldown
+            : isInCooldown // ignore: cast_nullable_to_non_nullable
+                  as bool,
+        cooldownTimeRemaining: null == cooldownTimeRemaining
+            ? _value.cooldownTimeRemaining
+            : cooldownTimeRemaining // ignore: cast_nullable_to_non_nullable
+                  as int,
       ),
     );
   }
@@ -211,6 +237,8 @@ class _$WorkoutSessionStateImpl implements _WorkoutSessionState {
     required this.isCompleted,
     required this.bodyPart,
     required final Map<String, int> exerciseTimings,
+    required this.isInCooldown,
+    required this.cooldownTimeRemaining,
   }) : _exercises = exercises,
        _exerciseTimings = exerciseTimings;
 
@@ -243,8 +271,13 @@ class _$WorkoutSessionStateImpl implements _WorkoutSessionState {
   }
 
   @override
+  final bool isInCooldown;
+  @override
+  final int cooldownTimeRemaining;
+
+  @override
   String toString() {
-    return 'WorkoutSessionState(exercises: $exercises, currentExerciseIndex: $currentExerciseIndex, timeRemaining: $timeRemaining, totalTimeSpent: $totalTimeSpent, isPlaying: $isPlaying, isCompleted: $isCompleted, bodyPart: $bodyPart, exerciseTimings: $exerciseTimings)';
+    return 'WorkoutSessionState(exercises: $exercises, currentExerciseIndex: $currentExerciseIndex, timeRemaining: $timeRemaining, totalTimeSpent: $totalTimeSpent, isPlaying: $isPlaying, isCompleted: $isCompleted, bodyPart: $bodyPart, exerciseTimings: $exerciseTimings, isInCooldown: $isInCooldown, cooldownTimeRemaining: $cooldownTimeRemaining)';
   }
 
   @override
@@ -271,7 +304,11 @@ class _$WorkoutSessionStateImpl implements _WorkoutSessionState {
             const DeepCollectionEquality().equals(
               other._exerciseTimings,
               _exerciseTimings,
-            ));
+            ) &&
+            (identical(other.isInCooldown, isInCooldown) ||
+                other.isInCooldown == isInCooldown) &&
+            (identical(other.cooldownTimeRemaining, cooldownTimeRemaining) ||
+                other.cooldownTimeRemaining == cooldownTimeRemaining));
   }
 
   @override
@@ -285,6 +322,8 @@ class _$WorkoutSessionStateImpl implements _WorkoutSessionState {
     isCompleted,
     bodyPart,
     const DeepCollectionEquality().hash(_exerciseTimings),
+    isInCooldown,
+    cooldownTimeRemaining,
   );
 
   /// Create a copy of WorkoutSessionState
@@ -309,6 +348,8 @@ abstract class _WorkoutSessionState implements WorkoutSessionState {
     required final bool isCompleted,
     required final BodyPart bodyPart,
     required final Map<String, int> exerciseTimings,
+    required final bool isInCooldown,
+    required final int cooldownTimeRemaining,
   }) = _$WorkoutSessionStateImpl;
 
   @override
@@ -327,6 +368,10 @@ abstract class _WorkoutSessionState implements WorkoutSessionState {
   BodyPart get bodyPart;
   @override
   Map<String, int> get exerciseTimings;
+  @override
+  bool get isInCooldown;
+  @override
+  int get cooldownTimeRemaining;
 
   /// Create a copy of WorkoutSessionState
   /// with the given fields replaced by the non-null parameter values.

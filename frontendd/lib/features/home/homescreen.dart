@@ -13,6 +13,7 @@ import 'package:lottie/lottie.dart';
 import 'package:intl/intl.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
+import 'package:frontendd/features/home/profile.dart' show profileProvider;
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -65,12 +66,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         DateFormat('EEEE').format(DateTime.now());
 
     final List<String> weekdays = [
-      'Upper Body Strength',
-      'Lower Body Strength',
-      'Cardio Endurance',
-      'Core Stability',
-      'Flexibility Training',
-      'Full Body Workout',
+      'Chest',
+      'Back',
+      'Legs',
+      'Shoulders',
+      'Arms',
+      'Core + Cardio',
       'Rest Day'
     ];
 
@@ -103,7 +104,76 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
                   ),
                   InkWell(
-                    onTap: () {},
+                    onTap: () {
+                      if(today == 'Sunday'){
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("It's Rest Day! Take a break and recharge for the week ahead."),
+                          ),
+                        );
+                         
+                      }
+                       else if(today == 'Monday'){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.chest),
+                              bodyPart: BodyPart.chest,
+                            ),
+                          ),
+                        );
+                      } else if(today == 'Tuesday'){
+                        Navigator.push( 
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.back),
+                              bodyPart: BodyPart.back,
+                            ),
+                          ),
+                        );  }
+                      else if(today == 'Wednesday'){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.legs),
+                              bodyPart: BodyPart.legs,
+                            ),
+                          ),
+                        );  }
+                      else if(today == 'Thursday'){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.shoulders),
+                              bodyPart: BodyPart.shoulders,
+                            ),
+                          ),
+                        );  }
+                      else if(today == 'Friday'){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.arms),
+                              bodyPart: BodyPart.arms,
+                            ),
+                          ),
+                        );  } else if(today == 'Saturday'){
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ExerciseExecutionPage(
+                              exercises: ExerciseData.getExercises(BodyPart.core),
+                              bodyPart: BodyPart.core,
+                            ),
+                          ),
+                        );  }
+
+                    },
                     child: SizedBox(
                       height: 160,
                       width: double.infinity,
@@ -158,20 +228,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Row(
                     children: [
                       Expanded(
-                        child: _smallCard(
-                          color:
-                              const Color.fromARGB(255, 1, 72, 4),
-                          lottie: 'assets/lottie/bodypart.json',
-                          text: "Train body part",
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = 2;
+                            });
+                          },
+                          child: _smallCard(
+                            color:
+                                const Color.fromARGB(255, 1, 72, 4),
+                            lottie: 'assets/lottie/bodypart.json',
+                            text: "Train body part",
+                          ),
                         ),
                       ),
                       const SizedBox(width: 12),
                       Expanded(
-                        child: _smallCard(
-                          color:
-                              const Color.fromARGB(255, 187, 187, 1),
-                          lottie: 'assets/lottie/growth.json',
-                          text: "Track your progress",
+                        child: InkWell(
+                          onTap: () {
+                          
+                          },
+                          child: _smallCard(
+                            color:
+                                const Color.fromARGB(255, 187, 187, 1),
+                            lottie: 'assets/lottie/growth.json',
+                            text: "Track your progress",
+                          ),
                         ),
                       ),
                     ],
@@ -222,36 +304,60 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           ProfileScreen(),
 
-          Consumer(builder: (context,ref,child) {
+          Consumer(builder: (context, ref, child) {
             return ListView(
-                padding : const EdgeInsets.all(16.0),
-                children:[
-                   _buildWorkoutCard(
-          context,
-          'Chest Workout',
-          BodyPart.chest,
-          Icons.fitness_center,
-        ),
-        _buildWorkoutCard(
-          context,
-          'Leg Workout',
-          BodyPart.legs,
-          Icons.directions_run,
-        ),
-        _buildWorkoutCard(
-          context,
-          'Back Workout',
-          BodyPart.back,
-          Icons.self_improvement,
-        ),
-        _buildWorkoutCard(
-          context,
-          'Arms Workout',
-          BodyPart.arms,
-          Icons.sports_martial_arts,
-        ),
-                ]
-            );
+                padding: const EdgeInsets.all(16.0),
+                children: [
+                  _buildWorkoutCard(
+                    context,
+                    'Chest Workout',
+                    BodyPart.chest,
+                    Icons.fitness_center,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Leg Workout',
+                    BodyPart.legs,
+                    Icons.directions_run,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Back Workout',
+                    BodyPart.back,
+                    Icons.self_improvement,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Arms Workout',
+                    BodyPart.arms,
+                    Icons.sports_martial_arts,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Shoulder Workout',
+                    BodyPart.shoulders,
+                    Icons.accessibility_new,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Core Workout',
+                    BodyPart.core,
+                    Icons.shield_moon,
+                    ref,
+                  ),
+                  _buildWorkoutCard(
+                    context,
+                    'Cardio Workout',
+                    BodyPart.cardio,
+                    Icons.favorite,
+                    ref,
+                  ),
+                ]);
           })
         ],
       ),
@@ -352,28 +458,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String title,
     BodyPart bodyPart,
     IconData icon,
-    
-  ){
+    WidgetRef ref,
+  ) {
     return Card(
-      color: Colors.blue,
-      margin: EdgeInsets.only(bottom:16),
+      color: const Color.fromARGB(255, 136, 7, 7),
+      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
       child: ListTile(
-        leading: Icon(icon, color: Colors.red, size: 40),
-        title: Text(title, style: GoogleFonts.poppins(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),),
-        trailing: Icon(Icons.arrow_forward_ios, color: Colors.white,),
+        leading: Icon(icon, color: const Color.fromARGB(255, 4, 4, 4), size: 40),
+        title: Text(
+          title,
+          style: GoogleFonts.poppins(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+          ),
+        ),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          color: Colors.white,
+        ),
         onTap: () {
-          // Navigate to workout detail page
-          final exercises = ExerciseData.getExercises(bodyPart);
-          Navigator.push(context, MaterialPageRoute(
-            builder: (context)=> ExerciseExecutionPage(
-              exercises: exercises,
-              bodyPart: bodyPart,
-            ),
-          ));
-          
+          final profileAsync = ref.watch(profileProvider);
+
+          profileAsync.whenData((profile) {
+            final goal = profile.goal ?? 'balanced';
+            final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
+
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ExerciseExecutionPage(
+                  exercises: exercises,
+                  bodyPart: bodyPart,
+                ),
+              ),
+            );
+          });
         },
       ),
     );
