@@ -5,40 +5,59 @@ import 'package:frontendd/features/auth/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 
-class SignUpPage extends ConsumerWidget {
-   SignUpPage({super.key});
-  final usernameCtrl = TextEditingController();
-  final emailCtrl = TextEditingController();
-  final passwordCtrl = TextEditingController();
-
-  bool isValidEmail(String email) {
-  final emailRegex = RegExp(
-    r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
-  );
-  return emailRegex.hasMatch(email);
-}
- bool isValidPassword(String password) {
-  return password.length >= 6;
-}
+class SignUpPage extends ConsumerStatefulWidget {
+  const SignUpPage({super.key});
 
   @override
-  
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<SignUpPage> createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends ConsumerState<SignUpPage> {
+  late TextEditingController usernameCtrl;
+  late TextEditingController emailCtrl;
+  late TextEditingController passwordCtrl;
+
+  @override
+  void initState() {
+    super.initState();
+    usernameCtrl = TextEditingController();
+    emailCtrl = TextEditingController();
+    passwordCtrl = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    usernameCtrl.dispose();
+    emailCtrl.dispose();
+    passwordCtrl.dispose();
+    super.dispose();
+  }
+
+  bool isValidEmail(String email) {
+    final emailRegex = RegExp(
+      r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$",
+    );
+    return emailRegex.hasMatch(email);
+  }
+
+  bool isValidPassword(String password) {
+    return password.length >= 6;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final authstate = ref.watch(authProvider);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-  if (authstate.error != null) {
-    ScaffoldMessenger.of(context).showSnackBar(
+      if (authstate.error != null && mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(content: Text(authstate.error!)),
     );
   }
   
 });
 
-    if(authstate.isLoading) {
-      return Scaffold ( body : Center(
-        child: CircularProgressIndicator(),
-      ));
-    }
+    // Don't show loading here - it breaks the flow
+    // The signup button has inline success/error handling
     return Scaffold(
       body: Stack(
         children: [
@@ -141,10 +160,8 @@ class SignUpPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Account created! Please Log In.")),
       );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => LoginPage()),
-      );
+      // Pop back to LoginPage (previous page on stack)
+      Navigator.pop(context);
     }
   }
 },
@@ -168,11 +185,12 @@ class SignUpPage extends ConsumerWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) =>  LoginPage()),
-                                  );
+                                  if (context.mounted) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) =>  LoginPage()),
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "Log In",

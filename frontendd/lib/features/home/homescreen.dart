@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/components/homeappbar.dart';
-import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/home/profile.dart';
+import 'package:frontendd/features/recoveryfeature/recoveryreadinesscard.dart';
 import 'package:frontendd/features/weeklyworkout/exercisedata.dart';
 import 'package:frontendd/features/weeklyworkout/exercisemodel.dart';
 import 'package:frontendd/features/weeklyworkout/exerciseui.dart';
@@ -59,9 +59,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final name =
-      ref.watch(authProvider.select((s) => s.username)) ?? "User";
-
     final String today =
         DateFormat('EEEE').format(DateTime.now());
 
@@ -82,27 +79,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       body: IndexedStack(
         index: selectedIndex,
         children: [
-         
+          // Home screen
           SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 children: [
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Padding(
-                      padding: const EdgeInsets.only(bottom: 12),
-                      child: Text(
-                        "Hi, $name",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 22,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: GoogleFonts.poppins().fontFamily,
-                        ),
-                      ),
-                    ),
-                  ),
+                  
                   InkWell(
                     onTap: () {
                       if(today == 'Sunday'){
@@ -114,64 +97,82 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                          
                       }
                        else if(today == 'Monday'){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.chest),
-                              bodyPart: BodyPart.chest,
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.chest),
+                                bodyPart: BodyPart.chest,
+                              ),
                             ),
-                          ),
-                        );
+                          );
+                        }
                       } else if(today == 'Tuesday'){
-                        Navigator.push( 
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.back),
-                              bodyPart: BodyPart.back,
+                        if (context.mounted) {
+                          Navigator.push( 
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.back),
+                                bodyPart: BodyPart.back,
+                              ),
                             ),
-                          ),
-                        );  }
+                          );
+                        }
+                      }
                       else if(today == 'Wednesday'){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.legs),
-                              bodyPart: BodyPart.legs,
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.legs),
+                                bodyPart: BodyPart.legs,
+                              ),
                             ),
-                          ),
-                        );  }
+                          );
+                        }
+                      }
                       else if(today == 'Thursday'){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.shoulders),
-                              bodyPart: BodyPart.shoulders,
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.shoulders),
+                                bodyPart: BodyPart.shoulders,
+                              ),
                             ),
-                          ),
-                        );  }
+                          );
+                        }
+                      }
                       else if(today == 'Friday'){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.arms),
-                              bodyPart: BodyPart.arms,
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.arms),
+                                bodyPart: BodyPart.arms,
+                              ),
                             ),
-                          ),
-                        );  } else if(today == 'Saturday'){
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ExerciseExecutionPage(
-                              exercises: ExerciseData.getExercises(BodyPart.core),
-                              bodyPart: BodyPart.core,
+                          );
+                        }
+                      }
+                      else if(today == 'Saturday'){
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ExerciseExecutionPage(
+                                exercises: ExerciseData.getExercises(BodyPart.core),
+                                bodyPart: BodyPart.core,
+                              ),
                             ),
-                          ),
-                        );  }
+                          );
+                        }
+                      }
 
                     },
                     child: SizedBox(
@@ -231,7 +232,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         child: InkWell(
                           onTap: () {
                             setState(() {
-                              selectedIndex = 2;
+                              selectedIndex = 1;
                             });
                           },
                           child: _smallCard(
@@ -275,6 +276,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         return Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: ClipRRect(
+                            key: ValueKey('carousel_$itemIndex'),
                             borderRadius:
                                 BorderRadius.circular(16),
                             child: Image.asset(
@@ -289,21 +291,32 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  _bigCard(
-                    color:
-                        const Color.fromARGB(255, 49, 1, 96),
-                    lottie: 'assets/lottie/Fitness.json',
-                    title: "Recovery Readiness Score",
-                    subtitle:
-                        "Your smart post-workout assistant!!",
+                  InkWell(
+                    onTap: (){
+                      if (context.mounted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Recoveryreadinesscard(),
+                          ),
+                        );
+                      }
+                    },
+                    child: _bigCard(
+                      color:
+                          const Color.fromARGB(255, 49, 1, 96),
+                      lottie: 'assets/lottie/Fitness.json',
+                      title: "Recovery Readiness Score",
+                      subtitle:
+                          "Your smart post-workout assistant!!",
+                    ),
                   ),
                 ],
               ),
             ),
           ),
 
-          ProfileScreen(),
-
+          // Workouts screen
           Consumer(builder: (context, ref, child) {
             return ListView(
                 padding: const EdgeInsets.all(16.0),
@@ -358,7 +371,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ref,
                   ),
                 ]);
-          })
+          }),
+
+          // Profile screen
+          ProfileScreen(),  
         ],
       ),
 
@@ -375,8 +391,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         },
         barItems:  [
           BarItem(icon: Icons.home, title: 'Home'),
-          BarItem(icon: Icons.person, title: 'Profile'),
           BarItem(icon: Icons.fitness_center, title: 'Workouts'),
+          BarItem(icon: Icons.person, title: 'Profile'),
         ],
       ),
     );
@@ -487,15 +503,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             final goal = profile.goal ?? 'balanced';
             final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => ExerciseExecutionPage(
-                  exercises: exercises,
-                  bodyPart: bodyPart,
+            if (context.mounted) {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ExerciseExecutionPage(
+                    exercises: exercises,
+                    bodyPart: bodyPart,
+                  ),
                 ),
-              ),
-            );
+              );
+            }
           });
         },
       ),

@@ -1,53 +1,73 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+
 class ApiService{
   static const String baseUrl="https://fitnessapp-backend-fpmk.onrender.com";
+  static const Duration timeout = Duration(seconds: 30);
+  
   Future<Map<String, dynamic>> post(
     String endpoint, 
     Map<String,dynamic> body,  {
       String? token,
     }
-  )
-  async {
-    final response = await http.post(
-      Uri.parse("$baseUrl$endpoint"),
-      headers: {
-        "Content-Type": "application/json",
-        if(token!=null) "Authorization": "Bearer $token",
-
-      },
-      body: jsonEncode(body),
-
-    );
-    final data = jsonDecode(response.body) as Map<String,dynamic>;
-    if(response.statusCode>=400){
-      throw Exception(data["error"] ?? 'Error: ${response.statusCode}');
+  ) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$baseUrl$endpoint"),
+        headers: {
+          "Content-Type": "application/json",
+          if(token!=null) "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(body),
+      ).timeout(timeout, onTimeout: () {
+        throw Exception('Request timeout - backend may be starting up, please try again');
+      });
+      
+      if(response.statusCode >= 400) {
+        try {
+          final errorData = jsonDecode(response.body) as Map<String,dynamic>;
+          throw Exception(errorData["error"] ?? 'Error: ${response.statusCode}');
+        } catch (e) {
+          throw Exception('Error: ${response.statusCode} - ${response.body}');
+        }
+      }
+      
+      final data = jsonDecode(response.body) as Map<String,dynamic>;
+      return data;
+    } catch (e) {
+      rethrow;
     }
-    return data;
   }
-  Future <Map<String,dynamic>> get (
+  
+  Future <Map<String,dynamic>> get(
     String endpoint, {
       String? token,
     }
   ) async {
-    print('🔵 API GET: $baseUrl$endpoint');
-    print('🔑 Token: ${token != null ? "Present (${token.substring(0, 20)}...)" : "Missing"}');
-    
-    final response = await http.get(
-      Uri.parse("$baseUrl$endpoint"),
-      headers: {
-        "Content-Type": "application/json",
-        if(token!=null) "Authorization": "Bearer $token",
-      },
-    );
-    
-    print('📡 Response status: ${response.statusCode}');
-    print('📦 Response body: ${response.body}');
-    
-    final data = jsonDecode(response.body) as Map<String,dynamic>;
-    if(response.statusCode>=400){
-      throw Exception(data["error"] ?? 'Error: ${response.statusCode}');
+    try {
+      final response = await http.get(
+        Uri.parse("$baseUrl$endpoint"),
+        headers: {
+          "Content-Type": "application/json",
+          if(token!=null) "Authorization": "Bearer $token",
+        },
+      ).timeout(timeout, onTimeout: () {
+        throw Exception('Request timeout - backend may be starting up, please try again');
+      });
+      
+      if(response.statusCode >= 400) {
+        try {
+          final errorData = jsonDecode(response.body) as Map<String,dynamic>;
+          throw Exception(errorData["error"] ?? 'Error: ${response.statusCode}');
+        } catch (e) {
+          throw Exception('Error: ${response.statusCode} - ${response.body}');
+        }
+      }
+      
+      final data = jsonDecode(response.body) as Map<String,dynamic>;
+      return data;
+    } catch (e) {
+      rethrow;
     }
-    return data;
   }
 }

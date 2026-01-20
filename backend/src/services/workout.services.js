@@ -79,7 +79,12 @@ export const getStreak=async(userId)=> {
         
     }
     const todayHasWorkout=workoutDays.some(d=>d.getTime()===today.getTime());
-    if(!todayHasWorkout){
+    const yesterday = new Date(today);
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayHasWorkout = workoutDays.some(d => d.getTime() === yesterday.getTime());
+    
+    // Only break streak if neither today nor yesterday has workout
+    if(!todayHasWorkout && !yesterdayHasWorkout){
         currentStreak=0;
     }
     let longestStreak=1;

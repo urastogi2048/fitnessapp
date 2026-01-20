@@ -215,10 +215,10 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 ),
               ),
             ),
-            // Timer
+            
             _buildTimer(sessionState),
             const SizedBox(height: 30),
-            // Control Buttons
+            
             _buildControlButtons(context, sessionState, sessionNotifier),
             const SizedBox(height: 40),
           ],
@@ -408,7 +408,11 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase()),
                 const SizedBox(height: 50),
                 ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () {
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 163, 68, 68),
                     foregroundColor: Colors.black,
@@ -479,7 +483,11 @@ class ExerciseExecutionPage extends ConsumerWidget {
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () {
+              if (context.mounted) {
+                Navigator.of(context).pop();
+              }
+            },
             child: Text(
               'Continue',
               style: GoogleFonts.poppins(color: const Color.fromARGB(255, 220, 50, 50)),
@@ -488,8 +496,10 @@ class ExerciseExecutionPage extends ConsumerWidget {
           TextButton(
             onPressed: () {
               sessionNotifier.pauseTimer();
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              if (context.mounted) {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              }
             },
             child: Text(
               'Exit',

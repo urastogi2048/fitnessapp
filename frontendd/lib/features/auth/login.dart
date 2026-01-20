@@ -5,33 +5,48 @@ import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class LoginPage extends ConsumerWidget {
-  LoginPage({super.key});
-
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+class LoginPage extends ConsumerStatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    // Watch the auth state to react to changes
-    final authstate = ref.watch(authProvider);
+  ConsumerState<LoginPage> createState() => _LoginPageState();
+}
 
-    // Handle Errors (Show SnackBar if login fails)
+class _LoginPageState extends ConsumerState<LoginPage> {
+  late TextEditingController emailController;
+  late TextEditingController passwordController;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    // Watch auth state to disable button during loading
+    final authstate = ref.watch(authProvider);
+    
+    // Listen for auth errors and show snackbar
     ref.listen<String?>(authProvider.select((s) => s.error), (previous, next) {
-      if (next != null) {
+      if (next != null && mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(next), backgroundColor: Colors.redAccent),
         );
       }
     });
 
-    // If loading, show a full-screen indicator
-    if (authstate.isLoading) {
-      return const Scaffold(
-        backgroundColor: Colors.black,
-        body: Center(child: CircularProgressIndicator(color: Color.fromARGB(255, 145, 3, 3))),
-      );
-    }
+    // Don't show loading here - let AuthGate handle navigation
+    // This prevents the red loader from blocking the auth state change
+    // The AuthGate will show loading and then navigate when auth state updates
 
     return Scaffold(
       body: Stack(
@@ -115,7 +130,7 @@ class LoginPage extends ConsumerWidget {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: () {
+                            onPressed: authstate.isLoading ? null : () async {
                               // Perform Login
                               final email = emailController.text.trim();
                               final password = passwordController.text.trim();
@@ -127,16 +142,30 @@ class LoginPage extends ConsumerWidget {
                                 return;
                               }
 
-                              ref.read(authProvider.notifier).login(email, password);
+                              await ref.read(authProvider.notifier).login(email, password);
+                              
+                              // After login completes, clear Navigator stack so AuthGate takes over
+                              if (mounted && ref.read(authProvider).isAuthenticated) {
+                                Navigator.of(context).popUntil((route) => route.isFirst);
+                              }
                             },
-                            child: Text(
-                              "Login",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white,
-                                fontFamily: GoogleFonts.poppins().fontFamily,
-                              ),
-                            ),
+                            child: authstate.isLoading
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  "Login",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.white,
+                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                  ),
+                                ),
                           ),
                         ),
 
@@ -155,10 +184,12 @@ class LoginPage extends ConsumerWidget {
                               ),
                               GestureDetector(
                                 onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(builder: (context) => SignUpPage()),
-                                  );
+                                  if (context.mounted) {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                                    );
+                                  }
                                 },
                                 child: Text(
                                   "Sign Up",

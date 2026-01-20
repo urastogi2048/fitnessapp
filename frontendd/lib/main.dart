@@ -4,8 +4,6 @@ import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
 import 'package:frontendd/features/home/homescreen.dart';
-import 'package:frontendd/features/weeklyworkout/exercisemodel.dart';
-import 'package:frontendd/features/weeklyworkout/exerciseui.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -32,33 +30,44 @@ class AuthGate extends ConsumerStatefulWidget {
 }
 
 class _AuthGateState extends ConsumerState<AuthGate> {
-  bool _initialized = false;
+  bool _isInitialCheck = true;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-    if (!_initialized) {
-      ref.read(authProvider.notifier).checkAuthStatus();
-      _initialized = true;
-    }
+  void initState() {
+    super.initState();
+    // Check auth status once on app startup
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await ref.read(authProvider.notifier).checkAuthStatus();
+      if (mounted) {
+        setState(() => _isInitialCheck = false);
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
 
-    if (auth.isLoading) {
-      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    // Show loading during initial check or during login/signup
+    if (_isInitialCheck) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
     }
 
+    // Not authenticated -> show login
     if (!auth.isAuthenticated) {
       return LoginPage();
     }
 
+    // Authenticated but not onboarded -> show questionnaire
     if (!auth.onboardingCompleted) {
-      return  QuestionnairePage();
+      return QuestionnairePage();
     }
 
-    return  HomeScreen();
+    // Authenticated and onboarded -> show home
+    return HomeScreen();
   }
 }

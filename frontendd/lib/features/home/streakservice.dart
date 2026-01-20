@@ -29,7 +29,7 @@ class StreakService {
       throw Exception("Not authenticated");
     }
     final data=await api.get('/workout/streak',token: token);
-    final payload=(data is Map && data['streak']!=null) ? data['streak'] : data;
+    final payload = data['streak'] ?? data;
     return StreakData.fromJson(payload as Map<String, dynamic>);
   }
 }

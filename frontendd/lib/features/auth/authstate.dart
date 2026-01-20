@@ -8,7 +8,7 @@ class AuthState {
   //final UserState? user;
 
   const AuthState({
-    this.isLoading = true,
+    this.isLoading = false,
     this.isAuthenticated = false,
     this.onboardingCompleted = false,
     this.username,
