@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/components/customappbar.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/qprovider.dart';
@@ -61,21 +62,21 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
 
   return Container(
     color: const Color.fromARGB(255, 31, 7, 7),
-    padding: const EdgeInsets.symmetric(horizontal: 24),
+    padding: EdgeInsets.symmetric(horizontal: 24.w),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Text(
           'What is your age?',
           style: TextStyle(
-            fontSize: 18,
+            fontSize: 18.sp,
             fontWeight: FontWeight.w500,
             fontFamily: GoogleFonts.poppins().fontFamily,
             color: const Color.fromARGB(255, 255, 255, 255),
           ),
         ),
 
-        const SizedBox(height: 16),
+        SizedBox(height: 16.h),
 
         AnimatedSwitcher(
           duration: const Duration(milliseconds: 150),

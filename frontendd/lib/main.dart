@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
@@ -15,9 +16,16 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: const AuthGate(),
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      builder: (_, child) {
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          home: const AuthGate(),
+        );
+      },
     );
   }
 }
@@ -35,7 +43,6 @@ class _AuthGateState extends ConsumerState<AuthGate> {
   @override
   void initState() {
     super.initState();
-    // Check auth status once on app startup
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await ref.read(authProvider.notifier).checkAuthStatus();
       if (mounted) {
@@ -48,7 +55,6 @@ class _AuthGateState extends ConsumerState<AuthGate> {
   Widget build(BuildContext context) {
     final auth = ref.watch(authProvider);
 
-    // Show loading during initial check or during login/signup
     if (_isInitialCheck) {
       return const Scaffold(
         body: Center(
@@ -57,17 +63,14 @@ class _AuthGateState extends ConsumerState<AuthGate> {
       );
     }
 
-    // Not authenticated -> show login
     if (!auth.isAuthenticated) {
       return LoginPage();
     }
 
-    // Authenticated but not onboarded -> show questionnaire
     if (!auth.onboardingCompleted) {
       return QuestionnairePage();
     }
 
-    // Authenticated and onboarded -> show home
     return HomeScreen();
   }
 }

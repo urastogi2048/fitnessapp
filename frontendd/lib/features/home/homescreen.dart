@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/components/homeappbar.dart';
 import 'package:frontendd/features/home/profile.dart';
 import 'package:frontendd/features/recoveryfeature/recoveryreadinesscard.dart';
@@ -14,6 +15,8 @@ import 'package:intl/intl.dart';
 import 'package:infinite_carousel/infinite_carousel.dart';
 import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 import 'package:frontendd/features/home/profile.dart' show profileProvider;
+import 'package:frontendd/features/home/streakservice.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -25,10 +28,11 @@ class HomeScreen extends ConsumerStatefulWidget {
 class _HomeScreenState extends ConsumerState<HomeScreen> {
   late InfiniteScrollController carouselController;
   Timer? _timer;
-
+  Timer? _streakTimer;
 
   int selectedIndex = 0;
-
+  final date = DateTime.now();
+  final day = DateTime.now().day;
   final List<String> carouselimages = [
     'assets/images/carousel.jpg',
     'assets/images/carousel2.jpg',
@@ -38,20 +42,27 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   void initState() {
-  super.initState();
-  carouselController = InfiniteScrollController();
+    super.initState();
+    carouselController = InfiniteScrollController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Periodically refresh streak so UI stays current without a manual reload.
+      ref.invalidate(streakProvider);
+      _streakTimer = Timer.periodic(
+        const Duration(seconds: 20),
+        (_) => ref.invalidate(streakProvider),
+      );
 
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
-      if (carouselController.hasClients) {
-        carouselController.nextItem();
-      }
+      _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
+        if (carouselController.hasClients) {
+          carouselController.nextItem();
+        }
+      });
     });
-  });
-}
+  }
 
   @override
   void dispose() {
+    _streakTimer?.cancel();
     _timer?.cancel();
     carouselController.dispose();
     super.dispose();
@@ -59,345 +70,727 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final String today =
-        DateFormat('EEEE').format(DateTime.now());
+    final String today = DateFormat('EEEE').format(DateTime.now());
+    final streak = ref.watch(streakProvider);
 
     final List<String> weekdays = [
-      'Chest',
-      'Back',
-      'Legs',
-      'Shoulders',
-      'Arms',
-      'Core + Cardio',
-      'Rest Day'
+      'CHEST DAY',
+      'BACK DAY',
+      'LEG DAY',
+      'SHOULDERS DAY',
+      'ARMS DAY',
+      'CORE + CARDIO DAY',
+      'REST DAY',
     ];
+    String workout = weekdays[DateTime.now().weekday - 1];
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
 
-    return Scaffold(
-      appBar: HomeAppBar(),
-      backgroundColor: const Color.fromARGB(255, 31, 7, 7),
-
-      body: IndexedStack(
-        index: selectedIndex,
-        children: [
-          // Home screen
-          SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  
-                  InkWell(
-                    onTap: () {
-                      if(today == 'Sunday'){
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("It's Rest Day! Take a break and recharge for the week ahead."),
+        body: IndexedStack(
+          index: selectedIndex,
+          children: [
+            // Home screen
+            // Text(
+            //   'Fitwell',
+            //   style: GoogleFonts.poppins(
+            //     fontSize: 24,
+            //     fontWeight: FontWeight.bold,
+            //     color: Colors.white,
+            //   ),
+            // ),
+            SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(16.0.w),
+                child: Column(
+                  children: [
+                    SizedBox(
+                      height: 65.h,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'FitWell',
+                                style: GoogleFonts.openSans(
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                "${today.substring(0, 3)}, $day ${DateFormat.MMM().format(date)}",
+                                style: GoogleFonts.openSans(
+                                  fontSize: 16.sp,
+                                  color: Colors.white70,
+                                ),
+                              ),
+                            ],
                           ),
-                        );
-                         
-                      }
-                       else if(today == 'Monday'){
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.chest),
-                                bodyPart: BodyPart.chest,
-                              ),
-                            ),
-                          );
-                        }
-                      } else if(today == 'Tuesday'){
-                        if (context.mounted) {
-                          Navigator.push( 
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.back),
-                                bodyPart: BodyPart.back,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      else if(today == 'Wednesday'){
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.legs),
-                                bodyPart: BodyPart.legs,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      else if(today == 'Thursday'){
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.shoulders),
-                                bodyPart: BodyPart.shoulders,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      else if(today == 'Friday'){
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.arms),
-                                bodyPart: BodyPart.arms,
-                              ),
-                            ),
-                          );
-                        }
-                      }
-                      else if(today == 'Saturday'){
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ExerciseExecutionPage(
-                                exercises: ExerciseData.getExercises(BodyPart.core),
-                                bodyPart: BodyPart.core,
-                              ),
-                            ),
-                          );
-                        }
-                      }
+                          SizedBox(width: 185.w),
 
-                    },
-                    child: SizedBox(
-                      height: 160,
-                      width: double.infinity,
-                      child: Card(
-                        color:
-                            const Color.fromARGB(255, 2, 71, 128),
-                        child: Row(
-                          children: [
-                            Lottie.asset(
-                              'assets/lottie/weight.json',
-                              width: 120,
-                              height: 120,
-                            ),
-                            Expanded(
-                              child: Column(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.center,
+                          streak.when(
+                            loading: () => const SizedBox.shrink(),
+                            error: (err, stack) => const SizedBox.shrink(),
+                            data: (streak) => InkWell(
+                              onTap: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (context) => AlertDialog(
+                                    backgroundColor: const Color.fromARGB(
+                                      255,
+                                      30,
+                                      7,
+                                      7,
+                                    ),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(16),
+                                      side: const BorderSide(
+                                        color: Color.fromARGB(255, 220, 50, 50),
+                                        width: 2,
+                                      ),
+                                    ),
+                                    title: Text(
+                                      "Your Streak 🔥",
+                                      style: GoogleFonts.poppins(
+                                        color: Colors.white,
+                                        fontSize: 20.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    content: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        if (streak.currentStreak > 0)
+                                          Text(
+                                            "Keep it going! You're on fire.",
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.grey[300],
+                                              fontSize: 14.sp,
+                                            ),
+                                          )
+                                        else
+                                          Text(
+                                            "Prioritize yourself! Get the streak movin'",
+                                            style: GoogleFonts.poppins(
+                                              color: Colors.grey[300],
+                                              fontSize: 14.sp,
+                                            ),
+                                          ),
+                                        SizedBox(height: 20.h),
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: const Color.fromARGB(
+                                              255,
+                                              220,
+                                              50,
+                                              50,
+                                            ).withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(
+                                              12,
+                                            ),
+                                            border: Border.all(
+                                              color: const Color.fromARGB(
+                                                255,
+                                                220,
+                                                50,
+                                                50,
+                                              ),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceBetween,
+                                            children: [
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "Current Streak",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.grey[400],
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4.h),
+                                                  Text(
+                                                    "${streak.currentStreak} days",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.end,
+                                                children: [
+                                                  Text(
+                                                    "Best Streak",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.grey[400],
+                                                      fontSize: 12.sp,
+                                                    ),
+                                                  ),
+                                                  SizedBox(height: 4.h),
+                                                  Text(
+                                                    "${streak.longestStreak} days",
+                                                    style: GoogleFonts.poppins(
+                                                      color: Colors.white,
+                                                      fontSize: 24.sp,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () =>
+                                            Navigator.of(context).pop(),
+                                        style: TextButton.styleFrom(
+                                          backgroundColor: const Color.fromARGB(
+                                            255,
+                                            220,
+                                            50,
+                                            50,
+                                          ),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(
+                                              8,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'Close',
+                                          style: GoogleFonts.poppins(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: Row(
                                 children: [
+                                  // Lottie.asset(
+                                  //   'assets/lottie/streak2.json',
+                                  //   width: 50,
+                                  //   height: 50,
+                                  // ),
+                                  const Icon(
+                                    FontAwesomeIcons.fireFlameCurved,
+                                    color: Colors.orange,
+                                    size: 28,
+                                  ),
+                                  const SizedBox(width: 4),
                                   Text(
-                                    "Continue your weekly workout plan",
-                                    style: TextStyle(
+                                    '${streak.currentStreak}',
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 18,
                                       fontWeight: FontWeight.bold,
-                                      fontFamily:
-                                          GoogleFonts.poppins()
-                                              .fontFamily,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 15),
-                                  Text(
-                                    "$today: ${weekdays[DateTime.now().weekday - 1]}",
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 12,
-                                      fontFamily:
-                                          GoogleFonts.oswald()
-                                              .fontFamily,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-
-                  const SizedBox(height: 16),
-
-                  Row(
-                    children: [
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                            setState(() {
-                              selectedIndex = 1;
-                            });
-                          },
-                          child: _smallCard(
-                            color:
-                                const Color.fromARGB(255, 1, 72, 4),
-                            lottie: 'assets/lottie/bodypart.json',
-                            text: "Train body part",
+                    SizedBox(height: 10.h),
+                    InkWell(
+                      onTap: () {
+                        if (today == 'Sunday') {
+                          workout = 'Rest Day';
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                "It's Rest Day! Take a break and recharge for the week ahead.",
+                              ),
+                            ),
+                          );
+                        } else if (today == 'Monday') {
+                          workout = 'Chest';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.chest,
+                                  ),
+                                  bodyPart: BodyPart.chest,
+                                ),
+                              ),
+                            );
+                          }
+                        } else if (today == 'Tuesday') {
+                          workout = 'Back';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.back,
+                                  ),
+                                  bodyPart: BodyPart.back,
+                                ),
+                              ),
+                            );
+                          }
+                        } else if (today == 'Wednesday') {
+                          workout = 'Legs';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.legs,
+                                  ),
+                                  bodyPart: BodyPart.legs,
+                                ),
+                              ),
+                            );
+                          }
+                        } else if (today == 'Thursday') {
+                          workout = 'Shoulders';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.shoulders,
+                                  ),
+                                  bodyPart: BodyPart.shoulders,
+                                ),
+                              ),
+                            );
+                          }
+                        } else if (today == 'Friday') {
+                          workout = 'Arms';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.arms,
+                                  ),
+                                  bodyPart: BodyPart.arms,
+                                ),
+                              ),
+                            );
+                          }
+                        } else if (today == 'Saturday') {
+                          workout = 'Core + Cardio';
+                          if (context.mounted) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ExerciseExecutionPage(
+                                  exercises: ExerciseData.getExercises(
+                                    BodyPart.core,
+                                  ),
+                                  bodyPart: BodyPart.core,
+                                ),
+                              ),
+                            );
+                          }
+                        }
+                      },
+                      child: SizedBox(
+                        height: 200.h,
+                        width: double.infinity,
+                        child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.r),
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: InkWell(
-                          onTap: () {
-                          
-                          },
-                          child: _smallCard(
-                            color:
-                                const Color.fromARGB(255, 187, 187, 1),
-                            lottie: 'assets/lottie/growth.json',
-                            text: "Track your progress",
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-
-                  const SizedBox(height: 20),
-
-                  SizedBox(
-                    height: 200,
-                    child: InfiniteCarousel.builder(
-                      itemCount: carouselimages.length,
-                      itemExtent:
-                          MediaQuery.of(context).size.width * 0.8,
-                      center: true,
-                      controller: carouselController,
-                      loop: true,
-                      itemBuilder:
-                          (context, itemIndex, realIndex) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: ClipRRect(
-                            key: ValueKey('carousel_$itemIndex'),
-                            borderRadius:
-                                BorderRadius.circular(16),
-                            child: Image.asset(
-                              carouselimages[itemIndex],
-                              fit: BoxFit.cover,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(20.r),
+                              gradient: const LinearGradient(
+                                colors: [
+                                  Color.fromARGB(255, 47, 25, 25),
+                                  Color.fromARGB(255, 104, 17, 17),
+                                ],
+                                begin: Alignment.bottomRight,
+                                end: Alignment.topLeft,
+                              ),
+                            ),
+                            child: Stack(
+                              children: [
+                                Positioned(
+                                  top: 20.h,
+                                  right: 20.w,
+                                  child: Opacity(
+                                    opacity: 0.5,
+                                    child: Icon(
+                                      FontAwesomeIcons.arrowRight,
+                                      color: const Color.fromARGB(255, 175, 173, 173),
+                                      size: 15,
+                                    ),
+                                  ),
+                                ),
+                                Positioned(
+                                  right: 0,
+                                  bottom: 0,
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.only(
+                                      bottomRight: Radius.circular(20.r),
+                                    ),
+                                    child: Opacity(
+                                      opacity: 0.80,
+                                      child: Image.asset(
+                                        'assets/images/Symbol.png',
+                                        width: 150.w,
+                                        height: 150.h,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                
+                                // Main co
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    // Top section with label
+                                    Padding(
+                                      padding: EdgeInsets.all(16.w),
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 12.w,
+                                          vertical: 6.h,
+                                        ),
+                                        decoration: ShapeDecoration(
+                                          color: const Color(0x33EF4444),
+                                          shape: RoundedRectangleBorder(
+                                            borderRadius: BorderRadius.circular(4.r),
+                                          ),
+                                        ),
+                                        child: Text(
+                                          'TODAY\'S FOCUS',
+                                          style: TextStyle(
+                                            color: const Color(0xFFF87171),
+                                            fontSize: 10.sp,
+                                            fontFamily: 'Inter',
+                                            fontWeight: FontWeight.w700,
+                                            letterSpacing: 0.50,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                    
+                                   
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 16.w,
+                                          vertical: 12.h,
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              workout,
+                                              style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                  255,
+                                                  210,
+                                                  200,
+                                                  200,
+                                                ),
+                                                fontSize: 40.sp,
+                                                fontStyle: FontStyle.italic,
+                                                fontFamily: 'Inter',
+                                                fontWeight: FontWeight.w900,
+                                                height: 1.1,
+                                              ),
+                                            ),
+                                            SizedBox(height: 4.h),
+                                            Text(
+                                              'Tap to start your workout',
+                                              style: TextStyle(
+                                                color: const Color.fromARGB(
+                                                  255,
+                                                  149,
+                                                  142,
+                                                  142,
+                                                ),
+                                                fontSize: 14.sp,
+                                                fontFamily: GoogleFonts.poppins()
+                                                    .fontFamily,
+                                                fontWeight: FontWeight.w500,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
                             ),
                           ),
-                        );
+                        ),
+                      ),
+                    ),
+
+                    const SizedBox(height: 16),
+                    InkWell(
+                      onTap: () {
+                        if (context.mounted) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Recoveryreadinesscard(),
+                            ),
+                          );
+                        }
                       },
-                    ),
-                  ),
+                      child: SizedBox(
+                        height: 100,
+                        width: double.infinity,
+                        child: Card(
+                          color: const Color.fromARGB(123, 9, 45, 81),
+                          
+                          child: Row(
+                            children: [
+                              
+                              Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Icon(
+                                  FontAwesomeIcons.heartPulse,
+                                  color: const Color.fromARGB(255, 110, 8, 118),
+                                  size: 40,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 16.w,
+                              ),
+                              Expanded(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Recovery Score',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18.sp,
+                                        fontWeight: FontWeight.bold,
+                                        //fontStyle: FontStyle.italic,
+                                        fontFamily:
+                                            GoogleFonts.manrope().fontFamily,
+                                      ),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
 
-                  const SizedBox(height: 20),
+                                      'Ready to train? See your recovery score.',
+                                      style: TextStyle(
+                                        color: Colors.white70,
+                                        fontSize: 12.sp,
+                                        fontFamily:
+                                            GoogleFonts.manrope().fontFamily,
+                                      ),
+                                    ),
 
-                  InkWell(
-                    onTap: (){
-                      if (context.mounted) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Recoveryreadinesscard(),
+                                  ],
+                                ),
+                              ),
+                              Icon(
+                                FontAwesomeIcons.arrowUpRightDots,
+                                color: const Color.fromARGB(179, 117, 116, 116),
+                                size: 15,
+                              ),
+                            ],
+
                           ),
-                        );
-                      }
-                    },
-                    child: _bigCard(
-                      color:
-                          const Color.fromARGB(255, 49, 1, 96),
-                      lottie: 'assets/lottie/Fitness.json',
-                      title: "Recovery Readiness Score",
-                      subtitle:
-                          "Your smart post-workout assistant!!",
+                        ),
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {
+                              setState(() {
+                                selectedIndex = 1;
+                              });
+                            },
+                            child: _smallCard(
+                              color: const Color.fromARGB(121, 10, 34, 60),
+                             // lottie: 'assets/lottie/bodypart.json',
+                              text: "Custom",
+                              icon: FontAwesomeIcons.dumbbell,
+                              minitext: "Choose your workout",
+                              iconColor: Colors.blue,
+                              iconSize: 50,
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: InkWell(
+                            onTap: () {},
+                            child: _smallCard(
+                              color: Color.fromARGB(121, 10, 34, 60),
+                              //lottie: 'assets/lottie/growth.json',
+                              text: "Progress",
+                              minitext: "View analytics",
+                              icon: FontAwesomeIcons.chartLine,
+                              iconColor: const Color.fromARGB(255, 161, 170, 34),
+                              iconSize: 50,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    SizedBox(
+                      height: 200,
+                      child: InfiniteCarousel.builder(
+                        itemCount: carouselimages.length,
+                        itemExtent: MediaQuery.of(context).size.width * 0.8,
+                        center: true,
+                        controller: carouselController,
+                        loop: true,
+                        itemBuilder: (context, itemIndex, realIndex) {
+                          return Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ClipRRect(
+                              key: ValueKey('carousel_$itemIndex'),
+                              borderRadius: BorderRadius.circular(16),
+                              child: Image.asset(
+                                carouselimages[itemIndex],
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+
+                    const SizedBox(height: 20),
+
+                    
+                  ],
+                ),
               ),
             ),
-          ),
 
-          // Workouts screen
-          Consumer(builder: (context, ref, child) {
-            return ListView(
-                padding: const EdgeInsets.all(16.0),
-                children: [
-                  _buildWorkoutCard(
-                    context,
-                    'Chest Workout',
-                    BodyPart.chest,
-                    Icons.fitness_center,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Leg Workout',
-                    BodyPart.legs,
-                    Icons.directions_run,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Back Workout',
-                    BodyPart.back,
-                    Icons.self_improvement,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Arms Workout',
-                    BodyPart.arms,
-                    Icons.sports_martial_arts,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Shoulder Workout',
-                    BodyPart.shoulders,
-                    Icons.accessibility_new,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Core Workout',
-                    BodyPart.core,
-                    Icons.shield_moon,
-                    ref,
-                  ),
-                  _buildWorkoutCard(
-                    context,
-                    'Cardio Workout',
-                    BodyPart.cardio,
-                    Icons.favorite,
-                    ref,
-                  ),
-                ]);
-          }),
+            // Workouts screen
+            Consumer(
+              builder: (context, ref, child) {
+                return ListView(
+                  padding: const EdgeInsets.all(16.0),
+                  children: [
+                    _buildWorkoutCard(
+                      context,
+                      'Chest Workout',
+                      BodyPart.chest,
+                      Icons.fitness_center,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Leg Workout',
+                      BodyPart.legs,
+                      Icons.directions_run,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Back Workout',
+                      BodyPart.back,
+                      Icons.self_improvement,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Arms Workout',
+                      BodyPart.arms,
+                      Icons.sports_martial_arts,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Shoulder Workout',
+                      BodyPart.shoulders,
+                      Icons.accessibility_new,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Core Workout',
+                      BodyPart.core,
+                      Icons.shield_moon,
+                      ref,
+                    ),
+                    _buildWorkoutCard(
+                      context,
+                      'Cardio Workout',
+                      BodyPart.cardio,
+                      Icons.favorite,
+                      ref,
+                    ),
+                  ],
+                );
+              },
+            ),
 
-          // Profile screen
-          ProfileScreen(),  
-        ],
-      ),
+            // Profile screen
+            ProfileScreen(),
+          ],
+        ),
 
-     
-      bottomNavigationBar: SlidingClippedNavBar(
-        backgroundColor: const Color(0xFF121212),
-        activeColor: Colors.redAccent,
-        iconSize: 28,
-        selectedIndex: selectedIndex,
-        onButtonPressed: (index) {
-          setState(() {
-            selectedIndex = index;
-          });
-        },
-        barItems:  [
-          BarItem(icon: Icons.home, title: 'Home'),
-          BarItem(icon: Icons.fitness_center, title: 'Workouts'),
-          BarItem(icon: Icons.person, title: 'Profile'),
-        ],
+        bottomNavigationBar: SlidingClippedNavBar(
+          backgroundColor: const Color(0xFF121212),
+          activeColor: Colors.redAccent,
+          iconSize: 28,
+          selectedIndex: selectedIndex,
+          onButtonPressed: (index) {
+            setState(() {
+              selectedIndex = index;
+            });
+          },
+          barItems: [
+            BarItem(icon: Icons.home, title: 'Home'),
+            BarItem(icon: Icons.fitness_center, title: 'Workouts'),
+            BarItem(icon: Icons.person, title: 'Profile'),
+          ],
+        ),
       ),
     );
   }
-
 
   Widget _bigCard({
     required Color color,
@@ -414,24 +807,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Lottie.asset(lottie, width: 120, height: 120),
             Expanded(
               child: Column(
-                mainAxisAlignment:
-                    MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
                     title,
-                    style:  TextStyle(
+                    style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      fontFamily: GoogleFonts.poppins()
-                          .fontFamily,
+                      fontFamily: GoogleFonts.poppins().fontFamily,
                     ),
                   ),
                   const SizedBox(height: 12),
                   Text(
                     subtitle,
-                    style:
-                        TextStyle(color: Colors.white70, fontFamily: GoogleFonts.oswald().fontFamily),
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontFamily: GoogleFonts.oswald().fontFamily,
+                    ),
                   ),
                 ],
               ),
@@ -444,31 +837,75 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
   Widget _smallCard({
     required Color color,
-    required String lottie,
+    //required String lottie,
     required String text,
+    required IconData icon,
+    required String minitext,
+    Color? iconColor,
+    double? iconSize,
   }) {
     return SizedBox(
       height: 140,
       child: Card(
         color: color,
-        child: Row(
-          children: [
-            Lottie.asset(lottie, width: 70, height: 70),
-            Expanded(
-              child: Text(
-                text,
-                style:  TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: GoogleFonts.poppins().fontFamily,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Stack(
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Lottie.asset(lottie, width: 70, height: 70),
+                  Icon(
+                    icon,
+                    color: iconColor ?? Colors.white,
+                    size: iconSize ?? 50,
+                  ),
+                  const SizedBox(height: 12),
+                  Expanded(
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Expanded(
+                    child: Text(
+                      minitext,
+                      style: TextStyle(
+                        color: const Color.fromARGB(255, 155, 152, 152),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: Icon(
+                    FontAwesomeIcons.arrowUpRightFromSquare,
+                    color: const Color.fromARGB(255, 175, 173, 173),
+                    size: 15,
+                  ),
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
+
   Widget _buildWorkoutCard(
     BuildContext context,
     String title,
@@ -479,11 +916,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     return Card(
       color: const Color.fromARGB(255, 136, 7, 7),
       margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       child: ListTile(
-        leading: Icon(icon, color: const Color.fromARGB(255, 4, 4, 4), size: 40),
+        leading: Icon(
+          icon,
+          color: const Color.fromARGB(255, 4, 4, 4),
+          size: 40,
+        ),
         title: Text(
           title,
           style: GoogleFonts.poppins(
@@ -492,10 +931,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             fontSize: 18,
           ),
         ),
-        trailing: const Icon(
-          Icons.arrow_forward_ios,
-          color: Colors.white,
-        ),
+        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white),
         onTap: () {
           final profileAsync = ref.watch(profileProvider);
 

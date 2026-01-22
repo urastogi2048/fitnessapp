@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sidebarx/sidebarx.dart';
@@ -12,7 +13,7 @@ class HomeAppBar extends ConsumerWidget
    HomeAppBar({super.key});
 
   @override
-  Size get preferredSize => const Size.fromHeight(72);
+  Size get preferredSize => Size.fromHeight(72.h);
   
 
   @override
@@ -33,7 +34,7 @@ class HomeAppBar extends ConsumerWidget
           child: SafeArea(
             bottom: false,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: Row(
                 children: [
                   // Sidebar toggle button
@@ -48,7 +49,7 @@ class HomeAppBar extends ConsumerWidget
                     child: Text(
                       "FitWell",
                       style: TextStyle(
-                        fontSize: 22,
+                        fontSize: 22.sp,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                         fontFamily: GoogleFonts.oswald().fontFamily,

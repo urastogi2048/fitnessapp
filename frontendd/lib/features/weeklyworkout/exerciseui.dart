@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/features/weeklyworkout/workout_session_state.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
@@ -56,35 +57,35 @@ class ExerciseExecutionPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                padding: EdgeInsets.symmetric(horizontal: 8.0.w),
                 child: Text(
                   "Rest Time!",
-                  style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 28),
+                  style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 28.sp),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all( 20.0),
+                padding: EdgeInsets.all(20.0.w),
                 child: Text(
                   "Take a deep breath and be ready!",
-                  style: GoogleFonts.poppins(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 20),
+                  style: GoogleFonts.poppins(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 20.sp),
                   textAlign: TextAlign.center,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10.h),
               Lottie.asset(
                 'assets/lottie/relax.json',
-                width: 250,
-                height: 250,
+                width: 250.w,
+                height: 250.h,
               ),
               Stack(
                 alignment: Alignment.center,
                 children: [
           SizedBox(
-            width: 200,
-            height: 200,
+            width: 200.w,
+            height: 200.h,
             child: CircularProgressIndicator(
               value: progress,
-              strokeWidth: 12,
+              strokeWidth: 12.w,
               backgroundColor: Colors.grey[800],
               valueColor: AlwaysStoppedAnimation<Color>(
                 progress > 0.3 ? const Color.fromARGB(255, 220, 50, 50) : Colors.redAccent,
@@ -97,7 +98,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 48,
+                  fontSize: 48.sp,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -105,7 +106,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 sessionState.isPlaying ? 'In Progress' : 'Paused',
                 style: GoogleFonts.oswald(
                   color: sessionState.isPlaying ? const Color.fromARGB(255, 220, 50, 50) : Colors.orange,
-                  fontSize: 14,
+                  fontSize: 14.sp,
                 ),
               ),
             ],
@@ -128,20 +129,20 @@ class ExerciseExecutionPage extends ConsumerWidget {
                   onPressed: () {
                     sessionNotifier.nextExercise();
                   },
-                  icon: const Icon(Icons.skip_next, size: 24),
+                  icon: Icon(Icons.skip_next, size: 24.sp),
                   label: Text(
                     "Skip Rest",
                     style: GoogleFonts.poppins(
-                      fontSize: 18,
+                      fontSize: 18.sp,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color.fromARGB(255, 155, 4, 4),
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                    padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 16.h),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(30.r),
                     ),
                     elevation: 8,
                   ),
@@ -180,47 +181,47 @@ class ExerciseExecutionPage extends ConsumerWidget {
           children: [
            
             _buildProgressBar(progress, sessionState),
-            const SizedBox(height: 20),
+            SizedBox(height: 20.h),
             
             Text(
               'Exercise ${sessionState.currentExerciseIndex + 1} of ${sessionState.exercises.length}',
               style: GoogleFonts.poppins(
                 color: Colors.grey[400],
-                fontSize: 14,
+                fontSize: 14.sp,
               ),
             ),
-            const SizedBox(height: 10),
+            SizedBox(height: 10.h),
             // Exercise Name
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding: EdgeInsets.symmetric(horizontal: 20.w),
               child: Text(
                 currentExercise.name,
                 style: GoogleFonts.poppins(
                   color: Colors.white,
-                  fontSize: 28,
+                  fontSize: 28.sp,
                   fontWeight: FontWeight.bold,
                 ),
                 textAlign: TextAlign.center,
               ),
             ),
-            const SizedBox(height: 30),
+            SizedBox(height: 30.h),
             // Animation
             Expanded(
               child: Center(
                 child: Lottie.asset(
                   currentExercise.animation,
-                  width: 300,
-                  height: 300,
+                  width: 300.w,
+                  height: 300.h,
                   fit: BoxFit.contain,
                 ),
               ),
             ),
             
             _buildTimer(sessionState),
-            const SizedBox(height: 30),
+            SizedBox(height: 30.h),
             
             _buildControlButtons(context, sessionState, sessionNotifier),
-            const SizedBox(height: 40),
+            SizedBox(height: 40.h),
           ],
         ),
       ),
@@ -229,20 +230,20 @@ class ExerciseExecutionPage extends ConsumerWidget {
 
   Widget _buildProgressBar(double progress, WorkoutSessionState sessionState) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(10),
+            borderRadius: BorderRadius.circular(10.r),
             child: LinearProgressIndicator(
               value: progress,
-              minHeight: 8,
+              minHeight: 8.h,
               backgroundColor: Colors.grey[800],
               valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 220, 50, 50)),
             ),
           ),
-          const SizedBox(height: 8),
+          SizedBox(height: 8.h),
           Text(
             'Total time: ${_formatTime(sessionState.totalTimeSpent)}',
             style: GoogleFonts.oswald(
@@ -379,34 +380,34 @@ class ExerciseExecutionPage extends ConsumerWidget {
               children: [
                 Lottie.asset(
                   'assets/lottie/Fitness.json',
-                  width: 250,
-                  height: 250,
+                  width: 250.w,
+                  height: 250.h,
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 Text(
                   'Workout Complete!',
                   style: GoogleFonts.poppins(
                     color: Colors.white,
-                    fontSize: 32,
+                    fontSize: 32.sp,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Text(
                   'Great job! You completed ${sessionState.exercises.length} exercises',
                   style: GoogleFonts.poppins(
                     color: Colors.grey[400],
-                    fontSize: 16,
+                    fontSize: 16.sp,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 30),
+                SizedBox(height: 30.h),
                 _buildStatCard('Total Time', _formatTime(sessionState.totalTimeSpent)),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 _buildStatCard('Exercises', '${sessionState.exercises.length}'),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase()),
-                const SizedBox(height: 50),
+                SizedBox(height: 50.h),
                 ElevatedButton(
                   onPressed: () {
                     if (context.mounted) {
