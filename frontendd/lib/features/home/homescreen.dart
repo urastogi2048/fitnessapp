@@ -85,7 +85,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     String workout = weekdays[DateTime.now().weekday - 1];
     return SafeArea(
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        backgroundColor: const Color.fromARGB(255, 27, 27, 27),
 
         body: IndexedStack(
           index: selectedIndex,
@@ -711,14 +711,56 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Consumer(
               builder: (context, ref, child) {
                 return ListView(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.all(20.0),
                   children: [
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          selectedIndex = 0;
+                        });
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowLeft,
+                            color: Colors.grey,
+                            size: 15,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Home',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontFamily: GoogleFonts.manrope().fontFamily,
+                            ),
+                          ),
+                      
+                        ],
+                      
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    Text(
+                      'Workouts',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 28,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                    SizedBox(height: 25),
+
                     _buildWorkoutCard(
                       context,
                       'Chest Workout',
                       BodyPart.chest,
                       Icons.fitness_center,
                       ref,
+                      const Color.fromARGB(132, 255, 82, 82)
                     ),
                     _buildWorkoutCard(
                       context,
@@ -726,13 +768,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.legs,
                       Icons.directions_run,
                       ref,
+                      const Color.fromARGB(156, 255, 235, 59),
                     ),
                     _buildWorkoutCard(
                       context,
                       'Back Workout',
                       BodyPart.back,
                       Icons.self_improvement,
+
                       ref,
+                      const Color.fromARGB(144, 33, 149, 243)
                     ),
                     _buildWorkoutCard(
                       context,
@@ -740,6 +785,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.arms,
                       Icons.sports_martial_arts,
                       ref,
+                      const Color.fromARGB(136, 156, 39, 176)
                     ),
                     _buildWorkoutCard(
                       context,
@@ -747,6 +793,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.shoulders,
                       Icons.accessibility_new,
                       ref,
+                      const Color.fromARGB(136, 0, 188, 212)
                     ),
                     _buildWorkoutCard(
                       context,
@@ -754,6 +801,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.core,
                       Icons.shield_moon,
                       ref,
+                      const Color.fromARGB(136, 76, 175, 80)
                     ),
                     _buildWorkoutCard(
                       context,
@@ -761,6 +809,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.cardio,
                       Icons.favorite,
                       ref,
+                      const Color.fromARGB(136, 255, 87, 34)
                     ),
                   ],
                 );
@@ -912,26 +961,25 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     BodyPart bodyPart,
     IconData icon,
     WidgetRef ref,
+    Color? color,
   ) {
+    // Get exercise count for the body part
+    final profileAsync = ref.watch(profileProvider);
+    int exerciseCount = 8; // default
+    
+    profileAsync.whenData((profile) {
+      final goal = profile.goal ?? 'balanced';
+      final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
+      exerciseCount = exercises.length;
+    });
+
     return Card(
-      color: const Color.fromARGB(255, 136, 7, 7),
-      margin: const EdgeInsets.only(bottom: 16),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-      child: ListTile(
-        leading: Icon(
-          icon,
-          color: const Color.fromARGB(255, 4, 4, 4),
-          size: 40,
-        ),
-        title: Text(
-          title,
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        trailing: const Icon(Icons.arrow_forward_ios, color: Colors.white),
+      color: const Color.fromARGB(255, 8, 13, 30), // dark neon blue base
+      elevation: 0,
+      margin: const EdgeInsets.only(bottom: 12),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
         onTap: () {
           final profileAsync = ref.watch(profileProvider);
 
@@ -952,6 +1000,70 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             }
           });
         },
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+           
+              Container(
+                height: 48,
+                width: 48,
+                
+                decoration: BoxDecoration(
+                  color: color?.withOpacity(0.2) ?? Colors.grey.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  icon,
+                  color: color ?? Colors.white,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 16),
+              // Title and subtitle
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      title.replaceAll(' Workout', ' Day'),
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '$exerciseCount Exercises • 45m',
+                      style: TextStyle(
+                        color: Colors.grey[500],
+                        fontSize: 13,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // Play button
+              Container(
+                height: 36,
+                width: 36,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: const Icon(
+                  Icons.play_arrow_rounded,
+                  color: Colors.white,
+                  size: 20,
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

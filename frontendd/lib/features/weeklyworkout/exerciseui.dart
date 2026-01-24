@@ -26,129 +26,165 @@ class ExerciseExecutionPage extends ConsumerWidget {
       workoutSessionProvider((bodyPart: bodyPart, exercises: exercises)).notifier,
     );
 
+    const backgroundColor = Color.fromARGB(255, 20, 6, 6);
+    const surfaceColor = Color.fromARGB(255, 36, 12, 12);
+    const trackColor = Color.fromARGB(255, 60, 20, 20);
+    const accentColor = Color.fromARGB(255, 255, 99, 99);
+    const accentGlow = Color.fromARGB(255, 220, 50, 50);
+    final softAccent = Colors.orangeAccent;
+
     if (sessionState.isCompleted) {
       return _buildCompletionScreen(context, sessionState);
     }
-    if(sessionState.isInCooldown==true){
-      final minutes = sessionState.cooldownTimeRemaining ~/60;
-      final seconds = sessionState.cooldownTimeRemaining %60;
-      final progress= sessionState.cooldownTimeRemaining/15;
+    if (sessionState.isInCooldown == true) {
+      final minutes = sessionState.cooldownTimeRemaining ~/ 60;
+      final seconds = sessionState.cooldownTimeRemaining % 60;
+      final progress = sessionState.cooldownTimeRemaining / 15;
+
       return Scaffold(
-        backgroundColor: Colors.black,
+        backgroundColor: backgroundColor,
         appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 128, 5, 5),
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.close, color: Colors.white),
-          onPressed: () => _showExitDialog(context, sessionNotifier),
-        ),
-        title: Text(
-          '${bodyPart.name.toUpperCase()} WORKOUT',
-          style: GoogleFonts.poppins(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
+          backgroundColor: const Color.fromARGB(255, 60, 15, 15),
+          elevation: 0,
+          leading: IconButton(
+            icon: const Icon(Icons.close, color: Colors.white),
+            onPressed: () => _showExitDialog(context, sessionNotifier),
           ),
-        ),
-        centerTitle: true,
-      ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8.0.w),
-                child: Text(
-                  "Rest Time!",
-                  style: GoogleFonts.poppins(color: Colors.white,fontWeight: FontWeight.bold, fontSize: 28.sp),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(20.0.w),
-                child: Text(
-                  "Take a deep breath and be ready!",
-                  style: GoogleFonts.poppins(color: Colors.grey,fontWeight: FontWeight.bold, fontSize: 20.sp),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(height: 10.h),
-              Lottie.asset(
-                'assets/lottie/relax.json',
-                width: 250.w,
-                height: 250.h,
-              ),
-              Stack(
-                alignment: Alignment.center,
-                children: [
-          SizedBox(
-            width: 200.w,
-            height: 200.h,
-            child: CircularProgressIndicator(
-              value: progress,
-              strokeWidth: 12.w,
-              backgroundColor: Colors.grey[800],
-              valueColor: AlwaysStoppedAnimation<Color>(
-                progress > 0.3 ? const Color.fromARGB(255, 220, 50, 50) : Colors.redAccent,
-              ),
+          title: Text(
+            '${bodyPart.name.toUpperCase()} WORKOUT',
+            style: GoogleFonts.manrope(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
             ),
           ),
-          Column(
-            children: [
-              Text(
-                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 48.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Text(
-                sessionState.isPlaying ? 'In Progress' : 'Paused',
-                style: GoogleFonts.oswald(
-                  color: sessionState.isPlaying ? const Color.fromARGB(255, 220, 50, 50) : Colors.orange,
-                  fontSize: 14.sp,
-                ),
-              ),
-            ],
-          ),
-                ],
-              ),
-              const SizedBox(height: 10),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.3),
-                      blurRadius: 15,
-                      spreadRadius: 2,
-                    ),
-                  ],
-                ),
-                child: ElevatedButton.icon(
-                  onPressed: () {
-                    sessionNotifier.nextExercise();
-                  },
-                  icon: Icon(Icons.skip_next, size: 24.sp),
-                  label: Text(
-                    "Skip Rest",
-                    style: GoogleFonts.poppins(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 155, 4, 4),
-                    foregroundColor: Colors.white,
-                    padding: EdgeInsets.symmetric(horizontal: 40.w, vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30.r),
-                    ),
-                    elevation: 8,
-                  ),
-                ),
-              ),
-            ],
+          centerTitle: true,
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                      SizedBox(height: 8.h),
+                      Text(
+                        'Rest Time',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.manrope(
+                          color: Colors.white,
+                          fontWeight: FontWeight.w700,
+                          fontSize: 26.sp,
+                        ),
+                      ),
+                      SizedBox(height: 8.h),
+                      Text(
+                        'Take a deep breath and get ready for the next round.',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.manrope(
+                          color: Colors.grey[400],
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                        ),
+                      ),
+                      SizedBox(height: 20.h),
+                      Container(
+                        padding: EdgeInsets.all(20.w),
+                        decoration: BoxDecoration(
+                          color: surfaceColor,
+                          borderRadius: BorderRadius.circular(24.r),
+                          border: Border.all(color: accentColor.withOpacity(0.15)),
+                          boxShadow: [
+                            BoxShadow(
+                              color: accentGlow.withOpacity(0.12),
+                              blurRadius: 30,
+                              offset: const Offset(0, 16),
+                            ),
+                          ],
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Lottie.asset(
+                              'assets/lottie/relax.json',
+                              width: 220.w,
+                              height: 220.h,
+                              fit: BoxFit.contain,
+                            ),
+                            SizedBox(height: 20.h),
+                            Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 200.w,
+                                  height: 200.h,
+                                  child: CircularProgressIndicator(
+                                    value: progress,
+                                    strokeWidth: 12.w,
+                                    backgroundColor: trackColor,
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      progress > 0.3 ? accentColor : softAccent,
+                                    ),
+                                  ),
+                                ),
+                                Column(
+                                  children: [
+                                    Text(
+                                      '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+                                      style: GoogleFonts.manrope(
+                                        color: Colors.white,
+                                        fontSize: 44.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    Text(
+                                      sessionState.isPlaying ? 'In Progress' : 'Paused',
+                                      style: GoogleFonts.manrope(
+                                        color: sessionState.isPlaying ? accentColor : softAccent,
+                                        fontSize: 14.sp,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 28.h),
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(16.r),
+                          boxShadow: [
+                            BoxShadow(
+                              color: accentGlow.withOpacity(0.28),
+                              blurRadius: 20,
+                              spreadRadius: 1,
+                              offset: const Offset(0, 10),
+                            ),
+                          ],
+                        ),
+                        child: ElevatedButton.icon(
+                          onPressed: sessionNotifier.nextExercise,
+                          icon: Icon(Icons.skip_next, size: 22.sp),
+                          label: Text(
+                            'Skip Rest',
+                            style: GoogleFonts.manrope(
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color.fromARGB(255, 155, 4, 4),
+                            foregroundColor: Colors.white,
+                            padding: EdgeInsets.symmetric(horizontal: 28.w, vertical: 14.h),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16.r),
+                            ),
+                            elevation: 6,
+                          ),
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       );
@@ -157,9 +193,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
     final progress = (sessionState.currentExerciseIndex + 1) / sessionState.exercises.length;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 17, 1, 1),
+      backgroundColor: backgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 128, 5, 5),
+        backgroundColor: const Color.fromARGB(255, 60, 15, 15),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
@@ -167,7 +203,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
         ),
         title: Text(
           '${bodyPart.name.toUpperCase()} WORKOUT',
-          style: GoogleFonts.poppins(
+          style: GoogleFonts.manrope(
             color: Colors.white,
             fontWeight: FontWeight.bold,
           ),
@@ -175,84 +211,195 @@ class ExerciseExecutionPage extends ConsumerWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-           
-            _buildProgressBar(progress, sessionState),
-            SizedBox(height: 20.h),
-            
-            Text(
-              'Exercise ${sessionState.currentExerciseIndex + 1} of ${sessionState.exercises.length}',
-              style: GoogleFonts.poppins(
-                color: Colors.grey[400],
-                fontSize: 14.sp,
-              ),
-            ),
-            SizedBox(height: 10.h),
-            // Exercise Name
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20.w),
-              child: Text(
-                currentExercise.name,
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 28.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-                textAlign: TextAlign.center,
-              ),
-            ),
-            SizedBox(height: 30.h),
-            // Animation
-            Expanded(
-              child: Center(
-                child: Lottie.asset(
-                  currentExercise.animation,
-                  width: 300.w,
-                  height: 300.h,
-                  fit: BoxFit.contain,
-                ),
-              ),
-            ),
-            
-            _buildTimer(sessionState),
-            SizedBox(height: 30.h),
-            
-            _buildControlButtons(context, sessionState, sessionNotifier),
-            SizedBox(height: 40.h),
-          ],
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(20.w, 16.h, 20.w, 24.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              SizedBox(height: 8.h),
+              _buildProgressBar(progress, sessionState),
+              SizedBox(height: 10.h),
+              // _buildExerciseMeta(sessionState),
+              // SizedBox(height: 14.h),
+              _buildExerciseName(currentExercise.name),
+              SizedBox(height: 15.h),
+              _buildAnimationPanel(currentExercise),
+              SizedBox(height: 15.h),
+              _buildTimerPanel(sessionState),
+              SizedBox(height: 15.h),
+              _buildControlButtons(context, sessionState, sessionNotifier),
+            ],
+          ),
         ),
       ),
     );
   }
 
   Widget _buildProgressBar(double progress, WorkoutSessionState sessionState) {
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.circular(12.r),
+          child: LinearProgressIndicator(
+            value: progress,
+            minHeight: 12,
+            backgroundColor: const Color.fromARGB(255, 60, 20, 20),
+            valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 255, 99, 99)),
+          ),
+        ),
+        SizedBox(height: 10.h),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Exercise ${sessionState.currentExerciseIndex + 1}/${sessionState.exercises.length}',
+              style: GoogleFonts.manrope(
+                color: Colors.grey[300],
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            Text(
+              _formatTime(sessionState.totalTimeSpent),
+              style: GoogleFonts.manrope(
+                color: Colors.grey[300],
+                fontSize: 13.sp,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildExerciseMeta(WorkoutSessionState sessionState) {
+    return Container(
+      padding: EdgeInsets.all(14.w),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 36, 12, 12),
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: const Color.fromARGB(60, 255, 99, 99)),
+      ),
+      child: Row(
         children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(10.r),
-            child: LinearProgressIndicator(
-              value: progress,
-              minHeight: 8.h,
-              backgroundColor: Colors.grey[800],
-              valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 220, 50, 50)),
+          Container(
+            padding: EdgeInsets.all(10.w),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 60, 20, 20),
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(
+                  color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.25),
+                  blurRadius: 16,
+                ),
+              ],
+            ),
+            child: const Icon(Icons.fitness_center, color: Colors.white, size: 20),
+          ),
+          SizedBox(width: 12.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  sessionState.bodyPart.name.toUpperCase(),
+                  style: GoogleFonts.manrope(
+                    color: Colors.white,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: 4.h),
+                Text(
+                  sessionState.isPlaying ? 'Maintain tempo and form' : 'Paused — tap play to resume',
+                  style: GoogleFonts.manrope(
+                    color: Colors.grey[400],
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ],
             ),
           ),
-          SizedBox(height: 8.h),
-          Text(
-            'Total time: ${_formatTime(sessionState.totalTimeSpent)}',
-            style: GoogleFonts.oswald(
-              color: Colors.grey[500],
-              fontSize: 12,
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            decoration: BoxDecoration(
+              color: const Color.fromARGB(255, 255, 99, 99).withOpacity(0.12),
+              borderRadius: BorderRadius.circular(14.r),
+              border: Border.all(color: const Color.fromARGB(255, 255, 99, 99)),
+            ),
+            child: Text(
+              sessionState.isPlaying ? 'LIVE' : 'PAUSED',
+              style: GoogleFonts.manrope(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 12.sp,
+              ),
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildExerciseName(String name) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 36, 12, 12),
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: const Color.fromARGB(50, 255, 99, 99)),
+      ),
+      child: Text(
+        name,
+        textAlign: TextAlign.center,
+        style: GoogleFonts.manrope(
+          color: Colors.white,
+          fontSize: 26.sp,
+          fontWeight: FontWeight.w800,
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAnimationPanel(Exercise currentExercise) {
+    return Container(
+      padding: EdgeInsets.all(16.w),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 36, 12, 12),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: const Color.fromARGB(50, 255, 99, 99)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.1),
+            blurRadius: 22,
+            offset: const Offset(0, 14),
+          ),
+        ],
+      ),
+      child: AspectRatio(
+        aspectRatio: 1,
+        child: Center(
+          child: Lottie.asset(
+            currentExercise.animation,
+            fit: BoxFit.contain,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTimerPanel(WorkoutSessionState sessionState) {
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 18.h),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 36, 12, 12),
+        borderRadius: BorderRadius.circular(20.r),
+        border: Border.all(color: const Color.fromARGB(80, 255, 99, 99)),
+      ),
+      child: Center(child: _buildTimer(sessionState)),
     );
   }
 
@@ -271,9 +418,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
           child: CircularProgressIndicator(
             value: progress,
             strokeWidth: 12,
-            backgroundColor: Colors.grey[800],
+            backgroundColor: const Color.fromARGB(255, 60, 20, 20),
             valueColor: AlwaysStoppedAnimation<Color>(
-              progress > 0.3 ? const Color.fromARGB(255, 48, 253, 17) : Colors.redAccent,
+              progress > 0.3 ? const Color.fromARGB(255, 255, 99, 99) : Colors.orangeAccent,
             ),
           ),
         ),
@@ -281,7 +428,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
           children: [
             Text(
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: GoogleFonts.poppins(
+              style: GoogleFonts.manrope(
                 color: Colors.white,
                 fontSize: 48,
                 fontWeight: FontWeight.bold,
@@ -289,8 +436,8 @@ class ExerciseExecutionPage extends ConsumerWidget {
             ),
             Text(
               sessionState.isPlaying ? 'In Progress' : 'Paused',
-              style: GoogleFonts.oswald(
-                color: sessionState.isPlaying ? const Color.fromARGB(255, 220, 50, 50) : Colors.orange,
+              style: GoogleFonts.manrope(
+                color: sessionState.isPlaying ? const Color.fromARGB(255, 255, 99, 99) : Colors.orangeAccent,
                 fontSize: 14,
               ),
             ),
@@ -305,8 +452,20 @@ class ExerciseExecutionPage extends ConsumerWidget {
     WorkoutSessionState sessionState,
     WorkoutSessionNotifier sessionNotifier,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 40),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 12.h),
+      decoration: BoxDecoration(
+        color: const Color.fromARGB(255, 36, 12, 12),
+        borderRadius: BorderRadius.circular(18.r),
+        border: Border.all(color: const Color.fromARGB(60, 255, 99, 99)),
+        boxShadow: [
+          BoxShadow(
+            color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.12),
+            blurRadius: 18,
+            offset: const Offset(0, 12),
+          ),
+        ],
+      ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
@@ -315,22 +474,22 @@ class ExerciseExecutionPage extends ConsumerWidget {
             onPressed: sessionState.currentExerciseIndex > 0
                 ? sessionNotifier.previousExercise
                 : null,
-            size: 50,
+            size: 56,
           ),
           _buildCircularButton(
             icon: sessionState.isPlaying ? Icons.pause : Icons.play_arrow,
             onPressed: sessionState.isPlaying
                 ? sessionNotifier.pauseTimer
                 : sessionNotifier.startTimer,
-            size: 70,
-            color: const Color.fromARGB(255, 155, 4, 4),
+            size: 78,
+            color: const Color.fromARGB(255, 255, 99, 99),
           ),
           _buildCircularButton(
             icon: Icons.skip_next,
             onPressed: sessionState.currentExerciseIndex < sessionState.exercises.length - 1
                 ? sessionNotifier.nextExercise
                 : null,
-            size: 50,
+            size: 56,
           ),
         ],
       ),
@@ -348,12 +507,12 @@ class ExerciseExecutionPage extends ConsumerWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color ?? Colors.grey[800],
+        color: color ?? const Color.fromARGB(255, 36, 12, 12),
         boxShadow: onPressed != null
             ? [
                 BoxShadow(
-                  color: (color ?? Colors.grey).withOpacity(0.5),
-                  blurRadius: 10,
+                  color: (color ?? Colors.redAccent).withOpacity(0.35),
+                  blurRadius: 12,
                   spreadRadius: 2,
                 ),
               ]
@@ -370,101 +529,126 @@ class ExerciseExecutionPage extends ConsumerWidget {
 
   Widget _buildCompletionScreen(BuildContext context, WorkoutSessionState sessionState) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 20, 6, 6),
       body: SafeArea(
-        child: Center(
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Lottie.asset(
-                  'assets/lottie/Fitness.json',
-                  width: 250.w,
-                  height: 250.h,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 32.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Lottie.asset(
+                'assets/lottie/Fitness.json',
+                width: 240.w,
+                height: 240.h,
+              ),
+              SizedBox(height: 28.h),
+              Text(
+                'Workout Complete!',
+                style: GoogleFonts.manrope(
+                  color: Colors.white,
+                  fontSize: 30.sp,
+                  fontWeight: FontWeight.bold,
                 ),
-                SizedBox(height: 30.h),
-                Text(
-                  'Workout Complete!',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontSize: 32.sp,
-                    fontWeight: FontWeight.bold,
-                  ),
+              ),
+              SizedBox(height: 14.h),
+              Text(
+                'Great job! You completed ${sessionState.exercises.length} exercises.',
+                style: GoogleFonts.manrope(
+                  color: Colors.grey[400],
+                  fontSize: 15.sp,
+                  height: 1.4,
                 ),
-                SizedBox(height: 20.h),
-                Text(
-                  'Great job! You completed ${sessionState.exercises.length} exercises',
-                  style: GoogleFonts.poppins(
-                    color: Colors.grey[400],
-                    fontSize: 16.sp,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-                SizedBox(height: 30.h),
-                _buildStatCard('Total Time', _formatTime(sessionState.totalTimeSpent)),
-                SizedBox(height: 10.h),
-                _buildStatCard('Exercises', '${sessionState.exercises.length}'),
-                SizedBox(height: 10.h),
-                _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase()),
-                SizedBox(height: 50.h),
-                ElevatedButton(
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 28.h),
+              Builder(
+                builder: (context) {
+                  final availableWidth = MediaQuery.of(context).size.width - (24.w * 2);
+                  final statWidth = (availableWidth - 12.w) / 2;
+                  return Wrap(
+                    spacing: 12.w,
+                    runSpacing: 12.h,
+                    children: [
+                      _buildStatCard('Total Time', _formatTime(sessionState.totalTimeSpent), statWidth),
+                      _buildStatCard('Exercises', '${sessionState.exercises.length}', statWidth),
+                      _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase(), statWidth),
+                    ],
+                  );
+                },
+              ),
+              SizedBox(height: 32.h),
+              SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: ElevatedButton(
                   onPressed: () {
                     if (context.mounted) {
                       Navigator.of(context).pop();
                     }
                   },
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 163, 68, 68),
-                    foregroundColor: Colors.black,
-                    padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 16),
+                    backgroundColor: const Color.fromARGB(255, 155, 4, 4),
+                    foregroundColor: Colors.white,
+                    elevation: 6,
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
+                      borderRadius: BorderRadius.circular(18),
                     ),
+                    shadowColor: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.4),
                   ),
                   child: Text(
-                    'Done',
-                    style: GoogleFonts.poppins(
+                    'DONE',
+                    style: GoogleFonts.manrope(
                       fontSize: 18,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: FontWeight.w900,
+                      letterSpacing: 1.2,
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildStatCard(String label, String value) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 16),
-      decoration: BoxDecoration(
-        color: Colors.grey[900],
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: const Color.fromARGB(255, 109, 1, 1).withOpacity(0.3)),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.poppins(
-              color: Colors.grey[400],
-              fontSize: 16,
+  Widget _buildStatCard(String label, String value, double width) {
+    return SizedBox(
+      width: width,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
+        decoration: BoxDecoration(
+          color: const Color.fromARGB(255, 36, 12, 12),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color.fromARGB(80, 255, 99, 99)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.08),
+              blurRadius: 18,
+              offset: const Offset(0, 10),
             ),
-          ),
-          Text(
-            value,
-            style: GoogleFonts.poppins(
-              color: Colors.white,
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
+          ],
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              label,
+              style: GoogleFonts.manrope(
+                color: Colors.white70,
+                fontSize: 14,
+              ),
             ),
-          ),
-        ],
+            Text(
+              value,
+              style: GoogleFonts.manrope(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -473,14 +657,15 @@ class ExerciseExecutionPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: Colors.grey[900],
+        backgroundColor: const Color.fromARGB(255, 36, 12, 12),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Exit Workout?',
-          style: GoogleFonts.poppins(color: Colors.white),
+          style: GoogleFonts.manrope(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         content: Text(
           'Your progress will not be saved if you exit now.',
-          style: GoogleFonts.poppins(color: Colors.grey[400]),
+          style: GoogleFonts.manrope(color: Colors.white70),
         ),
         actions: [
           TextButton(
@@ -491,7 +676,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
             },
             child: Text(
               'Continue',
-              style: GoogleFonts.poppins(color: const Color.fromARGB(255, 220, 50, 50)),
+                style: GoogleFonts.manrope(color: Colors.orangeAccent),
             ),
           ),
           TextButton(
@@ -504,7 +689,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
             },
             child: Text(
               'Exit',
-              style: GoogleFonts.poppins(color: Colors.redAccent),
+                style: GoogleFonts.manrope(color: const Color.fromARGB(255, 255, 99, 99)),
             ),
           ),
         ],

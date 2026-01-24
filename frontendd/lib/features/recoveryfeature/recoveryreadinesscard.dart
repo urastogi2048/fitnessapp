@@ -8,6 +8,20 @@ import 'package:frontendd/features/recoveryfeature/recoverystate.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+class _Suggestion {
+  const _Suggestion({
+    required this.title,
+    required this.message,
+    required this.icon,
+    required this.color,
+  });
+
+  final String title;
+  final String message;
+  final IconData icon;
+  final Color color;
+}
+
 
 class Recoveryreadinesscard extends ConsumerStatefulWidget {
   const Recoveryreadinesscard({super.key});
@@ -33,8 +47,6 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
   bool isloading = false;
   //int streak=0 ;
   double? overallscore;
-
-  // Add these for the quality selector
   final List<int> _qualityValues = [1, 2, 3, 4, 5];
   int _sleepQualityValue = 3;
   final List<int> _fatigueValues = [1, 2, 3, 4, 5];
@@ -78,14 +90,14 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
       body: overallscore == null ? buildform() : buildresult(),
     );
   }
 
   Widget buildform() {
     return Padding(
-      padding: EdgeInsets.all(25.0),
+      padding: const EdgeInsets.all(25.0),
       child: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -127,7 +139,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                   children: [
                     
                     Card(
-                      color: const Color.fromARGB(255, 7, 26, 41),
+                      color: const Color.fromARGB(255, 10, 18, 46),
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
@@ -335,7 +347,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                     ),
                     SizedBox(height: 15.0),
                     Card(
-                      color: const Color.fromARGB(255, 7, 26, 41),
+                      color: const Color.fromARGB(255, 10, 18, 46),
                       child: Padding(
                         padding: const EdgeInsets.all(20.0),
                         child: Column(
@@ -602,7 +614,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                     ),
                     SizedBox(height: 8.0),
                     Card(
-                      color: const Color.fromARGB(255, 6, 25, 41),
+                      color: const Color.fromARGB(255, 10, 18, 46),
                       child: Padding(
                         padding: const EdgeInsets.only(
                           top: 20.0,
@@ -703,7 +715,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                           ),
                                         ),
                                         child: SfSlider(
-                                          min: 40.0,
+                                          min: 45.0,
                                           max: 100.0,
                                           interval: 10,
                                           stepSize: 1,
@@ -828,6 +840,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     final score = scoreValue.round();
     String statusText = '';
     Color statusColor = Colors.white;
+    final suggestions = _buildSuggestions(scoreValue);
     
     if (score >= 80) {
       statusText = 'EXCELLENT';
@@ -843,108 +856,162 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       statusColor = Colors.redAccent;
     }
 
-    return Padding(
-      padding: EdgeInsets.all(30.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-         children: [
-           
-           Center ( 
-          child: Text(
-            'Analysis Complete',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              color: const Color.fromARGB(255, 148, 148, 148),
-            ),
-          ),
-         ),
-         SizedBox(height: 40),
-         Stack(
-           alignment: Alignment.center,
+    return SingleChildScrollView(
+      child: Padding(
+        padding: EdgeInsets.all(30.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
            children: [
-             SizedBox(
-               width: 240,
-               height: 240,
-               child: CircularProgressIndicator(
-                 value: overallscore! > 1 ? overallscore! / 100 : overallscore,
-                 strokeWidth: 20,
-                 backgroundColor: Colors.grey[800],
-                 color: statusColor,
-                 strokeCap: StrokeCap.round,
+             
+             Center ( 
+            child: Text(
+              'Analysis Complete',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.manrope().fontFamily,
+                color: const Color.fromARGB(255, 148, 148, 148),
+              ),
+            ),
+           ),
+           SizedBox(height: 40),
+           Stack(
+             alignment: Alignment.center,
+             children: [
+               SizedBox(
+                 width: 240,
+                 height: 240,
+                 child: CircularProgressIndicator(
+                   value: overallscore! > 1 ? overallscore! / 100 : overallscore,
+                   strokeWidth: 18,
+                   backgroundColor: const Color.fromARGB(255, 23, 35, 68),
+                   color: statusColor,
+                   strokeCap: StrokeCap.round,
+                 ),
                ),
-             ),
-             Column(
-               mainAxisSize: MainAxisSize.min,
-               children: [
-                 Text(
-                   scoreValue.toStringAsFixed(1),
-                   style: TextStyle(
-                     fontSize: 72,
-                     fontWeight: FontWeight.bold,
-                     color: Colors.white,
-                     fontFamily: GoogleFonts.inter().fontFamily,
+               Column(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   Text(
+                     scoreValue.toStringAsFixed(1),
+                     style: TextStyle(
+                       fontSize: 72,
+                       fontWeight: FontWeight.bold,
+                       color: Colors.white,
+                       fontFamily: GoogleFonts.poppins().fontFamily,
+                     ),
                    ),
-                 ),
-                 Text(
-                   statusText,
-                   style: TextStyle(
-                     fontSize: 16,
-                     fontWeight: FontWeight.w600,
-                     color: statusColor,
-                     letterSpacing: 2,
-                     fontFamily: GoogleFonts.inter().fontFamily,
+                   Text(
+                     statusText,
+                     style: TextStyle(
+                       fontSize: 16,
+                       fontWeight: FontWeight.w600,
+                       color: statusColor,
+                       letterSpacing: 2,
+                       fontFamily: GoogleFonts.oswald().fontFamily,
+                     ),
                    ),
-                 ),
-
-                SizedBox(height: 10),
-                if(overallscore! < 40)
-                  Text(
-                    'Consider taking a rest day or engaging in light recovery activities.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      fontFamily: GoogleFonts.manrope().fontFamily,
+      
+                  SizedBox(height: 10),
+                  
+                 ],
+               ),
+             ],
+           ),
+           SizedBox(height: 30),
+           if(overallscore! < 40)
+                    Text(
+                      'Consider taking a rest day or engaging in light recovery activities.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    )
+                  else if(overallscore! < 60)
+                    Text(
+                      'You are recovering well, but listen to your body for any signs of fatigue.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    )
+                  else if(overallscore! < 80)
+                    Text(
+                      'Good recovery! You are ready for your next workout session.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    )
+                  else
+                    Text(
+                      'Excellent recovery! You are in peak condition for training.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Colors.white70,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
                     ),
-                  )
-                else if(overallscore! < 60)
-                  Text(
-                    'You are recovering well, but listen to your body for any signs of fatigue.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      fontFamily: GoogleFonts.manrope().fontFamily,
-                    ),
-                  )
-                else if(overallscore! < 80)
-                  Text(
-                    'Good recovery! You are ready for your next workout session.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      fontFamily: GoogleFonts.manrope().fontFamily,
-                    ),
-                  )
-                else
-                  Text(
-                    'Excellent recovery! You are in peak condition for training.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.white70,
-                      fontFamily: GoogleFonts.manrope().fontFamily,
-                    ),
+          SizedBox(height: 24),
+          if (suggestions.isNotEmpty)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Personalized suggestions',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
-               ],
-             ),
-           ],
-         ),
-       ]
+                ),
+                const SizedBox(height: 12),
+                ...suggestions
+                    .map((suggestion) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: _suggestionCard(suggestion),
+                        ))
+                    .toList(),
+              ],
+            ),
+            SizedBox(
+                      width: double.infinity,
+                      height: 64,
+                      child: ElevatedButton(
+                        onPressed: 
+                        (){
+                          Navigator.of(context).pop();
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          elevation: 0,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        child:  Text(
+                                'RETURN TO HOME',
+                                style: GoogleFonts.inter(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 1.2,
+                                ),
+                              ),
+                      ),
+                    ),
+         ]
+         
+        ),
       ),
     );
   }
@@ -1034,5 +1101,263 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     return double.tryParse(value.trim()) == null
         ? 'Enter a valid number'
         : null;
+  }
+  List<_Suggestion> _buildSuggestions(double scoreValue) {
+    final suggestions = <_Suggestion>[];
+
+    // Score-driven headline card (always present)
+    if (scoreValue < 40) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Full recovery day',
+          message:
+              'Keep intensity low, focus on sleep, mobility, and hydration before resuming training.',
+          icon: Icons.self_improvement,
+          color: Colors.redAccent,
+        ),
+      );
+    } else if (scoreValue < 60) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Light & mindful',
+          message:
+              'Stick to active recovery: walks, stretching, or easy cardio. Watch for lingering fatigue.',
+          icon: Icons.directions_walk,
+          color: Colors.orangeAccent,
+        ),
+      );
+    } else if (scoreValue < 80) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Solid readiness',
+          message:
+              'You can train normally. Include a thorough warm-up and cap intensity if fatigue rises.',
+          icon: Icons.fitness_center,
+          color: Colors.lightGreen,
+        ),
+      );
+    } else {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Go for it',
+          message:
+              'You are primed. Plan progressive overload but keep cooldown and hydration consistent.',
+          icon: Icons.flash_on,
+          color: Colors.greenAccent,
+        ),
+      );
+    }
+
+    // Sleep hours (strict to input)
+    if (_sleepHoursValue < 6) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Prioritize sleep time',
+          message: 'Aim for 7–9 hours tonight; short sleep suppresses recovery and readiness.',
+          icon: Icons.nightlight_round,
+          color: Colors.purpleAccent,
+        ),
+      );
+    } else if (_sleepHoursValue > 8.5) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Sleep duration is solid',
+          message: 'Maintain this routine; keep caffeine away from late hours to protect quality.',
+          icon: Icons.check_circle,
+          color: Colors.blueAccent,
+        ),
+      );
+    } else {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Keep sleep consistent',
+          message: 'Stay in the 7–8 hour lane; anchor bed/wake times to keep quality high.',
+          icon: Icons.schedule,
+          color: Colors.tealAccent,
+        ),
+      );
+    }
+
+    // Sleep quality (strict to input)
+    if (_sleepQualityValue <= 2) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Boost sleep quality',
+          message:
+              'Wind down earlier, darken the room, and reduce screens 60 minutes before bed.',
+          icon: Icons.bedtime,
+          color: Colors.indigoAccent,
+        ),
+      );
+    } else if (_sleepQualityValue >= 4) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Quality on point',
+          message: 'Keep pre-bed routine steady; avoid late heavy meals to preserve this quality.',
+          icon: Icons.verified,
+          color: Colors.lightBlueAccent,
+        ),
+      );
+    }
+
+    // Fatigue level (strict to input)
+    if (_fatigueLevelValue >= 4) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Manage fatigue',
+          message: 'Keep today easy, extend warm-up, and insert micro-breaks if you train.',
+          icon: Icons.local_hotel,
+          color: Colors.deepOrangeAccent,
+        ),
+      );
+    } else if (_fatigueLevelValue <= 2) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Energy available',
+          message: 'You can push, but still watch technique and cap volume if soreness creeps in.',
+          icon: Icons.bolt,
+          color: Colors.greenAccent,
+        ),
+      );
+    }
+
+    // Resting heart rate (strict to input)
+    if (restingHRValue > 80) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Elevated resting HR',
+          message:
+              'Stay hydrated, keep today easy, and reassess tomorrow to avoid overreaching.',
+          icon: Icons.monitor_heart,
+          color: Colors.redAccent,
+        ),
+      );
+    } else if (restingHRValue < 55) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'HR looks steady',
+          message: 'Maintain your routine; keep an eye on sudden spikes after hard blocks.',
+          icon: Icons.favorite_border,
+          color: Colors.lightGreenAccent,
+        ),
+      );
+    }
+
+    // Muscle soreness (strict to input)
+    if (muscleSorenessValue >= 4) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Ease sore muscles',
+          message:
+              'Use light mobility, foam rolling, and gentle cardio to clear soreness before loading.',
+          icon: Icons.healing,
+          color: Colors.orange,
+        ),
+      );
+    } else if (muscleSorenessValue <= 2) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Soreness is low',
+          message: 'You can ramp intensity, but keep a cooldown to stay ahead of next-day stiffness.',
+          icon: Icons.directions_run,
+          color: Colors.cyanAccent,
+        ),
+      );
+    }
+
+    // Previous day intensity influence
+    final prevDay = previousDayIntensityValue;
+    if (prevDay > 0.7) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'High load yesterday',
+          message: 'Keep today submax or technique-focused to bank recovery after the hard effort.',
+          icon: Icons.speed,
+          color: Colors.amberAccent,
+        ),
+      );
+    } else if (prevDay < 0.3) {
+      suggestions.add(
+        const _Suggestion(
+          title: 'Low load yesterday',
+          message: 'If you feel fresh, a moderate session is fine; still start with mobility prep.',
+          icon: Icons.stacked_line_chart,
+          color: Colors.lightBlue,
+        ),
+      );
+    }
+
+    // Ensure we surface at least four tailored cards by adding a hydration/reminder tied to fatigue & HR
+    if (suggestions.length < 4) {
+      suggestions.add(
+        _Suggestion(
+          title: 'Hydrate and refuel',
+          message: _fatigueLevelValue >= 3
+              ? 'Use electrolytes and steady carbs to support recovery and lower perceived fatigue.'
+              : 'Maintain steady fluids and balanced meals to keep HR and energy stable.',
+          icon: Icons.local_drink,
+          color: Colors.blueAccent,
+        ),
+      );
+    }
+
+    return suggestions;
+
+    
+  }
+
+  Widget _suggestionCard(_Suggestion suggestion) {
+    return Card(
+      color: const Color.fromARGB(255, 10, 18, 46),
+      elevation: 0,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: suggestion.color.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(
+                suggestion.icon,
+                color: suggestion.color,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    suggestion.title,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    suggestion.message,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      height: 1.4,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 }

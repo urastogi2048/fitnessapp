@@ -90,91 +90,88 @@ class ProfileScreen extends ConsumerWidget {
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: EdgeInsets.all(16.0.w),
+                padding: const EdgeInsets.all(25.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header Section - Title and Settings
-                    SizedBox(
-                      height: 65.h,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Profile',
-                                style: GoogleFonts.openSans(
-                                  fontSize: 28.sp,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white,
-                                ),
-                              ),
-                              Text(
-                                profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
-                                style: GoogleFonts.openSans(
-                                  fontSize: 16.sp,
-                                  color: Colors.white70,
-                                ),
-                              ),
-                            ],
-                          ),
-                          InkWell(
-                            onTap: () {
-                              _showSettingsBottomSheet(context);
-                            },
-                            child: Container(
-                              padding: EdgeInsets.all(12.w),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(123, 9, 45, 81),
-                                borderRadius: BorderRadius.circular(12.r),
-                              ),
-                              child: const Icon(
-                                Icons.settings,
+                    // Header Section
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Profile',
+                              style: TextStyle(
+                                fontSize: 26,
                                 color: Colors.white,
-                                size: 24,
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
                               ),
                             ),
+                            SizedBox(height: 5.0),
+                            Text(
+                              profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.grey[600],
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.w500,
+                                ).fontFamily,
+                              ),
+                            ),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {
+                            _showSettingsBottomSheet(context);
+                          },
+                          child: Container(
+                            height: 44,
+                            width: 44,
+                            decoration: BoxDecoration(
+                              color: const Color.fromARGB(255, 6, 25, 41),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: const Icon(
+                              FontAwesomeIcons.gear,
+                              color: Colors.white,
+                              size: 20,
+                            ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 16.h),
+                    SizedBox(height: 20.0),
 
                     // Hero User Card
                     Card(
-                      color: const Color.fromARGB(255, 49, 1, 96),
+                      color: const Color.fromARGB(255, 7, 26, 41),
+                      elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20.r),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(20.w),
+                        padding: const EdgeInsets.all(20.0),
                         child: Row(
                           children: [
                             Container(
-                              width: 70.w,
-                              height: 70.h,
+                              height: 70,
+                              width: 70,
                               decoration: BoxDecoration(
+                                color: Colors.purpleAccent.withOpacity(0.15),
                                 shape: BoxShape.circle,
-                                gradient: const LinearGradient(
-                                  colors: [
-                                    Color.fromARGB(255, 255, 87, 51),
-                                    Color.fromARGB(255, 221, 44, 0),
-                                  ],
-                                  begin: Alignment.topLeft,
-                                  end: Alignment.bottomRight,
-                                ),
-                                border: Border.all(color: Colors.white24, width: 2),
                               ),
-                              child: Icon(
-                                Icons.person,
-                                color: Colors.white,
-                                size: 36.sp,
+                              child: const Icon(
+                                FontAwesomeIcons.userAstronaut,
+                                color: Colors.purpleAccent,
+                                size: 32,
                               ),
                             ),
-                            SizedBox(width: 16.w),
+                            const SizedBox(width: 16),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,20 +179,22 @@ class ProfileScreen extends ConsumerWidget {
                                 children: [
                                   Text(
                                     profile.username.isNotEmpty ? profile.username : 'User',
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 20.sp,
+                                    style: TextStyle(
+                                      fontSize: 20,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
+                                      fontFamily: GoogleFonts.manrope().fontFamily,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(height: 4.h),
+                                  const SizedBox(height: 6),
                                   Text(
                                     profile.email.isNotEmpty ? profile.email : 'No email',
-                                    style: GoogleFonts.openSans(
-                                      fontSize: 13.sp,
+                                    style: TextStyle(
+                                      fontSize: 14,
                                       color: Colors.white70,
+                                      fontFamily: GoogleFonts.manrope().fontFamily,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -207,76 +206,100 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ),
                     ),
-                    SizedBox(height: 24.h),
+                    const SizedBox(height: 24),
 
                     // Metrics Grid
-                    Text(
-                      'Your Metrics',
-                      style: GoogleFonts.openSans(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'BODY METRICS',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.cyanAccent,
+                            fontFamily: GoogleFonts.manrope(
+                              fontWeight: FontWeight.bold,
+                            ).fontFamily,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Icon(
+                          FontAwesomeIcons.chartLine,
+                          color: Colors.cyanAccent,
+                          size: 16,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 12.h),
+                    const SizedBox(height: 15),
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: 12.h,
-                      crossAxisSpacing: 12.w,
+                      mainAxisSpacing: 12,
+                      crossAxisSpacing: 12,
                       childAspectRatio: 1.15,
                       children: [
                         _metricCard(
                           'Age',
                           profile.age != null ? '${profile.age}' : '--',
                           'years',
-                          Icons.cake_outlined,
-                          const Color.fromARGB(255, 1, 72, 4),
+                          FontAwesomeIcons.cakeCandles,
+                          Colors.greenAccent,
                         ),
                         _metricCard(
                           'Height',
                           profile.height != null ? '${profile.height!.toStringAsFixed(0)}' : '--',
                           'cm',
-                          Icons.height,
-                          const Color.fromARGB(255, 187, 187, 1),
+                          FontAwesomeIcons.rulerVertical,
+                          Colors.amberAccent,
                         ),
                         _metricCard(
                           'Weight',
                           profile.weight != null ? '${profile.weight!.toStringAsFixed(0)}' : '--',
                           'kg',
-                          Icons.monitor_weight_outlined,
-                          const Color.fromARGB(255, 2, 71, 128),
+                          FontAwesomeIcons.weightScale,
+                          Colors.blueAccent,
                         ),
                         _metricCard(
                           'Goal',
                           _fallback(profile.goal),
                           '',
-                          Icons.flag_outlined,
-                          const Color.fromARGB(255, 136, 7, 7),
+                          FontAwesomeIcons.bullseye,
+                          Colors.orangeAccent,
                         ),
                       ],
                     ),
-                    SizedBox(height: 24.h),
+                    const SizedBox(height: 24),
 
                     // Body Profile Section
-                    Text(
-                      'Body Profile',
-                      style: GoogleFonts.openSans(
-                        fontSize: 18.sp,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                      ),
+                    Row(
+                      children: [
+                        Text(
+                          'BODY PROFILE',
+                          style: TextStyle(
+                            fontSize: 15,
+                            color: Colors.purpleAccent,
+                            fontFamily: GoogleFonts.manrope(
+                              fontWeight: FontWeight.bold,
+                            ).fontFamily,
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        const Icon(
+                          FontAwesomeIcons.dna,
+                          color: Colors.purpleAccent,
+                          size: 16,
+                        ),
+                      ],
                     ),
-                    SizedBox(height: 12.h),
-                    _profileInfoCard('Gender', _fallback(profile.gender)),
-                    SizedBox(height: 12.h),
-                    _profileInfoCard('Body Type', _fallback(profile.bodyType)),
-                    SizedBox(height: 32.h),
+                    const SizedBox(height: 15),
+                    _profileInfoCard('Gender', _fallback(profile.gender), FontAwesomeIcons.venusMars),
+                    const SizedBox(height: 12),
+                    _profileInfoCard('Body Type', _fallback(profile.bodyType), FontAwesomeIcons.personRunning),
+                    const SizedBox(height: 32),
 
                     // Logout Button
                     _logoutButton(context, ref),
-                    SizedBox(height: 20.h),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
@@ -292,52 +315,67 @@ class ProfileScreen extends ConsumerWidget {
     String value,
     String unit,
     IconData icon,
-    Color bgColor,
+    Color accentColor,
   ) {
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(16.r),
+    return Card(
+      color: const Color.fromARGB(255, 7, 26, 41),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Padding(
-        padding: EdgeInsets.all(12.w),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(icon, color: Colors.white, size: 28.sp),
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: accentColor.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: accentColor, size: 20),
+            ),
+            const SizedBox(height: 8),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   label,
-                  style: GoogleFonts.manrope(
+                  style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     fontWeight: FontWeight.w500,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                 ),
-                SizedBox(height: 4.h),
+                const SizedBox(height: 4),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
-                    Text(
-                      value,
-                      style: GoogleFonts.openSans(
-                        color: Colors.white,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
+                    Flexible(
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
                     ),
                     if (unit.isNotEmpty) ...[
-                      SizedBox(width: 4.w),
+                      const SizedBox(width: 4),
                       Text(
                         unit,
-                        style: GoogleFonts.manrope(
+                        style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 11.sp,
+                          fontSize: 11,
+                          fontFamily: GoogleFonts.manrope().fontFamily,
                         ),
                       ),
                     ],
@@ -351,33 +389,54 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  Widget _profileInfoCard(String label, String value) {
-    return Container(
-      padding: EdgeInsets.all(16.w),
-      decoration: BoxDecoration(
-        color: const Color.fromARGB(123, 9, 45, 81),
-        borderRadius: BorderRadius.circular(16.r),
+  Widget _profileInfoCard(String label, String value, IconData icon) {
+    return Card(
+      color: const Color.fromARGB(255, 7, 26, 41),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
       ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            label,
-            style: GoogleFonts.manrope(
-              color: Colors.white70,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w500,
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Row(
+          children: [
+            Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: Colors.purpleAccent.withOpacity(0.15),
+                shape: BoxShape.circle,
+              ),
+              child: Icon(icon, color: Colors.purpleAccent, size: 18),
             ),
-          ),
-          Text(
-            value,
-            style: GoogleFonts.openSans(
-              color: Colors.white,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.bold,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    label,
+                    style: TextStyle(
+                      color: Colors.white70,
+                      fontSize: 12,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    value,
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -458,29 +517,30 @@ class ProfileScreen extends ConsumerWidget {
   void _showSettingsBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: const Color.fromARGB(255, 20, 20, 20),
-      shape: RoundedRectangleBorder(
+      backgroundColor: const Color.fromARGB(255, 10, 10, 10),
+      shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(
-          top: Radius.circular(24.r),
+          top: Radius.circular(24),
         ),
       ),
       builder: (context) => Padding(
-        padding: EdgeInsets.all(24.w),
+        padding: const EdgeInsets.all(24.0),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
               'Settings',
-              style: GoogleFonts.openSans(
-                fontSize: 24.sp,
+              style: TextStyle(
+                fontSize: 24,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
+                fontFamily: GoogleFonts.manrope().fontFamily,
               ),
             ),
-            SizedBox(height: 24.h),
+            const SizedBox(height: 24),
             _settingsOption(
-              icon: Icons.edit,
+              icon: FontAwesomeIcons.penToSquare,
               title: 'Edit Profile',
               subtitle: 'Update your questionnaire details',
               onTap: () {
@@ -490,9 +550,9 @@ class ProfileScreen extends ConsumerWidget {
                 );
               },
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12),
             _settingsOption(
-              icon: Icons.notifications,
+              icon: FontAwesomeIcons.bell,
               title: 'Notifications',
               subtitle: 'Manage workout reminders',
               onTap: () {
@@ -502,9 +562,9 @@ class ProfileScreen extends ConsumerWidget {
                 );
               },
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12),
             _settingsOption(
-              icon: Icons.privacy_tip,
+              icon: FontAwesomeIcons.shieldHalved,
               title: 'Privacy',
               subtitle: 'Privacy and security settings',
               onTap: () {
@@ -514,9 +574,9 @@ class ProfileScreen extends ConsumerWidget {
                 );
               },
             ),
-            SizedBox(height: 12.h),
+            const SizedBox(height: 12),
             _settingsOption(
-              icon: Icons.help,
+              icon: FontAwesomeIcons.circleQuestion,
               title: 'Help & Support',
               subtitle: 'Get help with the app',
               onTap: () {
@@ -540,51 +600,54 @@ class ProfileScreen extends ConsumerWidget {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12.r),
+      borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: EdgeInsets.all(16.w),
+        padding: const EdgeInsets.all(16.0),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(123, 9, 45, 81),
-          borderRadius: BorderRadius.circular(12.r),
+          color: const Color.fromARGB(255, 7, 26, 41),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
           children: [
             Container(
-              padding: EdgeInsets.all(10.w),
+              height: 40,
+              width: 40,
               decoration: BoxDecoration(
-                color: Colors.white.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10.r),
+                color: Colors.cyanAccent.withOpacity(0.15),
+                shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.white, size: 24.sp),
+              child: Icon(icon, color: Colors.cyanAccent, size: 18),
             ),
-            SizedBox(width: 16.w),
+            const SizedBox(width: 16),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     title,
-                    style: GoogleFonts.manrope(
+                    style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16.sp,
+                      fontSize: 16,
                       fontWeight: FontWeight.bold,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
                   ),
-                  SizedBox(height: 4.h),
+                  const SizedBox(height: 4),
                   Text(
                     subtitle,
-                    style: GoogleFonts.manrope(
+                    style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12.sp,
+                      fontSize: 12,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
                   ),
                 ],
               ),
             ),
-            Icon(
-              Icons.arrow_forward_ios,
+            const Icon(
+              FontAwesomeIcons.chevronRight,
               color: Colors.white54,
-              size: 16.sp,
+              size: 14,
             ),
           ],
         ),
@@ -593,34 +656,38 @@ class ProfileScreen extends ConsumerWidget {
   }
 
   Widget _logoutButton(BuildContext context, WidgetRef ref) {
-    return Card(
-      color: const Color.fromARGB(255, 136, 7, 7),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(16),
-        onTap: () async {
+    return SizedBox(
+      width: double.infinity,
+      height: 64,
+      child: ElevatedButton(
+        onPressed: () async {
           await ref.read(authProvider.notifier).logout();
           if (context.mounted) {
             Navigator.of(context).pushNamedAndRemoveUntil('/login', (_) => false);
           }
         },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 18),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              const Icon(Icons.logout, color: Colors.white),
-              const SizedBox(width: 12),
-              Text(
-                'Sign Out',
-                style: GoogleFonts.poppins(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ],
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.white,
+          foregroundColor: Colors.black,
+          elevation: 0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
           ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(FontAwesomeIcons.rightFromBracket, size: 18),
+            const SizedBox(width: 12),
+            Text(
+              'SIGN OUT',
+              style: GoogleFonts.inter(
+                fontSize: 18,
+                fontWeight: FontWeight.w900,
+                letterSpacing: 1.2,
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -629,45 +696,79 @@ class ProfileScreen extends ConsumerWidget {
   Widget _errorState(BuildContext context, Object e, StackTrace stack, WidgetRef ref) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.all(30),
         child: Card(
-          color: const Color.fromARGB(255, 136, 7, 7),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          color: const Color.fromARGB(255, 7, 26, 41),
+          elevation: 0,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Padding(
-            padding: const EdgeInsets.all(24),
+            padding: const EdgeInsets.all(30),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.error_outline, color: Colors.amber, size: 54),
-                const SizedBox(height: 16),
+                Container(
+                  height: 70,
+                  width: 70,
+                  decoration: BoxDecoration(
+                    color: Colors.redAccent.withOpacity(0.15),
+                    shape: BoxShape.circle,
+                  ),
+                  child: const Icon(
+                    FontAwesomeIcons.triangleExclamation,
+                    color: Colors.redAccent,
+                    size: 32,
+                  ),
+                ),
+                const SizedBox(height: 20),
                 Text(
                   'Error loading profile',
-                  style: GoogleFonts.poppins(
+                  style: TextStyle(
                     color: Colors.white,
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                 ),
-                const SizedBox(height: 8),
+                const SizedBox(height: 10),
                 Text(
                   e.toString(),
-                  style: GoogleFonts.oswald(
+                  style: TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  icon: const Icon(Icons.refresh),
-                  label: const Text('Retry'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    foregroundColor: const Color.fromARGB(255, 136, 7, 7),
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                    padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 24),
+                const SizedBox(height: 24),
+                SizedBox(
+                  width: double.infinity,
+                  height: 50,
+                  child: ElevatedButton(
+                    onPressed: () => ref.invalidate(profileProvider),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.white,
+                      foregroundColor: Colors.black,
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(FontAwesomeIcons.arrowsRotate, size: 16),
+                        const SizedBox(width: 10),
+                        Text(
+                          'RETRY',
+                          style: GoogleFonts.inter(
+                            fontSize: 16,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  onPressed: () => ref.invalidate(profileProvider),
                 ),
               ],
             ),
