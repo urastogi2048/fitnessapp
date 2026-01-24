@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:frontendd/components/homeappbar.dart';
-import 'package:frontendd/features/home/streakservice.dart';
+
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:frontendd/features/recoveryfeature/recoverystate.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:scroll_wheel_selector/scroll_wheel_selector.dart';
+
 
 class Recoveryreadinesscard extends ConsumerStatefulWidget {
   const Recoveryreadinesscard({super.key});
@@ -824,10 +823,128 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
   }
 
   Widget buildresult() {
+    // Check if score is already in 0-100 range or 0-1 range
+    final scoreValue = overallscore! > 1 ? overallscore! : overallscore! * 100;
+    final score = scoreValue.round();
+    String statusText = '';
+    Color statusColor = Colors.white;
+    
+    if (score >= 80) {
+      statusText = 'EXCELLENT';
+      statusColor = Colors.greenAccent;
+    } else if (score >= 60) {
+      statusText = 'GOOD';
+      statusColor = Colors.lightGreen;
+    } else if (score >= 40) {
+      statusText = 'FAIR';
+      statusColor = Colors.orangeAccent;
+    } else {
+      statusText = 'POOR';
+      statusColor = Colors.redAccent;
+    }
+
     return Padding(
-      padding: EdgeInsets.all(16.0),
+      padding: EdgeInsets.all(30.0),
       child: Column(
-          
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+         children: [
+           
+           Center ( 
+          child: Text(
+            'Analysis Complete',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              fontFamily: GoogleFonts.manrope().fontFamily,
+              color: const Color.fromARGB(255, 148, 148, 148),
+            ),
+          ),
+         ),
+         SizedBox(height: 40),
+         Stack(
+           alignment: Alignment.center,
+           children: [
+             SizedBox(
+               width: 240,
+               height: 240,
+               child: CircularProgressIndicator(
+                 value: overallscore! > 1 ? overallscore! / 100 : overallscore,
+                 strokeWidth: 20,
+                 backgroundColor: Colors.grey[800],
+                 color: statusColor,
+                 strokeCap: StrokeCap.round,
+               ),
+             ),
+             Column(
+               mainAxisSize: MainAxisSize.min,
+               children: [
+                 Text(
+                   scoreValue.toStringAsFixed(1),
+                   style: TextStyle(
+                     fontSize: 72,
+                     fontWeight: FontWeight.bold,
+                     color: Colors.white,
+                     fontFamily: GoogleFonts.inter().fontFamily,
+                   ),
+                 ),
+                 Text(
+                   statusText,
+                   style: TextStyle(
+                     fontSize: 16,
+                     fontWeight: FontWeight.w600,
+                     color: statusColor,
+                     letterSpacing: 2,
+                     fontFamily: GoogleFonts.inter().fontFamily,
+                   ),
+                 ),
+
+                SizedBox(height: 10),
+                if(overallscore! < 40)
+                  Text(
+                    'Consider taking a rest day or engaging in light recovery activities.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  )
+                else if(overallscore! < 60)
+                  Text(
+                    'You are recovering well, but listen to your body for any signs of fatigue.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  )
+                else if(overallscore! < 80)
+                  Text(
+                    'Good recovery! You are ready for your next workout session.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  )
+                else
+                  Text(
+                    'Excellent recovery! You are in peak condition for training.',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.white70,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+               ],
+             ),
+           ],
+         ),
+       ]
       ),
     );
   }
