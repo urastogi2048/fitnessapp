@@ -39,7 +39,7 @@ class ApiService{
     }
   }
   
-  Future <Map<String,dynamic>> get(
+  Future<dynamic> get(
     String endpoint, {
       String? token,
     }
@@ -64,7 +64,7 @@ class ApiService{
         }
       }
       
-      final data = jsonDecode(response.body) as Map<String,dynamic>;
+      final data = jsonDecode(response.body);
       return data;
     } catch (e) {
       rethrow;

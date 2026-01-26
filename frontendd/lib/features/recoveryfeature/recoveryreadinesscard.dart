@@ -113,7 +113,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
             Text(
               'Daily Check-In',
               style: TextStyle(
-                fontSize: 26,
+                fontSize: 28,
                 color: Colors.white,
                 fontFamily: GoogleFonts.manrope(
                   fontWeight: FontWeight.bold,

@@ -8,6 +8,7 @@ import '../../core/tokenstorage.dart';
 import '../../core/onboardingstorage.dart';
 import 'authstate.dart';
 import '../home/profile.dart' show profileProvider;
+import '../progress/statprovider.dart';
 
 /// Shared service providers
 final apiServiceProvider = Provider<ApiService>((ref) => ApiService());
@@ -105,6 +106,11 @@ class AuthNotifier extends StateNotifier<AuthState> {
     
     // Invalidate profile cache
     ref.invalidate(profileProvider);
+    ref.invalidate(monthlyDaywiseProvider);
+ref.invalidate(weeklyDaywiseProvider);
+ref.invalidate(weeklyBodyPartwiseProvider);
+ref.invalidate(monthlyBodyPartwiseProvider);
+
     
     // Reset state completely
     state = state.copyWith(

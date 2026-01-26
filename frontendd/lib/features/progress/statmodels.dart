@@ -102,7 +102,7 @@ class MonthlyBodyPartwise {
             bodyPart.add(i['bodyPart']);
             totalSeconds.add(i['totalSeconds']);
             totalMinutes.add(i['totalMinutes']);
-            percentage.add(i['percentage'].toDouble());
+          percentage.add(double.tryParse(i['percentage'].toString()) ?? 0.0);
         }
          return MonthlyBodyPartwise (
             bodyPart: bodyPart,
