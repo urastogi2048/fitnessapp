@@ -65,6 +65,7 @@ const UserSchema = new mongoose.Schema(
         bodyType: String,
         goal: String,
     },
+
     
    
     onboardingCompleted: {

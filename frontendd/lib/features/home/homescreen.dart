@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/components/homeappbar.dart';
 import 'package:frontendd/features/home/profile.dart';
+import 'package:frontendd/features/progress/statui.dart';
 import 'package:frontendd/features/recoveryfeature/recoveryreadinesscard.dart';
 import 'package:frontendd/features/weeklyworkout/exercisedata.dart';
 import 'package:frontendd/features/weeklyworkout/exercisemodel.dart';
@@ -658,7 +659,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         const SizedBox(width: 12),
                         Expanded(
                           child: InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                builder: (context) =>  StatsUI(),
+                              ));
+                            },
                             child: _smallCard(
                               color: Color.fromARGB(121, 10, 34, 60),
                               //lottie: 'assets/lottie/growth.json',

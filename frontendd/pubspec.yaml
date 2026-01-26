@@ -29,6 +29,7 @@ dependencies:
   font_awesome_flutter: ^10.12.0
   syncfusion_flutter_sliders: ^32.1.24
   scroll_wheel_selector: ^0.0.4
+  fl_chart: ^1.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
