@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import '../../features/auth/authprovider.dart';
+import 'package:frontendd/services/notificationservice.dart';
 
 final profileProvider = FutureProvider<UserProfile>((ref) async {
   print('🔍 ProfileProvider: Starting to fetch user profile...');
@@ -555,11 +556,114 @@ class ProfileScreen extends ConsumerWidget {
               icon: FontAwesomeIcons.bell,
               title: 'Notifications',
               subtitle: 'Manage workout reminders',
-              onTap: () {
+              onTap: () async{
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Notification settings coming soon')),
-                );
+                final granted = await NotificationService().requestPermissions();
+
+                if(granted) {
+                  if(context.mounted){
+                    showDialog(
+                      context:context,
+                      builder:(context)=> AlertDialog(
+                        backgroundColor: const Color.fromARGB(255, 10, 10, 10),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                          side: BorderSide(color: Colors.cyanAccent.withOpacity(0.2), width: 2),
+                        ),
+                        title: Text(
+                          'Notifications Settings',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        content: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Would you like to enable daily workout streak reminders at 6:00 PM?',
+                              style: TextStyle(
+                                color: Colors.white70,
+                                fontFamily: GoogleFonts.manrope().fontFamily,
+                              ),
+                            ),
+                            const SizedBox(height: 20),
+                            Container(
+                              padding: const EdgeInsets.only(top: 10),
+                              decoration: BoxDecoration(
+                                color: const Color.fromARGB(255, 7, 26, 41),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(color: Colors.cyanAccent.withOpacity(0.2), width: 1),
+                              ),
+                               child: Row(
+                    children: [
+                      const Icon(Icons.alarm, color: Colors.orange, size: 32),
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: Text(
+                          'Daily Streak Reminder\n6:00 PM',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      const Icon(Icons.check_circle, color: Colors.green, size: 24),
+                    ],
+                  ),
+                            ),
+                             const SizedBox(height: 16),
+                             SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  await NotificationService().showTestNotification();
+                                  if(context.mounted){
+                                    Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Test notification sent!')),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.send),
+                                label: const Text('Send Test Notification'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: Colors.cyanAccent,
+                                  foregroundColor: Colors.black,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                             ),
+
+                          ],
+                        ),
+                        actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'Close',
+                  style: GoogleFonts.poppins(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+                        
+                      )
+                    );
+                  }
+                } else {
+                  if(context.mounted){
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Notification permissions denied')),
+                    );
+                  }
+                }
               },
             ),
             const SizedBox(height: 12),

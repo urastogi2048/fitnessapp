@@ -5,9 +5,16 @@ import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
 import 'package:frontendd/features/home/homescreen.dart';
+import 'package:frontendd/services/notificationservice.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  try{
+    await NotificationService().initialize();
+    await NotificationService().requestPermissions();
+  } catch (e) {
+    print('❌ Error initializing Notification Service: $e');
+  }
   runApp(const ProviderScope(child: MainApp()));
 }
 

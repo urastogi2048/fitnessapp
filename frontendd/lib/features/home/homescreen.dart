@@ -18,6 +18,7 @@ import 'package:sliding_clipped_nav_bar/sliding_clipped_nav_bar.dart';
 import 'package:frontendd/features/home/profile.dart' show profileProvider;
 import 'package:frontendd/features/home/streakservice.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontendd/services/notificationservice.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -46,7 +47,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     carouselController = InfiniteScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      // Periodically refresh streak so UI stays current without a manual reload.
+
+    
+
       ref.invalidate(streakProvider);
       _streakTimer = Timer.periodic(
         const Duration(seconds: 20),
@@ -56,6 +59,21 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
         if (carouselController.hasClients) {
           carouselController.nextItem();
+        }
+      });
+      Future.delayed(const Duration(seconds:2),() async {
+        try {
+          final granted=await NotificationService().requestPermissions();
+          if(granted) {
+            await NotificationService().scheduleDailyStreakReminder();
+
+          }
+          
+        
+
+        }
+        catch(e){
+          print('❌ Error scheduling notification: $e');
         }
       });
     });

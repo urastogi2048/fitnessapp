@@ -1,7 +1,6 @@
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:timezone/data/latest_all.dart';
 import 'package:timezone/timezone.dart' as tz;
-import 'package:timezone/data/latest_all.dart';
+import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
 
@@ -20,7 +19,7 @@ class NotificationService {
     if (_initialized) return;
 
     // Initialize timezone database
-    tz.initializeTimeZones();
+    tzdata.initializeTimeZones();
     tz.setLocalLocation(tz.getLocation('Asia/Kolkata')); // Change to your timezone
 
     // Android initialization settings
@@ -78,13 +77,15 @@ class NotificationService {
     await initialize();
     await cancelStreakReminder(); // Cancel existing first
 
-    final now = tz.TzDateTime.now(tz.local);
-    var scheduledDate = tz.TzDateTime(
+    final now = tz.TZDateTime.now(tz.local);
+    var scheduledDate = tz.TZDateTime(
       tz.local,
       now.year,
       now.month,
       now.day,
       18, // 6:00 PM
+      0,  // minutes
+      0,  // seconds
     );
 
     // If 6 PM has already passed today, schedule for tomorrow
@@ -97,9 +98,8 @@ class NotificationService {
       'streak_reminder_channel',
       'Streak Reminders',
       channelDescription: 'Daily reminders to maintain your workout streak',
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
-      icon: '@mipmap/ic_launcher',
       playSound: true,
       enableVibration: true,
     );
@@ -121,10 +121,10 @@ class NotificationService {
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
-      matchDateTimeComponents: DateTimeComponents.time, // Repeat daily
+      matchDateTimeComponents: DateTimeComponents.time,
     );
 
     print('✅ Daily streak reminder scheduled for 6:00 PM');
@@ -139,7 +139,7 @@ class NotificationService {
       'test_channel',
       'Test Notifications',
       channelDescription: 'Test notifications',
-      importance: Importance.high,
+      importance: Importance.max,
       priority: Priority.high,
     );
 
