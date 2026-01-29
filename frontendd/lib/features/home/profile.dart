@@ -2,6 +2,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontendd/features/home/editprofile.dart';
+import 'package:frontendd/features/home/help&support.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -545,10 +547,7 @@ class ProfileScreen extends ConsumerWidget {
               title: 'Edit Profile',
               subtitle: 'Update your questionnaire details',
               onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Edit profile feature coming soon')),
-                );
+                Navigator.push(context, MaterialPageRoute(builder: (context) => const Editprofile()));
               },
             ),
             const SizedBox(height: 12),
@@ -619,9 +618,32 @@ class ProfileScreen extends ConsumerWidget {
                               width: double.infinity,
                               child: ElevatedButton.icon(
                                 onPressed: () async {
-                                  await NotificationService().showTestNotification();
+                                  await NotificationService().scheduleDailyStreakReminder();
                                   if(context.mounted){
                                     Navigator.pop(context);
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(content: Text('Daily 6 PM reminder enabled!')),
+                                    );
+                                  }
+                                },
+                                icon: const Icon(Icons.schedule),
+                                label: const Text('Enable Daily Reminder'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: const Color.fromARGB(255, 220, 50, 50),
+                                  foregroundColor: Colors.white,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                              ),
+                             ),
+                             const SizedBox(height: 12),
+                             SizedBox(
+                              width: double.infinity,
+                              child: ElevatedButton.icon(
+                                onPressed: () async {
+                                  await NotificationService().showTestNotification();
+                                  if(context.mounted){
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       const SnackBar(content: Text('Test notification sent!')),
                                     );
@@ -667,27 +689,13 @@ class ProfileScreen extends ConsumerWidget {
               },
             ),
             const SizedBox(height: 12),
-            _settingsOption(
-              icon: FontAwesomeIcons.shieldHalved,
-              title: 'Privacy',
-              subtitle: 'Privacy and security settings',
-              onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Privacy settings coming soon')),
-                );
-              },
-            ),
-            const SizedBox(height: 12),
+            
             _settingsOption(
               icon: FontAwesomeIcons.circleQuestion,
               title: 'Help & Support',
               subtitle: 'Get help with the app',
               onTap: () {
-                Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text('Support page coming soon')),
-                );
+               Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpAndSupportPage()));
               },
             ),
           ],

@@ -116,7 +116,7 @@ class NotificationService {
     );
 
     await _notificationsPlugin.zonedSchedule(
-      0, // Notification ID
+      0, 
       '🔥 Keep Your Streak Alive!',
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
@@ -150,8 +150,8 @@ class NotificationService {
 
     await _notificationsPlugin.show(
       999,
-      '🔥 Test Notification',
-      'Your notifications are working!',
+      'Test Notification',
+      'Notifications are working!',
       notificationDetails,
     );
   }
