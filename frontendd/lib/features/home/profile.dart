@@ -130,7 +130,7 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                         InkWell(
                           onTap: () {
-                            _showSettingsBottomSheet(context);
+                            _showSettingsBottomSheet(context, profile);
                           },
                           child: Container(
                             height: 44,
@@ -517,7 +517,7 @@ class ProfileScreen extends ConsumerWidget {
     );
   }
 
-  void _showSettingsBottomSheet(BuildContext context) {
+  void _showSettingsBottomSheet(BuildContext context, UserProfile profile) {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color.fromARGB(255, 10, 10, 10),
@@ -547,7 +547,7 @@ class ProfileScreen extends ConsumerWidget {
               title: 'Edit Profile',
               subtitle: 'Update your questionnaire details',
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => const Editprofile()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  Editprofile(userProfile: profile)));
               },
             ),
             const SizedBox(height: 12),
@@ -601,7 +601,7 @@ class ProfileScreen extends ConsumerWidget {
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          'Daily Streak Reminder\n6:00 PM',
+                          'Daily Streak Reminder\n6:30 PM (Auto-enabled)',
                           style: GoogleFonts.poppins(
                             color: Colors.white,
                             fontSize: 14,
@@ -614,30 +614,6 @@ class ProfileScreen extends ConsumerWidget {
                   ),
                             ),
                              const SizedBox(height: 16),
-                             SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  await NotificationService().scheduleDailyStreakReminder();
-                                  if(context.mounted){
-                                    Navigator.pop(context);
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Daily 6 PM reminder enabled!')),
-                                    );
-                                  }
-                                },
-                                icon: const Icon(Icons.schedule),
-                                label: const Text('Enable Daily Reminder'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color.fromARGB(255, 220, 50, 50),
-                                  foregroundColor: Colors.white,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                             ),
-                             const SizedBox(height: 12),
                              SizedBox(
                               width: double.infinity,
                               child: ElevatedButton.icon(
@@ -803,7 +779,8 @@ class ProfileScreen extends ConsumerWidget {
         ),
       ),
     );
-  }
+  } 
+  
 
   Widget _errorState(BuildContext context, Object e, StackTrace stack, WidgetRef ref) {
     return Center(

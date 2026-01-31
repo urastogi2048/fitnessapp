@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:permission_handler/permission_handler.dart';
@@ -9,24 +11,22 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
+  static const int _streakHour = 01; 
+  static const int _streakMinute = 50;
+
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
   bool _initialized = false;
 
-  /// Initialize the notification service
   Future<void> initialize() async {
     if (_initialized) return;
 
-    // Initialize timezone database
     tzdata.initializeTimeZones();
-    tz.setLocalLocation(tz.getLocation('Asia/Kolkata')); // Change to your timezone
-
-    // Android initialization settings
+    final localTimeZone = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(localTimeZone));
     const AndroidInitializationSettings androidSettings =
         AndroidInitializationSettings('@mipmap/ic_launcher');
-
-    // iOS initialization settings
     const DarwinInitializationSettings iosSettings =
         DarwinInitializationSettings(
       requestAlertPermission: true,
@@ -43,9 +43,29 @@ class NotificationService {
       initSettings,
       onDidReceiveNotificationResponse: _onNotificationTapped,
     );
+    const AndroidNotificationChannel streakChannel = AndroidNotificationChannel(
+      'streak_reminder_channel',
+      'Streak Reminders',
+      description: 'Daily reminders to maintain your workout streak',
+      importance: Importance.max,
+    );
+
+    const AndroidNotificationChannel testChannel = AndroidNotificationChannel(
+      'test_channel',
+      'Test Notifications',
+      description: 'Test notifications',
+      importance: Importance.max,
+    );
+
+    final androidPlugin = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    
+    await androidPlugin?.createNotificationChannel(streakChannel);
+    await androidPlugin?.createNotificationChannel(testChannel);
 
     _initialized = true;
-    print('✅ Notification Service initialized');
+    print('✅ Notification Service initialized with timezone: ${tz.local.name}');
   }
 
   /// Handle notification tap
@@ -56,8 +76,18 @@ class NotificationService {
   /// Request notification permissions
   Future<bool> requestPermissions() async {
     if (Platform.isAndroid) {
-      final status = await Permission.notification.request();
-      return status.isGranted;
+      final notificationStatus = await Permission.notification.request();
+      // Android 12+ exact alarm permission (required for exact scheduling)
+      final exactAlarmStatus = await Permission.scheduleExactAlarm.request();
+
+      // Request to ignore battery optimizations (OEMs may still require manual change)
+      final batteryOptStatus =
+          await Permission.ignoreBatteryOptimizations.request();
+
+      print(
+          '🔐 Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}');
+
+      return notificationStatus.isGranted;
     } else if (Platform.isIOS) {
       final bool? granted = await _notificationsPlugin
           .resolvePlatformSpecificImplementation<
@@ -72,7 +102,6 @@ class NotificationService {
     return true;
   }
 
-  /// Schedule daily streak reminder at 18:00 (6:00 PM)
   Future<void> scheduleDailyStreakReminder() async {
     await initialize();
     await cancelStreakReminder(); // Cancel existing first
@@ -83,15 +112,16 @@ class NotificationService {
       now.year,
       now.month,
       now.day,
-      18, // 6:00 PM
-      0,  // minutes
-      0,  // seconds
+      _streakHour,
+      _streakMinute,
+      0,
     );
-
-    // If 6 PM has already passed today, schedule for tomorrow
+    
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
+
+    print('🕒 Now: ${now.toLocal()} | Scheduled: ${scheduledDate.toLocal()}');
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
@@ -115,19 +145,30 @@ class NotificationService {
       iOS: iosDetails,
     );
 
+    final canExact = await Permission.scheduleExactAlarm.isGranted;
+    print('🔐 Can schedule exact alarms: $canExact');
+
     await _notificationsPlugin.zonedSchedule(
       0, 
       '🔥 Keep Your Streak Alive!',
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: canExact
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print('✅ Daily streak reminder scheduled for 6:00 PM');
+    print('✅ Daily streak reminder scheduled for ${scheduledDate.toLocal()}');
+
+    final pending = await _notificationsPlugin.pendingNotificationRequests();
+    print('📌 Pending scheduled notifications: ${pending.length}');
+    for (final p in pending) {
+      print('   - ID ${p.id}: ${p.title}');
+    }
   }
 
   /// Show test notification
@@ -154,6 +195,50 @@ class NotificationService {
       'Notifications are working!',
       notificationDetails,
     );
+
+    // Also schedule a 1-minute test to verify scheduled notifications
+    await _scheduleTestInMinutes(1);
+  }
+
+  Future<void> _scheduleTestInMinutes(int minutes) async {
+    final scheduledDate = tz.TZDateTime.now(tz.local)
+        .add(Duration(minutes: minutes));
+
+    const AndroidNotificationDetails androidDetails =
+        AndroidNotificationDetails(
+      'test_channel',
+      'Test Notifications',
+      channelDescription: 'Test notifications',
+      importance: Importance.max,
+      priority: Priority.high,
+      playSound: true,
+      enableVibration: true,
+    );
+
+    const NotificationDetails notificationDetails = NotificationDetails(
+      android: androidDetails,
+      iOS: DarwinNotificationDetails(),
+    );
+
+    final canExact = await Permission.scheduleExactAlarm.isGranted;
+
+    await _notificationsPlugin.zonedSchedule(
+      998,
+      '⏰ Scheduled Test',
+      'If you see this, scheduled notifications work!',
+      scheduledDate,
+      notificationDetails,
+      androidScheduleMode: canExact
+          ? AndroidScheduleMode.exactAllowWhileIdle
+          : AndroidScheduleMode.inexactAllowWhileIdle,
+      uiLocalNotificationDateInterpretation:
+          UILocalNotificationDateInterpretation.absoluteTime,
+    );
+
+    print('✅ Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)');
+    
+    final pending = await _notificationsPlugin.pendingNotificationRequests();
+    print('📌 Total pending after test schedule: ${pending.length}');
   }
 
   /// Cancel the daily streak reminder

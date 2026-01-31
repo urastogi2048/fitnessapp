@@ -70,4 +70,38 @@ class ApiService{
       rethrow;
     }
   }
+  
+  Future<Map<String, dynamic>> put(
+    String endpoint, 
+    Map<String,dynamic> body,  {
+      String? token,
+    }
+  ) async {
+    try {
+      final response = await http.put(
+        Uri.parse("$baseUrl$endpoint"),
+        headers: {
+          "Content-Type": "application/json",
+          if(token!=null) "Authorization": "Bearer $token",
+        },
+        body: jsonEncode(body),
+      ).timeout(timeout, onTimeout: () {
+        throw Exception('Request timeout - backend may be starting up, please try again');
+      });
+      
+      if(response.statusCode >= 400) {
+        try {
+          final errorData = jsonDecode(response.body) as Map<String,dynamic>;
+          throw Exception(errorData["error"] ?? 'Error: ${response.statusCode}');
+        } catch (e) {
+          throw Exception('Error: ${response.statusCode} - ${response.body}');
+        }
+      }
+      
+      final data = jsonDecode(response.body) as Map<String,dynamic>;
+      return data;
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

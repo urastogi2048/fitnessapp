@@ -47,9 +47,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     super.initState();
     carouselController = InfiniteScrollController();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-
-    
-
       ref.invalidate(streakProvider);
       _streakTimer = Timer.periodic(
         const Duration(seconds: 20),
@@ -59,21 +56,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
       _timer = Timer.periodic(const Duration(seconds: 3), (timer) {
         if (carouselController.hasClients) {
           carouselController.nextItem();
-        }
-      });
-      Future.delayed(const Duration(seconds:2),() async {
-        try {
-          final granted=await NotificationService().requestPermissions();
-          if(granted) {
-            await NotificationService().scheduleDailyStreakReminder();
-
-          }
-          
-        
-
-        }
-        catch(e){
-          print('❌ Error scheduling notification: $e');
         }
       });
     });

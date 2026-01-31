@@ -33,6 +33,8 @@ dependencies:
   flutter_local_notifications: ^18.0.1
   timezone: ^0.9.4
   permission_handler: ^11.3.1
+  flutter_timezone: ^3.0.1
+  flutter_launcher_icons: ^0.14.4
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -47,3 +49,8 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: assets/images/12.png

@@ -569,9 +569,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
                     spacing: 12.w,
                     runSpacing: 12.h,
                     children: [
-                      _buildStatCard('Total Time', _formatTime(sessionState.totalTimeSpent), statWidth),
-                      _buildStatCard('Exercises', '${sessionState.exercises.length}', statWidth),
-                      _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase(), statWidth),
+                      _buildStatCard('Total Time', _formatTime(sessionState.totalTimeSpent), double.infinity),
+                      _buildStatCard('Exercises', '${sessionState.exercises.length}', double.infinity),
+                      _buildStatCard('Body Part', sessionState.bodyPart.name.toUpperCase(), double.infinity),
                     ],
                   );
                 },

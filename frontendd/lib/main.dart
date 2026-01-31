@@ -11,7 +11,11 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   try{
     await NotificationService().initialize();
-    await NotificationService().requestPermissions();
+    final granted = await NotificationService().requestPermissions();
+    if (granted) {
+      await NotificationService().scheduleDailyStreakReminder();
+      print('✅ Daily streak reminder scheduled automatically on app start');
+    }
   } catch (e) {
     print('❌ Error initializing Notification Service: $e');
   }

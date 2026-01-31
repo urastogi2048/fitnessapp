@@ -28,6 +28,7 @@ router.get("/me", protect, (req, res) => {
 });
 
 router.post("/profile", protect, saveProfile);
+router.put("/profile", protect, saveProfile);
 
 
 export default router;
