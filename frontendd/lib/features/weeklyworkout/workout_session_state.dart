@@ -33,6 +33,6 @@ class WorkoutSessionState with _$WorkoutSessionState {
         bodyPart: bodyPart,
         exerciseTimings: {},
         isInCooldown: false,
-        cooldownTimeRemaining: 15,
+        cooldownTimeRemaining: 45,
       );
 }

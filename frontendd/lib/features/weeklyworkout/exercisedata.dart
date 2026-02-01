@@ -7,68 +7,285 @@ class ExerciseData {
 
     switch (bodyPart) {
       case BodyPart.chest:
-        if (normalizedGoal.contains('lose weight')) {
+        if (normalizedGoal.contains('build muscle')) {
           return [
             Exercise(
-              name: 'Push Ups (Fast)',
-              bodypart: BodyPart.chest,
-              animation: 'assets/lottie/Fitness.json',
-              duration: 30,
-            ),
-            Exercise(
-              name: 'Plyometric Push Ups',
-              bodypart: BodyPart.chest,
-              animation: 'assets/lottie/Fitness.json',
-              duration: 25,
-            ),
-          ];
-        } else if (normalizedGoal.contains('build muscle')) {
-          return [
-            Exercise(
-              name: 'Push Ups',
+              name: 'Barbell Bench Press x1',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 45,
             ),
             Exercise(
-              name: 'Push Ups 2nd Rep',
+              name: 'Barbell Bench Press x2',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 45,
             ),
             Exercise(
-              name: 'Wide Push Ups',
+              name: 'Barbell Bench Press x3',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 45,
             ),
             Exercise(
-              name: 'Diamond Push Ups',
+              name: 'Barbell Bench Press x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Inclined Dumbell Press x1',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 40,
             ),
+            Exercise(
+              name: 'Inclined Dumbell Press x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'Inclined Dumbell Press x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'Inclined Dumbell Press x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'Flat Dumbell Press x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Flat Dumbell Press x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Flat Dumbell Press x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Flat Dumbell Press x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Cable Flyes x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+               Exercise(
+              name: 'Cable Flyes x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+               Exercise(
+              name: 'Cable Flyes x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+               Exercise(
+              name: 'Weighted Dips x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+              Exercise(
+              name: 'Weighted Dips x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),Exercise(
+              name: 'Weighted Dips x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+              Exercise(
+              name: 'PushUps x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+              Exercise(
+              name: 'PushUps x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 40,  
+              ),
+
+
+                        
+
+            
+            
+            
+          ];
+        } else if (normalizedGoal.contains('lose weight')) {
+          return [
+            Exercise(
+              name: 'Push Ups x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Push Ups x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Push Ups x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Push Ups x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Dumbell Press x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Dumbell Press x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Dumbell Press x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Dumbell Press x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+
+            
+            
           ];
         } else {
        
           return [
             Exercise(
-              name: 'Push Ups',
+              name: 'Dumbell Press x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Dumbell Press x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Dumbell Press x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Inclined PushUps x1',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 45,
             ),
-            Exercise(
-              name: 'Wide Push Ups',
+             Exercise(
+              name: 'Inclined PushUps x2',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
-              duration: 40,
+              duration: 45,
+            ), Exercise(
+              name: 'Inclined PushUps x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
+            ), Exercise(
+              name: 'Inclined PushUps x4',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 45,
             ),
-            Exercise(
-              name: 'Diamond Push Ups',
+             Exercise(
+              name: 'Peck Deck Fly x1',
               bodypart: BodyPart.chest,
               animation: 'assets/lottie/Fitness.json',
               duration: 35,
+            ),
+            Exercise(
+              name: 'Peck Deck Fly x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Peck Deck Fly x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Shoulder Tap Plank x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Shoulder Tap Plank x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Shoulder Tap Plank x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Resistance Band Fly x1',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 30,
+            ),
+             Exercise(
+              name: 'Resistance Band Fly x2',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 30,
+            ),
+             Exercise(
+              name: 'Resistance Band Fly x3',
+              bodypart: BodyPart.chest,
+              animation: 'assets/lottie/Fitness.json',
+              duration: 30,
             ),
           ];
         }
@@ -77,17 +294,112 @@ class ExerciseData {
         if (normalizedGoal.contains('lose weight')) {
           return [
             Exercise(
-              name: 'Jump Squats',
+              name: 'Bodyweight Squats x1',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Bodyweight Squats x2',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Bodyweight Squats x3',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Bodyweight Squats x4',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 45,
+            ),
+            Exercise(
+              name: 'Jump Squats x1',
               bodypart: BodyPart.legs,
               animation: 'assets/lottie/Lunge.json',
               duration: 35,
             ),
             Exercise(
-              name: 'High Knees',
+              name: 'Jump Squats x2',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 35,
+            ),Exercise(
+              name: 'Jump Squats x3',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 35,
+            ),Exercise(
+              name: 'Jump Squats x4',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 35,
+            ),
+            Exercise(
+              name: 'Alternating Lunges x1',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'Alternating Lunges x2',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),Exercise(
+              name: 'Alternating Lunges x3',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),Exercise(
+              name: 'Alternating Lunges x4',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'High Knees x1',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),Exercise(
+              name: 'High Knees x2',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),Exercise(
+              name: 'High Knees x3',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),Exercise(
+              name: 'High Knees x4',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 40,
+            ),
+            Exercise(
+              name: 'Sled Push x1',
               bodypart: BodyPart.legs,
               animation: 'assets/lottie/Lunge.json',
               duration: 30,
             ),
+             Exercise(
+              name: 'Sled Push x2',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 30,
+            ), Exercise(
+              name: 'Sled Push x3',
+              bodypart: BodyPart.legs,
+              animation: 'assets/lottie/Lunge.json',
+              duration: 30,
+            ),
+            
           ];
         } else if (normalizedGoal.contains('build muscle')) {
           return [

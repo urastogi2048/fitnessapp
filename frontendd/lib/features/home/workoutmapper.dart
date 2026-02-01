@@ -9,12 +9,12 @@ class WeeklyPlanNotifier extends StateNotifier<List<String>>{
   static const String _key='weekly_workout_plan';
   
   WeeklyPlanNotifier() : super([
-    'CHEST DAY',       // Monday (index 0)
-    'BACK DAY',        // Tuesday
-    'LEG DAY',         // Wednesday
-    'SHOULDERS DAY',   // Thursday
-    'ARMS DAY',        // Friday
-    'CORE + CARDIO DAY', // Saturday
+    'CHEST DAY',      
+    'BACK DAY',        
+    'LEG DAY',         
+    'SHOULDERS DAY',   
+    'ARMS DAY',       
+    'CORE + CARDIO DAY', 
     'REST DAY',  
   ]){_loadPlan();}
 

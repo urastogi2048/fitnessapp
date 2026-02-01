@@ -16,7 +16,7 @@ class QuestionnairePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
 
     ref.listen<Qstate>(qprovider, (prev, next) async {
-      // ✅ LAST STEP IS 5, NOT 6
+      
       if (prev?.step != 5 && next.step == 6) {
         try {
           await QRepo().saveProfile(
@@ -28,7 +28,7 @@ class QuestionnairePage extends ConsumerWidget {
             goal: next.goal!,
           );
           await OnboardingStorage.markCompleted();
-          // 🔥 THIS IS WHAT UNBLOCKS AUTHGATE
+         
           await ref
               .read(authProvider.notifier)
               .fetchUser();
@@ -44,7 +44,7 @@ class QuestionnairePage extends ConsumerWidget {
     final qstate = ref.watch(qprovider);
 
     return Scaffold(
-      appBar: CustomAppBar(title: "Questionnaire"),
+     // appBar: CustomAppBar(title: "Questionnaire"),
       body: switch (qstate.step) {
         0 => AgeQuestion(qstate: qstate, ref: ref),
         1 => GenderQuestion(qstate: qstate, ref: ref),
