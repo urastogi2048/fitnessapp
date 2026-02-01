@@ -94,470 +94,410 @@ class _EditprofileState extends ConsumerState<Editprofile>{
   
   Widget _buildAgeSection(Qstate qstate) {
     final age = qstate.age ?? 18;
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your age?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
-          ),
-          SizedBox(height: 16.h),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            transitionBuilder: (child, animation) =>
-                ScaleTransition(scale: animation, child: child),
-            child: Text(
-              "$age",
-              key: ValueKey(age),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'PERSONAL INFO',
               style: TextStyle(
-                fontSize: 48.sp,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 134, 90, 255),
+                fontSize: 15,
+                color: Colors.purpleAccent,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold,
+                ).fontFamily,
               ),
             ),
-          ),
-          Text(
-            "years",
-            style: TextStyle(
-              color: Colors.grey.shade500,
-              fontFamily: GoogleFonts.oswald().fontFamily,
+            Opacity(
+              opacity: 0.5,
+              child: Icon(
+                FontAwesomeIcons.user,
+                size: 40,
+                color: const Color.fromARGB(148, 223, 64, 251),
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          NumberPicker(
-            value: age,
-            minValue: 10,
-            maxValue: 100,
-            itemHeight: 60,
-            axis: Axis.horizontal,
-            selectedTextStyle: TextStyle(
-              fontSize: 28.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: GoogleFonts.manrope().fontFamily,
+          ],
+        ),
+        SizedBox(height: 15.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Age',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontFamily: GoogleFonts.manrope().fontFamily,
+              ),
             ),
-            textStyle: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey,
-              fontFamily: GoogleFonts.manrope().fontFamily,
+            Text(
+              '$age years',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w500,
+                ).fontFamily,
+              ),
             ),
-            onChanged: (value) {
-              ref.read(qprovider.notifier).setAge(value);
-            },
+          ],
+        ),
+        SizedBox(height: 12),
+        NumberPicker(
+          value: age,
+          minValue: 10,
+          maxValue: 100,
+          itemHeight: 60,
+          axis: Axis.horizontal,
+          selectedTextStyle: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
-        ],
-      ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontFamily: GoogleFonts.manrope().fontFamily,
+          ),
+          onChanged: (value) {
+            ref.read(qprovider.notifier).setAge(value);
+          },
+        ),
+      ],
     );
-    
   }
   Widget _buildGenderSection(Qstate qstate) {
     final selected = qstate.gender;
 
-    Widget option(String label) {
-      final bool isSelected =
-          selected?.toLowerCase() == label.toLowerCase();
-
-      return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              isSelected
-                  ? const Color.fromARGB(255, 134, 90, 255)
-                  : const Color.fromARGB(255, 75, 35, 150).withOpacity(0.4),
-            ),
-            foregroundColor: MaterialStateProperty.all(
-              isSelected ? Colors.white : const Color.fromARGB(255, 188, 177, 255),
-            ),
-            elevation: MaterialStateProperty.all(isSelected ? 8 : 0),
-            padding: MaterialStateProperty.all(
-              const EdgeInsets.symmetric(vertical: 16),
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-          ),
-          onPressed: () {
-            ref.read(qprovider.notifier).setGender(label.toLowerCase());
-          },
-          child: Text(
-            label,
-            style: TextStyle(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Gender',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
         ),
-      );
-    }
-
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your gender?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
+        const SizedBox(height: 8),
+        Container(
+          height: 56,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 10, 6, 37),
+            borderRadius: BorderRadius.circular(20),
           ),
-          SizedBox(height: 16.h),
-          option("Male"),
-          SizedBox(height: 12.h),
-          option("Female"),
-        ],
-      ),
+          child: Row(
+            children: ['Male', 'Female'].map((gender) {
+              final isSelected = selected?.toLowerCase() == gender.toLowerCase();
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(qprovider.notifier).setGender(gender.toLowerCase());
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.deepPurple : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      gender,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.grey.shade500,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
-    
   }
   Widget _buildWeightSection(Qstate qstate) {
     final weight = qstate.weight ?? 70;
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your weight (kg)?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
-          ),
-          SizedBox(height: 16.h),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            transitionBuilder: (child, animation) =>
-                ScaleTransition(scale: animation, child: child),
-            child: Text(
-              '$weight',
-              key: ValueKey(weight),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'BODY METRICS',
               style: TextStyle(
-                fontSize: 48.sp,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.poppins().fontFamily,
-                color: const Color.fromARGB(255, 134, 90, 255),
+                fontSize: 15,
+                color: Colors.orange,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold,
+                ).fontFamily,
               ),
             ),
-          ),
-          Text(
-            'kg',
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey.shade500,
-              fontFamily: GoogleFonts.oswald().fontFamily,
+            Opacity(
+              opacity: 0.5,
+              child: Icon(
+                FontAwesomeIcons.weightScale,
+                size: 40,
+                color: const Color.fromARGB(148, 251, 153, 64),
+              ),
             ),
-          ),
-          SizedBox(height: 16.h),
-          NumberPicker(
-            minValue: 25,
-            maxValue: 200,
-            value: weight.toInt(),
-            onChanged: (value) {
-              ref.read(qprovider.notifier).setWeight(value.toDouble());
-            },
-            axis: Axis.horizontal,
-            selectedTextStyle: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
-              fontFamily: GoogleFonts.manrope().fontFamily,
+          ],
+        ),
+        SizedBox(height: 15.0),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Weight',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontFamily: GoogleFonts.manrope().fontFamily,
+              ),
             ),
-            textStyle: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey,
-              fontFamily: GoogleFonts.manrope().fontFamily,
+            Text(
+              '${weight.toInt()} kg',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w500,
+                ).fontFamily,
+              ),
             ),
+          ],
+        ),
+        SizedBox(height: 12),
+        NumberPicker(
+          value: weight.toInt(),
+          minValue: 30,
+          maxValue: 200,
+          itemHeight: 60,
+          axis: Axis.horizontal,
+          selectedTextStyle: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
-        ],
-      ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontFamily: GoogleFonts.manrope().fontFamily,
+          ),
+          onChanged: (value) {
+            ref.read(qprovider.notifier).setWeight(value.toDouble());
+          },
+        ),
+      ],
     );
-    
   }
   Widget _buildHeightSection(Qstate qstate) {
     final height = qstate.height ?? 170;
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your height (cm)?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
-          ),
-          SizedBox(height: 16.h),
-          AnimatedSwitcher(
-            duration: const Duration(milliseconds: 150),
-            transitionBuilder: (child, animation) =>
-                ScaleTransition(scale: animation, child: child),
-            child: Text(
-              '$height',
-              key: ValueKey(height),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Height',
               style: TextStyle(
-                fontSize: 48.sp,
-                fontWeight: FontWeight.bold,
-                color: const Color.fromARGB(255, 134, 90, 255),
-                fontFamily: GoogleFonts.poppins().fontFamily,
+                fontSize: 14,
+                color: Colors.white,
+                fontFamily: GoogleFonts.manrope().fontFamily,
               ),
             ),
-          ),
-          Text(
-            "cm",
-            style: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey.shade500,
-              fontFamily: GoogleFonts.oswald().fontFamily,
+            Text(
+              '${height.toInt()} cm',
+              style: TextStyle(
+                fontSize: 14,
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.w500,
+                ).fontFamily,
+              ),
             ),
+          ],
+        ),
+        SizedBox(height: 12),
+        NumberPicker(
+          value: height.toInt(),
+          minValue: 100,
+          maxValue: 250,
+          itemHeight: 60,
+          axis: Axis.horizontal,
+          selectedTextStyle: TextStyle(
+            fontSize: 28,
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
-          SizedBox(height: 16.h),
-          NumberPicker(
-            minValue: 100,
-            maxValue: 250,
-            value: height.toInt(),
-            onChanged: (value) {
-              ref.read(qprovider.notifier).setHeight(value.toDouble());
-            },
-            axis: Axis.horizontal,
-            selectedTextStyle: TextStyle(
-              fontSize: 24.sp,
-              fontWeight: FontWeight.bold,
-              color: const Color.fromARGB(255, 255, 255, 255),
-              fontFamily: GoogleFonts.manrope().fontFamily,
-            ),
-            textStyle: TextStyle(
-              fontSize: 16.sp,
-              color: Colors.grey,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-            ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
-        ],
-      ),
+          onChanged: (value) {
+            ref.read(qprovider.notifier).setHeight(value.toDouble());
+          },
+        ),
+      ],
     );
-    
   }
   Widget _buildBodyTypeSection(Qstate qstate) {
     final selected = qstate.bodyType;
 
-    Widget option(String label) {
-      final bool isSelected =
-          selected?.toLowerCase() == label.toLowerCase();
-
-      return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              isSelected
-                  ? const Color.fromARGB(255, 134, 90, 255)
-                  : const Color.fromARGB(255, 75, 35, 150).withOpacity(0.4),
-            ),
-            foregroundColor: MaterialStateProperty.all(
-              isSelected ? Colors.white : const Color.fromARGB(255, 188, 177, 255),
-            ),
-            elevation: MaterialStateProperty.all(isSelected ? 8 : 0),
-            padding: MaterialStateProperty.all(
-              const EdgeInsets.symmetric(vertical: 16),
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'FITNESS GOALS',
+              style: TextStyle(
+                fontSize: 15,
+                color: Colors.cyan,
+                fontFamily: GoogleFonts.manrope(
+                  fontWeight: FontWeight.bold,
+                ).fontFamily,
               ),
             ),
-          ),
-          onPressed: () {
-            ref.read(qprovider.notifier).setBodyType(label.toLowerCase());
-          },
-          child: Text(
-            label,
-            style: TextStyle(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
+            Opacity(
+              opacity: 0.5,
+              child: Icon(
+                FontAwesomeIcons.dumbbell,
+                size: 40,
+                color: Colors.cyan.withOpacity(0.6),
+              ),
             ),
-          ),
-        ),
-      );
-    }
-
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your body type?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
+        SizedBox(height: 15.0),
+        Text(
+          'Body Type',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
-          SizedBox(height: 16.h),
-          option("Ectomorph"),
-          SizedBox(height: 12.h),
-          option("Mesomorph"),
-          SizedBox(height: 12.h),
-          option("Endomorph"),
-        ],
-      ),
+        ),
+        const SizedBox(height: 8),
+        Container(
+          height: 56,
+          width: double.infinity,
+          padding: const EdgeInsets.symmetric(horizontal: 6),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 10, 6, 37),
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: Row(
+            children: ['Ectomorph', 'Mesomorph', 'Endomorph'].map((bodyType) {
+              final isSelected = selected?.toLowerCase() == bodyType.toLowerCase();
+              return Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(qprovider.notifier).setBodyType(bodyType.toLowerCase());
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue[700] : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    child: Text(
+                      bodyType,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.grey.shade500,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
-    
   }
   Widget _buildGoalSection(Qstate qstate) {
     final selected = qstate.goal;
 
-    Widget option(String label) {
-      final bool isSelected =
-          selected?.toLowerCase() == label.toLowerCase();
-
-      return SizedBox(
-        width: double.infinity,
-        child: ElevatedButton(
-          style: ButtonStyle(
-            backgroundColor: MaterialStateProperty.all(
-              isSelected
-                  ? const Color.fromARGB(255, 134, 90, 255)
-                  : const Color.fromARGB(255, 75, 35, 150).withOpacity(0.4),
-            ),
-            foregroundColor: MaterialStateProperty.all(
-              isSelected ? Colors.white : const Color.fromARGB(255, 188, 177, 255),
-            ),
-            elevation: MaterialStateProperty.all(isSelected ? 8 : 0),
-            padding: MaterialStateProperty.all(
-              const EdgeInsets.symmetric(vertical: 16),
-            ),
-            shape: MaterialStateProperty.all(
-              RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-              ),
-            ),
-          ),
-          onPressed: () {
-            ref.read(qprovider.notifier).setGoal(label.toLowerCase());
-          },
-          child: Text(
-            label,
-            style: TextStyle(
-              fontFamily: GoogleFonts.poppins().fontFamily,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Goal',
+          style: TextStyle(
+            color: Colors.white,
+            fontSize: 14,
+            fontFamily: GoogleFonts.manrope().fontFamily,
           ),
         ),
-      );
-    }
-
-    return Container(
-      padding: EdgeInsets.all(20.w),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          colors: [
-            const Color.fromARGB(255, 75, 35, 150).withOpacity(0.3),
-            const Color.fromARGB(255, 134, 90, 255).withOpacity(0.15),
-          ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color.fromARGB(255, 134, 90, 255).withOpacity(0.4), width: 2),
-      ),
-      child: Column(
-        children: [
-          Text(
-            'What is your fitness goal?',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontFamily: GoogleFonts.manrope().fontFamily,
-              fontWeight: FontWeight.w500,
-              color: const Color.fromARGB(255, 188, 177, 255),
-            ),
+        const SizedBox(height: 8),
+        Container(
+          width: double.infinity,
+          padding: const EdgeInsets.all(6),
+          decoration: BoxDecoration(
+            color: const Color.fromARGB(255, 10, 6, 37),
+            borderRadius: BorderRadius.circular(20),
           ),
-          SizedBox(height: 16.h),
-          option("Lose Weight"),
-          SizedBox(height: 12.h),
-          option("Build Muscle"),
-          SizedBox(height: 12.h),
-          option("Maintain Fitness"),
-        ],
-      ),
+          child: Column(
+            children: ['Lose Weight', 'Gain Muscle', 'Maintain Fitness'].map((goal) {
+              final isSelected = selected?.toLowerCase() == goal.toLowerCase();
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: GestureDetector(
+                  onTap: () {
+                    ref.read(qprovider.notifier).setGoal(goal.toLowerCase());
+                  },
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: isSelected ? Colors.blue[700] : Colors.transparent,
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    alignment: Alignment.center,
+                    padding: const EdgeInsets.symmetric(vertical: 16),
+                    child: Text(                                                            
+                      goal,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                        color: isSelected ? Colors.white : Colors.grey.shade500,
+                        fontFamily: GoogleFonts.manrope().fontFamily,
+                      ),
+                    ),
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
     );
   }
 
@@ -566,80 +506,121 @@ class _EditprofileState extends ConsumerState<Editprofile>{
   Widget build(BuildContext context) {
     final qstate = ref.watch(qprovider);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 10, 7, 31),
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const FaIcon(
-            FontAwesomeIcons.arrowLeft,
-            color: Colors.white,
-            size: 20,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: Text(
-          'Edit Profile',
-          style: TextStyle(
-            color: Colors.white,
-            fontSize: 20.sp,
-            fontWeight: FontWeight.bold,
-            fontFamily: GoogleFonts.manrope().fontFamily,
-          ),
-        ),
-        centerTitle: true,
-      ),
+      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-          child: Column(
-            children: [
-              _buildAgeSection(qstate),
-              SizedBox(height: 20.h),
-              _buildGenderSection(qstate),
-              SizedBox(height: 20.h),
-              _buildWeightSection(qstate),
-              SizedBox(height: 20.h),
-              _buildHeightSection(qstate),
-              SizedBox(height: 20.h),
-              _buildBodyTypeSection(qstate),
-              SizedBox(height: 20.h),
-              _buildGoalSection(qstate),
-              SizedBox(height: 32.h),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                    foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                    padding: EdgeInsets.symmetric(vertical: 16.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    elevation: 8,
-                  ),
-                  onPressed: _isLoading ? null : _saveProfile,
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 20,
-                          width: 20,
-                          child: CircularProgressIndicator(
-                            color: Color.fromARGB(255, 120, 120, 120),
-                            strokeWidth: 2,
-                          ),
-                        )
-                      : Text(
-                          'Save Changes',
-                          style: TextStyle(
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: GoogleFonts.manrope().fontFamily,
-                          ),
-                        ),
+        child: Padding(
+          padding: const EdgeInsets.all(25.0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
                 ),
-              ),
-              SizedBox(height: 24.h),
-            ],
+                SizedBox(height: 12.0),
+                Text(
+                  'Edit Profile',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.bold,
+                    ).fontFamily,
+                  ),
+                ),
+                SizedBox(height: 5.0),
+                Text(
+                  'Update your personal information',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w500,
+                    ).fontFamily,
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildAgeSection(qstate),
+                        SizedBox(height: 30),
+                        _buildGenderSection(qstate),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildWeightSection(qstate),
+                        SizedBox(height: 30),
+                        _buildHeightSection(qstate),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        _buildBodyTypeSection(qstate),
+                        SizedBox(height: 30),
+                        _buildGoalSection(qstate),
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                SizedBox(
+                  width: double.infinity,
+                  height: 64,
+                  child: ElevatedButton(
+                    onPressed: _isLoading ? null : _saveProfile,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      elevation: 8,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                    ),
+                    child: _isLoading
+                        ? const SizedBox(
+                            height: 24,
+                            width: 24,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 3,
+                              color: Colors.white,
+                            ),
+                          )
+                        : Text(
+                            'SAVE PROFILE',
+                            style: GoogleFonts.inter(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                            ),
+                          ),
+                  ),
+                ),
+                SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),

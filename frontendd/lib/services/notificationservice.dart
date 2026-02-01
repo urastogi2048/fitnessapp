@@ -11,8 +11,8 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  static const int _streakHour = 01; 
-  static const int _streakMinute = 50;
+  static const int _streakHour = 7; 
+  static const int _streakMinute = 20;
 
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
       FlutterLocalNotificationsPlugin();

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/features/home/editprofile.dart';
+import 'package:frontendd/features/home/editworkoutui.dart';
 import 'package:frontendd/features/home/help&support.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -552,117 +553,13 @@ class ProfileScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 12),
             _settingsOption(
-              icon: FontAwesomeIcons.bell,
-              title: 'Notifications',
-              subtitle: 'Manage workout reminders',
-              onTap: () async{
-                Navigator.pop(context);
-                final granted = await NotificationService().requestPermissions();
-
-                if(granted) {
-                  if(context.mounted){
-                    showDialog(
-                      context:context,
-                      builder:(context)=> AlertDialog(
-                        backgroundColor: const Color.fromARGB(255, 10, 10, 10),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                          side: BorderSide(color: Colors.cyanAccent.withOpacity(0.2), width: 2),
-                        ),
-                        title: Text(
-                          'Notifications Settings',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontFamily: GoogleFonts.manrope().fontFamily,
-                          ),
-                        ),
-                        content: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Would you like to enable daily workout streak reminders at 6:00 PM?',
-                              style: TextStyle(
-                                color: Colors.white70,
-                                fontFamily: GoogleFonts.manrope().fontFamily,
-                              ),
-                            ),
-                            const SizedBox(height: 20),
-                            Container(
-                              padding: const EdgeInsets.only(top: 10),
-                              decoration: BoxDecoration(
-                                color: const Color.fromARGB(255, 7, 26, 41),
-                                borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: Colors.cyanAccent.withOpacity(0.2), width: 1),
-                              ),
-                               child: Row(
-                    children: [
-                      const Icon(Icons.alarm, color: Colors.orange, size: 32),
-                      const SizedBox(width: 12),
-                      Expanded(
-                        child: Text(
-                          'Daily Streak Reminder\n6:30 PM (Auto-enabled)',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                      const Icon(Icons.check_circle, color: Colors.green, size: 24),
-                    ],
-                  ),
-                            ),
-                             const SizedBox(height: 16),
-                             SizedBox(
-                              width: double.infinity,
-                              child: ElevatedButton.icon(
-                                onPressed: () async {
-                                  await NotificationService().showTestNotification();
-                                  if(context.mounted){
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(content: Text('Test notification sent!')),
-                                    );
-                                  }
-                                },
-                                icon: const Icon(Icons.send),
-                                label: const Text('Send Test Notification'),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: Colors.cyanAccent,
-                                  foregroundColor: Colors.black,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                ),
-                              ),
-                             ),
-
-                          ],
-                        ),
-                        actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text(
-                  'Close',
-                  style: GoogleFonts.poppins(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-                        
-                      )
-                    );
-                  }
-                } else {
-                  if(context.mounted){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Notification permissions denied')),
-                    );
-                  }
-                }
+              icon: FontAwesomeIcons.calendarDays,
+              title: 'Set Your Schedule',
+              subtitle: 'Manange your weekly workout plan',
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) =>  EditWorkoutUI()));
               },
+                
             ),
             const SizedBox(height: 12),
             

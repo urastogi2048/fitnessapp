@@ -73,73 +73,82 @@ class _StatsUIState extends ConsumerState<StatsUI> {
     final monthlyBodyPartwiseasync = ref.watch(monthlyBodyPartwiseProvider);
     
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 34, 34, 34),
-      body: SingleChildScrollView(
+      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
+      body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              InkWell(
-                onTap: () => Navigator.pop(context),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Icon(
-                      FontAwesomeIcons.arrowLeft,
-                      color: Colors.grey,
-                      size: 15,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Home',
-                      style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 16,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                    ),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
                 ),
-              ),
-              const SizedBox(height: 10),
-              Text(
-                'Progress Dashboard',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: GoogleFonts.manrope().fontFamily,
-                ),
-              ),
-              const SizedBox(height: 25),
-              Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  gradient: const LinearGradient(
-                    colors: [
-                       const Color.fromARGB(255, 10, 18, 46),
-                      Color.fromARGB(255, 12, 22, 54),                    ],
-
-                  ),
-                  border: Border.all(color: Colors.blueGrey , width: 2 ),
-
-                ),
-               // color: const Color.fromARGB(255, 6, 7, 33),
-                child: Column(
-                  children: [
+                SizedBox(height: 12.0),
                 Text(
-                  "Last 30 Days Activity (in Minutes)",
+                  'Progress Dashboard',
                   style: TextStyle(
-                    color: const Color.fromARGB(169, 255, 255, 255),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: GoogleFonts.manrope().fontFamily,
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.bold,
+                    ).fontFamily,
                   ),
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 5.0),
+                Text(
+                  'Track your fitness journey',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w500,
+                    ).fontFamily,
+                  ),
+                ),
+                SizedBox(height: 20.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'MONTHLY ACTIVITY',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.lightBlueAccent,
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Icon(
+                                FontAwesomeIcons.chartLine,
+                                size: 40,
+                                color: Colors.lightBlueAccent.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'Last 30 Days (Minutes)',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        SizedBox(height: 10),
                 SizedBox(
                         
                   height: 300,
@@ -215,35 +224,52 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                     loading: () => const Center(child: CircularProgressIndicator()),
                     error: (error, stack) => Center(child: Text('Error: $error')),
                   ),
-                ),]),
-              ),
-              SizedBox(height: 20),
-              Container(
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  gradient: const LinearGradient(
-                    colors: [
-                      const Color.fromARGB(255, 10, 18, 46),
-                      Color.fromARGB(255, 12, 22, 54), 
-                    ],
-
-                  ),
-                  border: Border.all(color: Colors.blueGrey , width: 2 ),
-
                 ),
-                child: Column(
-                  children: [
-                    Text(
-                      "Last 7 Days Activity (in Minutes)",
-                      style: TextStyle(
-                        color: const Color.fromARGB(159, 255, 255, 255),
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
+                      ],
                     ),
-                 
-              SizedBox(height: 20),
+                  ),
+                ),
+                SizedBox(height: 15.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'WEEKLY ACTIVITY',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.blueAccent,
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Icon(
+                                FontAwesomeIcons.chartBar,
+                                size: 40,
+                                color: Colors.blueAccent.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'Last 7 Days (Minutes)',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        SizedBox(height: 10),
               SizedBox(
                 height : 300,
                 width: double.infinity,
@@ -293,35 +319,51 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                   error: (error, stack) => Center(child: Text('Error: $error')),
                 ),
               ),
-              ],
-                ),
-              ),
-              SizedBox(height : 30),
-              Container(
-                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  gradient: const LinearGradient(
-                    colors: [
-                       const Color.fromARGB(255, 10, 18, 46),
-                      Color.fromARGB(255, 12, 22, 54), 
-                    ],
-
-                  ),
-                  border: Border.all(color: Colors.blueGrey  , width: 2 ),
-
-                ),
-                child: Column(
-                  children: [
-                 Text(
-                  "Weekly Body Part Wise(in Minutes)",
-                  style: TextStyle(
-                    color: const Color.fromARGB(159, 255, 255, 255),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: GoogleFonts.manrope().fontFamily,
+                      ],
+                    ),
                   ),
                 ),
-                SizedBox(height : 30),
+                SizedBox(height: 15.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'BODY PART FOCUS',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.orange,
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Icon(
+                                FontAwesomeIcons.dumbbell,
+                                size: 40,
+                                color: Colors.orange.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'Weekly Body Part (Minutes)',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        SizedBox(height: 10),
                 SizedBox(
                   height : 300,
                   width: double.infinity,
@@ -370,33 +412,52 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                     error: (error, stack) => Center(child: Text('Error: $error')),
                   ),
                 
-                ),], ),
-              ),
-              SizedBox(height: 30),
-              Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
-                    gradient: const LinearGradient(
-                      colors: [
-                        const Color.fromARGB(255, 10, 18, 46),
-                     Color.fromARGB(255, 12, 22, 54), 
+                ),
                       ],
-  
                     ),
-                    border: Border.all(color: Colors.blueGrey  , width: 2 ),
-  
-                  ),
-                child: Column(
-                children: [Text(
-                  "BodyPart Wise Distribution(in Minutes)",
-                  style: TextStyle(
-                    color: const Color.fromARGB(159, 255, 255, 255),
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 15.0),
+                Card(
+                  color: const Color.fromARGB(255, 10, 18, 46),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'MONTHLY DISTRIBUTION',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.purpleAccent,
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Icon(
+                                FontAwesomeIcons.chartPie,
+                                size: 40,
+                                color: Colors.purpleAccent.withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'Body Part Distribution',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        SizedBox(height: 10),
                 SizedBox(
                   height: 300,
                   width: double.infinity,
@@ -446,12 +507,13 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                   loading: () => const SizedBox.shrink(),
                   error: (_, __) => const SizedBox.shrink(),
                 ),
-              ]),
-              ),
-
-
-
-            ],
+                      ],
+                    ),
+                  ),
+                ),
+                SizedBox(height: 24),
+              ],
+            ),
           ),
         ),
       ),

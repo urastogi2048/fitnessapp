@@ -19,7 +19,7 @@ import 'package:frontendd/features/home/profile.dart' show profileProvider;
 import 'package:frontendd/features/home/streakservice.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontendd/services/notificationservice.dart';
-
+import 'package:frontendd/features/home/workoutmapper.dart';
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -40,6 +40,14 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     'assets/images/carousel2.jpg',
     'assets/images/carousel3.jpg',
     'assets/images/carousel4.jpg',
+    'assets/images/carousel5.jpg',
+    'assets/images/carousel6.png',
+    'assets/images/carousel7.png',
+    'assets/images/carousel8.png',
+    'assets/images/carousel9.png',
+    'assets/images/carousel10.png',
+    'assets/images/carousel11.png',
+    'assets/images/carousel12.png',
   ];
 
   @override
@@ -74,15 +82,16 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final String today = DateFormat('EEEE').format(DateTime.now());
     final streak = ref.watch(streakProvider);
 
-    final List<String> weekdays = [
-      'CHEST DAY',
-      'BACK DAY',
-      'LEG DAY',
-      'SHOULDERS DAY',
-      'ARMS DAY',
-      'CORE + CARDIO DAY',
-      'REST DAY',
-    ];
+    // final List<String> weekdays = [
+    //   'CHEST DAY',
+    //   'BACK DAY',
+    //   'LEG DAY',
+    //   'SHOULDERS DAY',
+    //   'ARMS DAY',
+    //   'CORE + CARDIO DAY',
+    //   'REST DAY',
+    // ];
+    final weekdays=ref.watch(weeklyPlanProvider);
     String workout = weekdays[DateTime.now().weekday - 1];
     return SafeArea(
       child: Scaffold(
@@ -320,8 +329,11 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     SizedBox(height: 10.h),
                     InkWell(
                       onTap: () {
-                        if (today == 'Sunday') {
-                          workout = 'Rest Day';
+                        final todayWorkout = weekdays[DateTime.now().weekday - 1];
+                        final bodyPart = Workoutmapper.getBodyPart(todayWorkout);
+                        
+                        if (bodyPart == null) {
+                          // Rest Day
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(
@@ -329,92 +341,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ),
                           );
-                        } else if (today == 'Monday') {
-                          workout = 'Chest';
+                        } else {
+                          // Navigate to workout
                           if (context.mounted) {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                 builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.chest,
-                                  ),
-                                  bodyPart: BodyPart.chest,
-                                ),
-                              ),
-                            );
-                          }
-                        } else if (today == 'Tuesday') {
-                          workout = 'Back';
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.back,
-                                  ),
-                                  bodyPart: BodyPart.back,
-                                ),
-                              ),
-                            );
-                          }
-                        } else if (today == 'Wednesday') {
-                          workout = 'Legs';
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.legs,
-                                  ),
-                                  bodyPart: BodyPart.legs,
-                                ),
-                              ),
-                            );
-                          }
-                        } else if (today == 'Thursday') {
-                          workout = 'Shoulders';
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.shoulders,
-                                  ),
-                                  bodyPart: BodyPart.shoulders,
-                                ),
-                              ),
-                            );
-                          }
-                        } else if (today == 'Friday') {
-                          workout = 'Arms';
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.arms,
-                                  ),
-                                  bodyPart: BodyPart.arms,
-                                ),
-                              ),
-                            );
-                          }
-                        } else if (today == 'Saturday') {
-                          workout = 'Core + Cardio';
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(
-                                    BodyPart.core,
-                                  ),
-                                  bodyPart: BodyPart.core,
+                                  exercises: ExerciseData.getExercises(bodyPart),
+                                  bodyPart: bodyPart,
                                 ),
                               ),
                             );
