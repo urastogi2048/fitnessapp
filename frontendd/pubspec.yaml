@@ -35,6 +35,8 @@ dependencies:
   permission_handler: ^11.3.1
   flutter_timezone: ^3.0.1
   flutter_launcher_icons: ^0.14.4
+  cached_network_image: ^3.4.1
+  audioplayers: ^6.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -42,6 +44,7 @@ dev_dependencies:
   freezed: ^2.4.5
   build_runner: ^2.4.6
   on_popup_window_widget: ^0.0.14
+  
 
 flutter:
   uses-material-design: true
@@ -49,6 +52,7 @@ flutter:
   assets:
     - assets/images/
     - assets/lottie/
+    - assets/audio/
 
 flutter_icons:
   android: true

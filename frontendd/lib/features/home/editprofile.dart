@@ -465,7 +465,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
-            children: ['Lose Weight', 'Gain Muscle', 'Maintain Fitness'].map((goal) {
+            children: ['Lose Weight', 'Build Muscle', 'Maintain Fitness'].map((goal) {
               final isSelected = selected?.toLowerCase() == goal.toLowerCase();
               return Padding(
                 padding: const EdgeInsets.only(bottom: 4),

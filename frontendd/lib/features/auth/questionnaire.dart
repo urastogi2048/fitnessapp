@@ -7,6 +7,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/qrepo.dart';
 import 'package:frontendd/features/auth/qstate.dart';
 import 'package:frontendd/core/onboardingstorage.dart';
+import 'package:frontendd/features/home/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:numberpicker/numberpicker.dart';
 class QuestionnairePage extends ConsumerWidget {
@@ -32,6 +33,9 @@ class QuestionnairePage extends ConsumerWidget {
           await ref
               .read(authProvider.notifier)
               .fetchUser();
+          
+          // Invalidate profile provider to refresh exercise data
+          ref.invalidate(profileProvider);
 
         } catch (e) {
           ScaffoldMessenger.of(context).showSnackBar(

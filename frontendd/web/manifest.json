@@ -1,6 +1,6 @@
 {
-    "name": "frontendd",
-    "short_name": "frontendd",
+    "name": "Fitness Dude",
+    "short_name": "Fitness Dude",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

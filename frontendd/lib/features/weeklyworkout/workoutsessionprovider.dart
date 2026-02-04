@@ -5,10 +5,14 @@ import 'package:frontendd/core/tokenstorage.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'workout_session_state.dart';
 import 'exercisemodel.dart';
+import 'package:frontendd/services/soundservice.dart';
 
 class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
     Timer? timer;
+    Timer? saveTimer;
     final ApiService apiService;
+    int lastSavedTime = 0;
+    final WorkoutSoundService soundService=WorkoutSoundService();
     WorkoutSessionNotifier(
       List<Exercise> exercises,
       BodyPart bodyPart,
@@ -17,10 +21,23 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       exercises:exercises,
       bodyPart: bodyPart, 
     ));
+    
     void startTimer(){
       if(state.isCompleted) return;
-      state = state.copyWith(isPlaying: true);
+      
+      // Cancel any existing timers first
       timer?.cancel();
+      timer = null;
+      saveTimer?.cancel();
+      saveTimer = null;
+      
+      state = state.copyWith(isPlaying: true);
+      soundService.playBackgroundMusic();
+      
+      // Start periodic save timer (every 10 seconds)
+      saveTimer = Timer.periodic(Duration(seconds: 10), (_) {
+        _saveProgressIncremental();
+      });
       
       timer = Timer.periodic(Duration(seconds: 1), (timer) {
         
@@ -34,25 +51,28 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
             
             if(state.currentExerciseIndex < state.exercises.length - 1){
               final nextIndex = state.currentExerciseIndex + 1;
+              // Only resume music if it was playing before cooldown
+              if(state.isPlaying) {
+                soundService.resumeBackgroundMusic();
+              }
               state = state.copyWith(
                 currentExerciseIndex: nextIndex,
                 timeRemaining: state.exercises[nextIndex].duration,
                 isInCooldown: false,
-                cooldownTimeRemaining: 15,
-                isPlaying: true,
+                cooldownTimeRemaining: 45,
+                isPlaying: state.isPlaying,
               );
             }
           }
         }
-        // Handle exercise mode
+       
         else {
           if(state.timeRemaining > 0){
             state = state.copyWith(
               timeRemaining: state.timeRemaining - 1,
               totalTimeSpent: state.totalTimeSpent + 1,
             );
-            
-            // Update per-exercise timing
+          
             final currentExercise = state.exercises[state.currentExerciseIndex];
             final currentTiming = state.exerciseTimings[currentExercise.name] ?? 0;
             state = state.copyWith(
@@ -64,11 +84,13 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
           } else {
             // Exercise finished, check if more exercises
             if(state.currentExerciseIndex < state.exercises.length - 1){
+              // Pause music during cooldown/rest
+              soundService.pauseBackgroundMusic(); 
               // Enter cooldown mode
               state = state.copyWith(
                 isInCooldown: true,
-                cooldownTimeRemaining: 15,
-                isPlaying: true,
+                cooldownTimeRemaining: 45,
+                isPlaying: state.isPlaying,
               );
             } else {
               // Last exercise done, complete workout
@@ -80,8 +102,20 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       });
     }
     void pauseTimer(){
+      // Cancel timers first
       timer?.cancel();
+      timer = null;
+      saveTimer?.cancel();
+      saveTimer = null;
+      
+      // Pause music
+      soundService.pauseBackgroundMusic();
+      
+      // Update state
       state = state.copyWith(isPlaying: false);
+      
+      // Save progress when pausing
+      _saveProgressIncremental();
     }
 
     void nextExercise(){
@@ -93,7 +127,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
           timeRemaining: state.exercises[nextIndex].duration,
           isPlaying: false,
           isInCooldown: false,
-          cooldownTimeRemaining: 15,
+          cooldownTimeRemaining: 45,
         );
       }
     }
@@ -111,45 +145,52 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
     void entercooldown(){
       state = state.copyWith(
         isInCooldown: true,
-        cooldownTimeRemaining: 15,
+        cooldownTimeRemaining: 45,
       );
     }
-
+    Future<void> _saveProgressIncremental() async {
+      final timeToSave = state.totalTimeSpent - lastSavedTime;
+      if(timeToSave <= 0) return;
       
-    Future<void> completeWorkout() async {
-      timer?.cancel();
-      state = state.copyWith(isCompleted: true);
-      print('🏋️ WORKOUT COMPLETED - Starting to save...');
-      print('   Total time: ${state.totalTimeSpent}s');
-      print('   Body part: ${state.bodyPart.name}');
+      print('💾 Saving incremental progress: ${timeToSave}s');
       
       try{
         final token = await TokenStorage.getToken();
-        print('   Token: ${token != null ? "✅ Found" : "❌ Not found"}');
         
-        if(token!=null){
-          print('   Sending POST to /workout/log...');
-          final response = await apiService.post(
+        if(token != null){
+          await apiService.post(
             '/workout/log',
             {
-              'duration': state.totalTimeSpent,
+              'duration': timeToSave,
               'bodyPart': state.bodyPart.name,
             },
             token: token,
           );
-          print('✅ Workout logged successfully: $response');
-        } else {
-          print('❌ Token is null - cannot save workout');
+          lastSavedTime = state.totalTimeSpent;
+          print('✅ Progress saved (${timeToSave}s)');
         }
       }
       catch(e){
-        print('❌ Error logging workout: $e');
-        print('   Stack trace: $e');
+        print('❌ Error saving progress: $e');
       }
     }
+      
+    Future<void> completeWorkout() async {
+      timer?.cancel();
+      saveTimer?.cancel();
+      soundService.stopBackgroundMusic();
+      await _saveProgressIncremental();
+      
+      state = state.copyWith(isCompleted: true);
+      print('🏋️ WORKOUT COMPLETED');
+    }
+    
     @override 
     void dispose(){
       timer?.cancel();
+      saveTimer?.cancel();
+      soundService.dispose();
+      _saveProgressIncremental();
       super.dispose();
     }
     }

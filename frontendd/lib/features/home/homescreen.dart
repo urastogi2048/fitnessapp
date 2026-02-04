@@ -123,7 +123,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'FitWell',
+                                'Fitness Dude',
                                 style: GoogleFonts.openSans(
                                   fontSize: 28.sp,
                                   fontWeight: FontWeight.bold,
@@ -139,7 +139,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 185.w),
+                          SizedBox(width: 125.w),
 
                           streak.when(
                             loading: () => const SizedBox.shrink(),
@@ -327,35 +327,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 10.h),
-                    InkWell(
-                      onTap: () {
-                        final todayWorkout = weekdays[DateTime.now().weekday - 1];
-                        final bodyPart = Workoutmapper.getBodyPart(todayWorkout);
+                    Consumer(
+                      builder: (context, ref, child) {
+                        final profileAsync = ref.watch(profileProvider);
                         
-                        if (bodyPart == null) {
-                          // Rest Day
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                "It's Rest Day! Take a break and recharge for the week ahead.",
-                              ),
-                            ),
-                          );
-                        } else {
-                          // Navigate to workout
-                          if (context.mounted) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ExerciseExecutionPage(
-                                  exercises: ExerciseData.getExercises(bodyPart),
-                                  bodyPart: bodyPart,
+                        return InkWell(
+                          onTap: () {
+                            final todayWorkout = weekdays[DateTime.now().weekday - 1];
+                            final bodyPart = Workoutmapper.getBodyPart(todayWorkout);
+                            
+                            if (bodyPart == null) {
+                              // Rest Day
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    "It's Rest Day! Take a break and recharge for the week ahead.",
+                                  ),
                                 ),
-                              ),
-                            );
-                          }
-                        }
-                      },
+                              );
+                            } else {
+                              // Navigate to workout with user's goal
+                              profileAsync.whenData((profile) {
+                                final goal = profile.goal ?? 'balanced';
+                                final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
+                                
+                                if (context.mounted) {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => ExerciseExecutionPage(
+                                        exercises: exercises,
+                                        bodyPart: bodyPart,
+                                      ),
+                                    ),
+                                  );
+                                }
+                              });
+                            }
+                          },
                       child: SizedBox(
                         height: 200.h,
                         width: double.infinity,
@@ -494,6 +503,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
                         ),
                       ),
+                    );
+                      },
                     ),
 
                     const SizedBox(height: 16),
