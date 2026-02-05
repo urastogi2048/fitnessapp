@@ -90,7 +90,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: overallscore == null ? buildform() : buildresult(),
     );
   }
@@ -104,12 +104,10 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+              onTap: () => Navigator.pop(context),
+              child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
             ),
-            SizedBox(height: 12.0),
+            const SizedBox(height: 12.0),
             Text(
               'Daily Check-In',
               style: TextStyle(
@@ -120,7 +118,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                 ).fontFamily,
               ),
             ),
-            SizedBox(height: 5.0),
+            const SizedBox(height: 5.0),
             Text(
               'Full body and mind analysis',
               style: TextStyle(
@@ -131,7 +129,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                 ).fontFamily,
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Form(
               key: _formkey,
               child: SingleChildScrollView(
@@ -858,12 +856,19 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
 
     return SingleChildScrollView(
       child: Padding(
-        padding: EdgeInsets.all(30.0),
+        padding: const EdgeInsets.all(25.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
            children: [
-             
+             Align(
+               alignment: Alignment.centerLeft,
+               child: InkWell(
+                 onTap: () => Navigator.pop(context),
+                 child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+               ),
+             ),
+             const SizedBox(height: 20.0),
              Center ( 
             child: Text(
               'Analysis Complete',
@@ -875,7 +880,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
               ),
             ),
            ),
-           SizedBox(height: 40),
+           const SizedBox(height: 40),
            Stack(
              alignment: Alignment.center,
              children: [

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HelpAndSupportPage extends StatefulWidget {
   const HelpAndSupportPage({super.key});
@@ -132,23 +133,15 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: Stack(
         children: [
-          // Animated gradient background
+        
           Positioned.fill(
             child: AnimatedContainer(
               duration: const Duration(seconds: 3),
               decoration: BoxDecoration(
-                gradient: RadialGradient(
-                  center: Alignment.topRight,
-                  radius: 1.5,
-                  colors: [
-                    Colors.deepPurple.withOpacity(0.1),
-                    const Color.fromARGB(255, 5, 10, 26),
-                    const Color.fromARGB(255, 5, 10, 26),
-                  ],
-                ),
+                color:  const Color.fromARGB(255, 27, 27, 27),
               ),
             ),
           ),
@@ -170,15 +163,13 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             InkWell(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
+                              onTap: () => Navigator.pop(context),
                               child: const Icon(
                                 FontAwesomeIcons.arrowLeft,
                                 color: Colors.white,
                               ),
                             ),
-                            SizedBox(height: 12.h),
+                            const SizedBox(height: 12.0),
                             Text(
                               'Help & Support',
                               style: TextStyle(
@@ -189,7 +180,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                                 ).fontFamily,
                               ),
                             ),
-                            SizedBox(height: 5.h),
+                            const SizedBox(height: 5.0),
                             Text(
                               'We\'re here to help you succeed',
                               style: TextStyle(
@@ -200,7 +191,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                                 ).fontFamily,
                               ),
                             ),
-                            SizedBox(height: 20.h),
+                            const SizedBox(height: 20.0),
                             _buildWelcomeCard(),
                             SizedBox(height: 24.h),
                             _buildSearchBar(),
@@ -688,8 +679,47 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
           child: Material(
             color: Colors.transparent,
             child: InkWell(
-              onTap: () {
-               // _showContactDialog(method);
+              onTap: () async {
+                try {
+                  if (method['title'] == 'Email Support') {
+                    final Uri emailUrl = Uri.parse('mailto:urfitnessdude@gmail.com');
+                    if (await canLaunchUrl(emailUrl)) {
+                      await launchUrl(emailUrl);
+                    } else {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('No email app found'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  } else if (method['title'] == 'Join our Discord') {
+                    final Uri discordUrl = Uri.parse('https://discord.gg/8YrtqP3a3V');
+                    if (await canLaunchUrl(discordUrl)) {
+                      await launchUrl(discordUrl, mode: LaunchMode.externalApplication);
+                    } else {
+                      if (mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Cannot open Discord link'),
+                            backgroundColor: Colors.red,
+                          ),
+                        );
+                      }
+                    }
+                  }
+                } catch (e) {
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Error: ${e.toString()}'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
               },
               borderRadius: BorderRadius.circular(20.r),
               child: ClipRRect(

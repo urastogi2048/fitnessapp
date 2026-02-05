@@ -84,7 +84,7 @@ class ProfileScreen extends ConsumerWidget {
     final profileAsync = ref.watch(profileProvider);
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: profileAsync.when(
         loading: () => const Center(
           child: CircularProgressIndicator(color: Colors.white),
@@ -101,33 +101,10 @@ class ProfileScreen extends ConsumerWidget {
                     // Header Section
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Profile',
-                              style: TextStyle(
-                                fontSize: 26,
-                                color: Colors.white,
-                                fontFamily: GoogleFonts.manrope(
-                                  fontWeight: FontWeight.bold,
-                                ).fontFamily,
-                              ),
-                            ),
-                            SizedBox(height: 5.0),
-                            Text(
-                              profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey[600],
-                                fontFamily: GoogleFonts.manrope(
-                                  fontWeight: FontWeight.w500,
-                                ).fontFamily,
-                              ),
-                            ),
-                          ],
+                        InkWell(
+                          onTap: () => Navigator.pop(context),
+                          child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
                         ),
                         InkWell(
                           onTap: () {
@@ -149,7 +126,29 @@ class ProfileScreen extends ConsumerWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.0),
+                    const SizedBox(height: 12.0),
+                    Text(
+                      'Profile',
+                      style: TextStyle(
+                        fontSize: 28,
+                        color: Colors.white,
+                        fontFamily: GoogleFonts.manrope(
+                          fontWeight: FontWeight.bold,
+                        ).fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 5.0),
+                    Text(
+                      profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
+                      style: TextStyle(
+                        fontSize: 16,
+                        color: Colors.grey[600],
+                        fontFamily: GoogleFonts.manrope(
+                          fontWeight: FontWeight.w500,
+                        ).fontFamily,
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
 
                     // Hero User Card
                     Card(

@@ -506,7 +506,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
   Widget build(BuildContext context) {
     final qstate = ref.watch(qprovider);
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -516,9 +516,9 @@ class _EditprofileState extends ConsumerState<Editprofile>{
               children: [
                 InkWell(
                   onTap: () => Navigator.pop(context),
-                  child: Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+                  child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
                 ),
-                SizedBox(height: 12.0),
+                const SizedBox(height: 12.0),
                 Text(
                   'Edit Profile',
                   style: TextStyle(
@@ -529,7 +529,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                     ).fontFamily,
                   ),
                 ),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 Text(
                   'Update your personal information',
                   style: TextStyle(
@@ -540,7 +540,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                     ).fontFamily,
                   ),
                 ),
-                SizedBox(height: 20.0),
+                const SizedBox(height: 20.0),
                 Card(
                   color: const Color.fromARGB(255, 10, 18, 46),
                   child: Padding(

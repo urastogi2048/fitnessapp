@@ -68,6 +68,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
 
     if (_isInitialCheck) {
       return const Scaffold(
+        backgroundColor: Color.fromARGB(255, 27, 27, 27),
         body: Center(
           child: CircularProgressIndicator(),
         ),

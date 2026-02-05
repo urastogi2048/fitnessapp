@@ -593,7 +593,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
 
   Widget _buildCompletionScreen(BuildContext context, WorkoutSessionState sessionState) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 20, 6, 6),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 32.h),

@@ -23,7 +23,7 @@ class EditWorkoutUI extends ConsumerWidget {
     ];
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 10, 10, 10),
         elevation: 0,

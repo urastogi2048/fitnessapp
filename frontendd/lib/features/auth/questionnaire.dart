@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontendd/components/customappbar.dart';
+//import 'package:frontendd/components/customappbar.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/qprovider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -21,9 +21,9 @@ class QuestionnairePage extends ConsumerWidget {
       if (prev?.step != 5 && next.step == 6) {
         try {
           await QRepo().saveProfile(
-            age: next.age!,
-            gender: next.gender!,
-            weight: next.weight!,
+            age: next.age ?? 18,
+            gender: next.gender?? "male",
+            weight: next.weight ?? 70,
             height: next.height!,
             bodyType: next.bodyType!,
             goal: next.goal!,
@@ -33,8 +33,7 @@ class QuestionnairePage extends ConsumerWidget {
           await ref
               .read(authProvider.notifier)
               .fetchUser();
-          
-          // Invalidate profile provider to refresh exercise data
+       
           ref.invalidate(profileProvider);
 
         } catch (e) {
@@ -47,16 +46,64 @@ class QuestionnairePage extends ConsumerWidget {
 
     final qstate = ref.watch(qprovider);
 
-    return Scaffold(
-     // appBar: CustomAppBar(title: "Questionnaire"),
-      body: switch (qstate.step) {
-        0 => AgeQuestion(qstate: qstate, ref: ref),
-        1 => GenderQuestion(qstate: qstate, ref: ref),
-        2 => WeightQuestion(qstate: qstate, ref: ref),
-        3 => HeightQuestion(qstate: qstate, ref: ref),
-        4 => BodyTypeQuestion(qstate: qstate, ref: ref),
-        _ => GoalQuestion(qstate: qstate, ref: ref, context: context),
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (!didPop) {
+          // Prevent back navigation during questionnaire
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(
+              content: Text('Please complete the questionnaire to continue'),
+              duration: Duration(seconds: 2),
+            ),
+          );
+        }
       },
+      child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 27, 27, 27),
+        body: SafeArea(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Personal Questionnaire',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.bold,
+                    ).fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 5.0),
+                Text(
+                  'Please answer the following questions',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w500,
+                    ).fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+                Expanded(
+                  child: switch (qstate.step) {
+                    0 => AgeQuestion(qstate: qstate, ref: ref),
+                    1 => GenderQuestion(qstate: qstate, ref: ref),
+                    2 => WeightQuestion(qstate: qstate, ref: ref),
+                    3 => HeightQuestion(qstate: qstate, ref: ref),
+                    4 => BodyTypeQuestion(qstate: qstate, ref: ref),
+                    _ => GoalQuestion(qstate: qstate, ref: ref, context: context),
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
@@ -65,7 +112,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
   final age = qstate.age ?? 18;
 
   return Container(
-    color: const Color.fromARGB(255, 31, 7, 7),
+    color: const Color.fromARGB(255, 27, 27, 27),
     padding: EdgeInsets.symmetric(horizontal: 24.w),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -149,30 +196,31 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
         // 🔥 NEXT / PREVIOUS BUTTONS
         Row(
           children: [
-            Expanded(
-              child: OutlinedButton(
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFF444444)),
-                  foregroundColor: const Color.fromARGB(255, 98, 98, 98),
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(14),
+            if (qstate.step > 0) ...[
+              Expanded(
+                child: OutlinedButton(
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(color: Color(0xFF444444)),
+                    foregroundColor: const Color.fromARGB(255, 98, 98, 98),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
                   ),
-                ),
-                onPressed: () {
-                  ref.read(qprovider.notifier).previousStep();
-                },
-                child: Text(
-                  'Previous',
-                  style: TextStyle(
-                    fontFamily: GoogleFonts.poppins().fontFamily,
-                    fontSize: 14,
+                  onPressed: () {
+                    ref.read(qprovider.notifier).previousStep();
+                  },
+                  child: Text(
+                    'Previous',
+                    style: TextStyle(
+                      fontFamily: GoogleFonts.poppins().fontFamily,
+                      fontSize: 14,
+                    ),
                   ),
                 ),
               ),
-            ),
-
-            const SizedBox(width: 12),
+              const SizedBox(width: 12),
+            ],
 
             Expanded(
               child: ElevatedButton(
@@ -202,6 +250,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
+  
 }
 
 Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
@@ -252,13 +301,13 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
 
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24),
-    color: const Color.fromARGB(255, 31, 7, 7),
+    color: const Color.fromARGB(255, 27, 27, 27),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Text(
-          'What is your gender?',
+      Text(
+        'What is your gender?',
           style: TextStyle(
             fontSize: 18,
             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -324,16 +373,16 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
+  
 }
 
 Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
   final weight = qstate.weight ?? 70;
   return Container(
-    color:const Color.fromARGB(255, 31, 7, 7),
-    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 24),
+    color: const Color.fromARGB(255, 27, 27, 27),
+    padding: const EdgeInsets.symmetric(horizontal: 24),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
-      
       children: [
         Text('What is your weight (kg)?', style: TextStyle(fontSize: 18, fontFamily: GoogleFonts.poppins().fontFamily, fontWeight: FontWeight.w500, color: Colors.white),),
         SizedBox(height: 20),
@@ -406,13 +455,14 @@ Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
+  
 }
 Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
   final height =qstate.height ?? 170;
   
   return Container(
-    color: const Color.fromARGB(255, 31, 7, 7),
-    padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 24),
+    color: const Color.fromARGB(255, 27, 27, 27),
+    padding: const EdgeInsets.symmetric(horizontal: 24),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -485,7 +535,7 @@ Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
     
       ],
     ),
-  );
+  ); 
 }
 Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
   final selected = qstate.bodyType;
@@ -535,12 +585,12 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
 
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24),
-    color: const Color.fromARGB(255, 31, 7, 7),
+    color: const Color.fromARGB(255, 27, 27, 27),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text(
-          'What is your body type?',
+      Text(
+        'What is your body type?',
           style: TextStyle(
             fontSize: 18,
             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -550,11 +600,11 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
         ),
         const SizedBox(height: 24),
 
-        option("Ectomorph"),
+        option("Slim"),
         const SizedBox(height: 12),
-        option("Mesomorph"),
+        option("Athletic"),
         const SizedBox(height: 12),
-        option("Endomorph"),
+        option("Heavy"),
 
         const SizedBox(height: 40),
 
@@ -611,6 +661,7 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
+  
 }
 Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required BuildContext context}) {
   final selected = qstate.goal;
@@ -660,7 +711,7 @@ Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required Bu
 
   return Container(
     padding: const EdgeInsets.symmetric(horizontal: 24),
-    color: const Color.fromARGB(255, 31, 7, 7),
+    color: const Color.fromARGB(255, 27, 27, 27),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [

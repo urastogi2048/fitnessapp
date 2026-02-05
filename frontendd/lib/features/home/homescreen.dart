@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:frontendd/components/homeappbar.dart';
+import 'package:frontendd/features/home/bmicalc.dart';
 import 'package:frontendd/features/home/profile.dart';
 import 'package:frontendd/features/progress/statui.dart';
 import 'package:frontendd/features/recoveryfeature/recoveryreadinesscard.dart';
@@ -139,7 +140,48 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ),
                             ],
                           ),
-                          SizedBox(width: 125.w),
+                          SizedBox(width: 65.w),
+
+                          InkWell(
+                            onTap: () => Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const BMICalculator(),
+                              ),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                            
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.weightScale,
+                                  color: Colors.blueAccent,
+                                  size: 20,
+                                ),
+                                SizedBox(height: 4.h),
+                                Text(
+                                  'BMI ',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 12.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  'Calculator',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 8.sp,
+                                    //fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                                              
+                              ],
+                            ),
+                          ),
+
+
+                          SizedBox(width: 20.w),
 
                           streak.when(
                             loading: () => const SizedBox.shrink(),

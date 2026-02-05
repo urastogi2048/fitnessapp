@@ -73,7 +73,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
     final monthlyBodyPartwiseasync = ref.watch(monthlyBodyPartwiseProvider);
     
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 5, 10, 26),
+      backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(25.0),
@@ -84,9 +84,9 @@ class _StatsUIState extends ConsumerState<StatsUI> {
               children: [
                 InkWell(
                   onTap: () => Navigator.pop(context),
-                  child: Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+                  child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
                 ),
-                SizedBox(height: 12.0),
+                const SizedBox(height: 12.0),
                 Text(
                   'Progress Dashboard',
                   style: TextStyle(
@@ -97,7 +97,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                     ).fontFamily,
                   ),
                 ),
-                SizedBox(height: 5.0),
+                const SizedBox(height: 5.0),
                 Text(
                   'Track your fitness journey',
                   style: TextStyle(
@@ -108,6 +108,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                     ).fontFamily,
                   ),
                 ),
+                const SizedBox(height: 20.0),
                 SizedBox(height: 20.0),
                 Card(
                   color: const Color.fromARGB(255, 10, 18, 46),
