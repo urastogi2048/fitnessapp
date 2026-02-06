@@ -153,22 +153,25 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
   await ref.read(authProvider.notifier).signup(username, email, password);
 
-  // Use the latest state to check if signup was successful
   final currentState = ref.read(authProvider);
   if (currentState.error == null && !currentState.isLoading) {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Account created! Please Log In.")),
       );
-      // Pop back to LoginPage (previous page on stack)
+    
       Navigator.pop(context);
     }
   }
 },
-                            child:  Text(
-                              "Sign Up",
-                              style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily,),
-                            ),
+                            child: ref.watch(authProvider).isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  "Sign Up",
+                                  style: TextStyle(fontSize: 16, color: Colors.white, fontFamily: GoogleFonts.poppins().fontFamily,),
+                                ),
                           ),
                         ),
 
