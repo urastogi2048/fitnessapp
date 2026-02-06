@@ -12,6 +12,13 @@ class ExerciseExecutionPage extends ConsumerWidget {
   final List<Exercise> exercises;
   final BodyPart bodyPart;
 
+  static const backgroundColor = Color.fromARGB(255, 27, 27, 27);
+  static const surfaceColor = Color.fromARGB(255, 10, 18, 46);
+  static const trackColor = Color.fromARGB(255, 10, 18, 46);
+  static const accentColor = Color.fromARGB(255, 21, 14, 81);
+  static const accentGlow = Color.fromARGB(255, 13, 97, 142);
+  static final softAccent = Colors.orangeAccent;
+
   const ExerciseExecutionPage({
     super.key,
     required this.exercises,
@@ -26,13 +33,6 @@ class ExerciseExecutionPage extends ConsumerWidget {
     final sessionNotifier = ref.read(
       workoutSessionProvider((bodyPart: bodyPart, exercises: exercises)).notifier,
     );
-
-    const backgroundColor = Color.fromARGB(255, 20, 6, 6);
-    const surfaceColor = Color.fromARGB(255, 36, 12, 12);
-    const trackColor = Color.fromARGB(255, 60, 20, 20);
-    const accentColor = Color.fromARGB(255, 255, 99, 99);
-    const accentGlow = Color.fromARGB(255, 220, 50, 50);
-    final softAccent = Colors.orangeAccent;
 
     if (sessionState.isCompleted) {
       return _buildCompletionScreen(context, sessionState);
@@ -52,7 +52,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
         child: Scaffold(
           backgroundColor: backgroundColor,
         appBar: AppBar(
-          backgroundColor: const Color.fromARGB(255, 60, 15, 15),
+          backgroundColor: const Color.fromARGB(255, 15, 33, 92),
           elevation: 0,
           leading: IconButton(
             icon: const Icon(Icons.close, color: Colors.white),
@@ -61,7 +61,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
           title: Text(
             '${bodyPart.name.toUpperCase()} WORKOUT',
             style: GoogleFonts.manrope(
-              color: Colors.white,
+              color: const Color.fromARGB(255, 255, 255, 255),
               fontWeight: FontWeight.bold,
             ),
           ),
@@ -99,10 +99,10 @@ class ExerciseExecutionPage extends ConsumerWidget {
                         decoration: BoxDecoration(
                           color: surfaceColor,
                           borderRadius: BorderRadius.circular(24.r),
-                          border: Border.all(color: accentColor.withOpacity(0.15)),
+                          border: Border.all(color: surfaceColor),
                           boxShadow: [
                             BoxShadow(
-                              color: accentGlow.withOpacity(0.12),
+                              color: const Color.fromARGB(255, 23, 15, 99).withOpacity(0.12),
                               blurRadius: 30,
                               offset: const Offset(0, 16),
                             ),
@@ -132,7 +132,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                                     strokeWidth: 12.w,
                                     backgroundColor: trackColor,
                                     valueColor: AlwaysStoppedAnimation<Color>(
-                                      progress > 0.3 ? accentColor : softAccent,
+                                      progress > 0.3 ? const Color.fromARGB(255, 69, 188, 9) : softAccent,
                                     ),
                                   ),
                                 ),
@@ -149,7 +149,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                                     Text(
                                       sessionState.isPlaying ? 'In Progress' : 'Paused',
                                       style: GoogleFonts.manrope(
-                                        color: sessionState.isPlaying ? accentColor : softAccent,
+                                        color: sessionState.isPlaying ? Colors.lightGreenAccent  : Colors.redAccent,
                                         fontSize: 14.sp,
                                       ),
                                     ),
@@ -213,7 +213,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
       child: Scaffold(
         backgroundColor: backgroundColor,
         appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 60, 15, 15),
+        backgroundColor: const Color.fromARGB(255, 15, 33, 92),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.close, color: Colors.white),
@@ -229,22 +229,25 @@ class ExerciseExecutionPage extends ConsumerWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 12.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              SizedBox(height: 6.h),
-              _buildProgressBar(progress, sessionState),
-              SizedBox(height: 10.h),
-              _buildExerciseName(currentExercise.name),
-              SizedBox(height: 12.h),
-              _buildAnimationPanel(currentExercise),
-              SizedBox(height: 12.h),
-              _buildTimerPanel(sessionState),
-              SizedBox(height: 12.h),
-              _buildControlButtons(context, sessionState, sessionNotifier),
-            ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(25.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                SizedBox(height: 6.h),
+                _buildProgressBar(progress, sessionState),
+                SizedBox(height: 10.h),
+                _buildExerciseName(currentExercise.name),
+                SizedBox(height: 12.h),
+                _buildAnimationPanel(currentExercise),
+                SizedBox(height: 12.h),
+                _buildTimerPanel(sessionState),
+                SizedBox(height: 12.h),
+                _buildControlButtons(context, sessionState, sessionNotifier),
+                SizedBox(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -260,7 +263,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
           child: LinearProgressIndicator(
             value: progress,
             minHeight: 10,
-            backgroundColor: const Color.fromARGB(255, 60, 20, 20),
+            backgroundColor: surfaceColor,
             valueColor: const AlwaysStoppedAnimation<Color>(Color.fromARGB(255, 255, 99, 99)),
           ),
         ),
@@ -294,20 +297,20 @@ class ExerciseExecutionPage extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.all(14.w),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 36, 12, 12),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(18.r),
-        border: Border.all(color: const Color.fromARGB(60, 255, 99, 99)),
+        border: Border.all(color: surfaceColor),
       ),
       child: Row(
         children: [
           Container(
             padding: EdgeInsets.all(10.w),
             decoration: BoxDecoration(
-              color: const Color.fromARGB(255, 60, 20, 20),
+              color: surfaceColor,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.25),
+                  color: const Color.fromARGB(255, 4, 16, 86).withOpacity(0.25),
                   blurRadius: 16,
                 ),
               ],
@@ -364,9 +367,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 36, 12, 12),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color.fromARGB(50, 255, 99, 99)),
+        border: Border.all(color: surfaceColor),
       ),
       child: Text(
         name,
@@ -390,9 +393,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
       height: 220.h,
       padding: EdgeInsets.all(12.w),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 36, 12, 12),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color.fromARGB(50, 255, 99, 99)),
+        border: Border.all(color: surfaceColor),
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12.r),
@@ -464,9 +467,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 16.h),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 36, 12, 12),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color.fromARGB(80, 255, 99, 99)),
+        border: Border.all(color: surfaceColor),
       ),
       child: Center(child: _buildTimer(sessionState)),
     );
@@ -482,14 +485,14 @@ class ExerciseExecutionPage extends ConsumerWidget {
       alignment: Alignment.center,
       children: [
         SizedBox(
-          width: 170,
-          height: 170,
+          width: 200,
+          height: 200,
           child: CircularProgressIndicator(
             value: progress,
             strokeWidth: 10,
-            backgroundColor: const Color.fromARGB(255, 60, 20, 20),
+            backgroundColor: const Color.fromARGB(255, 8, 13, 30),
             valueColor: AlwaysStoppedAnimation<Color>(
-              progress > 0.3 ? const Color.fromARGB(255, 255, 99, 99) : Colors.orangeAccent,
+              progress > 0.3 ?   Colors.lightGreenAccent  : Colors.redAccent,
             ),
           ),
         ),
@@ -500,14 +503,14 @@ class ExerciseExecutionPage extends ConsumerWidget {
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
               style: GoogleFonts.manrope(
                 color: Colors.white,
-                fontSize: 40,
+                fontSize: 45,
                 fontWeight: FontWeight.bold,
               ),
             ),
             Text(
               sessionState.isPlaying ? 'In Progress' : 'Paused',
               style: GoogleFonts.manrope(
-                color: sessionState.isPlaying ? const Color.fromARGB(255, 255, 99, 99) : Colors.orangeAccent,
+                color: sessionState.isPlaying ? Colors.lightGreenAccent  : Colors.redAccent,
                 fontSize: 13,
               ),
             ),
@@ -525,9 +528,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 10.h),
       decoration: BoxDecoration(
-        color: const Color.fromARGB(255, 36, 12, 12),
+        color: surfaceColor,
         borderRadius: BorderRadius.circular(16.r),
-        border: Border.all(color: const Color.fromARGB(60, 255, 99, 99)),
+        border: Border.all(color: surfaceColor),
       ),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -545,7 +548,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                 ? sessionNotifier.pauseTimer
                 : sessionNotifier.startTimer,
             size: 64,
-            color: const Color.fromARGB(255, 255, 99, 99),
+            color: const Color.fromARGB(255, 155, 4, 4),
           ),
           _buildCircularButton(
             icon: Icons.skip_next,
@@ -557,7 +560,6 @@ class ExerciseExecutionPage extends ConsumerWidget {
         ],
       ),
     );
-  }
   }
 
   Widget _buildCircularButton({
@@ -571,11 +573,11 @@ class ExerciseExecutionPage extends ConsumerWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color ?? const Color.fromARGB(255, 36, 12, 12),
+        color: color ?? surfaceColor,
         boxShadow: onPressed != null
             ? [
                 BoxShadow(
-                  color: (color ?? Colors.redAccent).withOpacity(0.35),
+                  color: (color ?? const Color.fromARGB(255, 7, 43, 88)).withOpacity(0.35),
                   blurRadius: 12,
                   spreadRadius: 2,
                 ),
@@ -664,7 +666,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(18),
                     ),
-                    shadowColor: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.4),
+                    shadowColor: const Color.fromARGB(255, 32, 10, 105).withOpacity(0.4),
                   ),
                   child: Text(
                     'DONE',
@@ -689,9 +691,9 @@ class ExerciseExecutionPage extends ConsumerWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
         decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 36, 12, 12),
+          color: surfaceColor,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: const Color.fromARGB(80, 255, 99, 99)),
+          border: Border.all(color: surfaceColor),
           boxShadow: [
             BoxShadow(
               color: const Color.fromARGB(255, 220, 50, 50).withOpacity(0.08),
@@ -728,7 +730,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        backgroundColor: const Color.fromARGB(255, 36, 12, 12),
+        backgroundColor: surfaceColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
           'Exit Workout?',
@@ -774,3 +776,4 @@ class ExerciseExecutionPage extends ConsumerWidget {
     final secs = seconds % 60;
     return '${minutes}m ${secs}s';
   }
+}

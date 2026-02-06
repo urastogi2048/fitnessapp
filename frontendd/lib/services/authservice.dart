@@ -47,8 +47,8 @@ class AuthService{
 }
 
    Future<Map<String, dynamic>> getRecoveryMetrics(Map<String, dynamic> userMetrics) async {
-  print('📊 AuthService.getRecoveryMetrics() called');
-  print('➡️ POST $_recoveryUrl');
+  print(' AuthService.getRecoveryMetrics() called');
+  //print('POST $_recoveryUrl');
   try {
     // Call external ML service
     final response = await http.post(
@@ -56,7 +56,7 @@ class AuthService{
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(userMetrics),
     );
-    print('⬅️ status: ${response.statusCode}, body: ${response.body}');
+    print('status: ${response.statusCode}, body: ${response.body}');
 
     if (response.statusCode != 200) {
       throw Exception('Failed to get recovery score: ${response.statusCode} ${response.reasonPhrase}');
