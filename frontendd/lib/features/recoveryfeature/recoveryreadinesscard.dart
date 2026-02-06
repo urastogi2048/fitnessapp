@@ -1313,7 +1313,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
 
   Widget _suggestionCard(_Suggestion suggestion) {
     return Card(
-      color: const Color.fromARGB(255, 10, 18, 46),
+      color: const Color.fromARGB(255, 8, 13, 30),
       elevation: 0,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       child: Padding(

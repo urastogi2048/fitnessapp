@@ -565,7 +565,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         height: 100,
                         width: double.infinity,
                         child: Card(
-                          color: const Color.fromARGB(123, 9, 45, 81),
+                          color: const Color.fromARGB(255, 8, 13, 30),
                           
                           child: Row(
                             children: [
@@ -634,7 +634,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               });
                             },
                             child: _smallCard(
-                              color: const Color.fromARGB(121, 10, 34, 60),
+                              color: const Color.fromARGB(255, 8, 13, 30),
                              // lottie: 'assets/lottie/bodypart.json',
                               text: "Custom",
                               icon: FontAwesomeIcons.dumbbell,
@@ -653,7 +653,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ));
                             },
                             child: _smallCard(
-                              color: Color.fromARGB(121, 10, 34, 60),
+                              color: Color.fromARGB(255, 8, 13, 30),
                               //lottie: 'assets/lottie/growth.json',
                               text: "Progress",
                               minitext: "View analytics",
@@ -810,7 +810,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             ),
 
             // Profile screen
-            ProfileScreen(),
+            ProfileScreen(
+              onBackToHome: () {
+                setState(() {
+                  selectedIndex = 0;
+                });
+              },
+            ),
           ],
         ),
 

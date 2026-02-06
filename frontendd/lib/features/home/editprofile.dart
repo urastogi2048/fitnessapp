@@ -542,7 +542,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                 ),
                 const SizedBox(height: 20.0),
                 Card(
-                  color: const Color.fromARGB(255, 10, 18, 46),
+                  color: const Color.fromARGB(255, 8, 13, 30),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -557,7 +557,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                 ),
                 SizedBox(height: 15.0),
                 Card(
-                  color: const Color.fromARGB(255, 10, 18, 46),
+                  color: const Color.fromARGB(255, 8, 13, 30),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(
@@ -572,7 +572,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                 ),
                 SizedBox(height: 15.0),
                 Card(
-                  color: const Color.fromARGB(255, 10, 18, 46),
+                  color: const Color.fromARGB(255, 8, 13, 30),
                   child: Padding(
                     padding: const EdgeInsets.all(20.0),
                     child: Column(

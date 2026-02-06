@@ -361,7 +361,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
         filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
         child: Container(
           decoration: BoxDecoration(
-            color: const Color.fromARGB(255, 10, 18, 46),
+            color: const Color.fromARGB(255, 8, 13, 30),
             borderRadius: BorderRadius.circular(16.r),
             border: Border.all(
               color: Colors.purpleAccent.withOpacity(0.2),
@@ -515,7 +515,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
             filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
             child: Container(
               decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 10, 18, 46),
+                color: const Color.fromARGB(255, 8, 13, 30),
                 borderRadius: BorderRadius.circular(20.r),
                 border: Border.all(
                   color: Colors.purpleAccent.withOpacity(0.2),

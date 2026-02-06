@@ -76,11 +76,18 @@ class UserProfile {
 }
 
 
-class ProfileScreen extends ConsumerWidget {
-  const ProfileScreen({super.key});
+class ProfileScreen extends ConsumerStatefulWidget {
+  final VoidCallback? onBackToHome;
+  
+  const ProfileScreen({super.key, this.onBackToHome});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends ConsumerState<ProfileScreen> {
+  @override
+  Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileProvider);
 
     return Scaffold(
@@ -99,12 +106,45 @@ class ProfileScreen extends ConsumerWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     // Header Section
+                    InkWell(
+                      onTap: () {
+                        if (widget.onBackToHome != null) {
+                          widget.onBackToHome!();
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Icon(
+                            FontAwesomeIcons.arrowLeft,
+                            color: Colors.grey,
+                            size: 15,
+                          ),
+                          SizedBox(width: 10),
+                          Text(
+                            'Home',
+                            style: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 16,
+                              fontFamily: GoogleFonts.manrope().fontFamily,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: 10),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        InkWell(
-                          onTap: () => Navigator.pop(context),
-                          child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+                        Text(
+                          'Profile',
+                          style: TextStyle(
+                            fontSize: 28,
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
                         ),
                         InkWell(
                           onTap: () {
@@ -128,17 +168,6 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     const SizedBox(height: 12.0),
                     Text(
-                      'Profile',
-                      style: TextStyle(
-                        fontSize: 28,
-                        color: Colors.white,
-                        fontFamily: GoogleFonts.manrope(
-                          fontWeight: FontWeight.bold,
-                        ).fontFamily,
-                      ),
-                    ),
-                    const SizedBox(height: 5.0),
-                    Text(
                       profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
                       style: TextStyle(
                         fontSize: 16,
@@ -152,7 +181,7 @@ class ProfileScreen extends ConsumerWidget {
 
                     // Hero User Card
                     Card(
-                      color: const Color.fromARGB(255, 7, 26, 41),
+                    color: const Color.fromARGB(255, 8, 13, 30),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
@@ -321,7 +350,7 @@ class ProfileScreen extends ConsumerWidget {
     Color accentColor,
   ) {
     return Card(
-      color: const Color.fromARGB(255, 7, 26, 41),
+      color: const Color.fromARGB(255, 8, 13, 30),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -394,7 +423,7 @@ class ProfileScreen extends ConsumerWidget {
 
   Widget _profileInfoCard(String label, String value, IconData icon) {
     return Card(
-      color: const Color.fromARGB(255, 7, 26, 41),
+      color: const Color.fromARGB(255, 8, 13, 30),
       elevation: 0,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(16),
@@ -683,7 +712,7 @@ class ProfileScreen extends ConsumerWidget {
       child: Padding(
         padding: const EdgeInsets.all(30),
         child: Card(
-          color: const Color.fromARGB(255, 7, 26, 41),
+          color: const Color.fromARGB(255, 8, 13, 30),
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           child: Padding(

@@ -122,7 +122,9 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       if(state.currentExerciseIndex<state.exercises.length -1){
         final nextIndex = state.currentExerciseIndex +1;
         timer?.cancel();
+        soundService.pauseBackgroundMusic();
         state = state.copyWith(
+           
           currentExerciseIndex: nextIndex,
           timeRemaining: state.exercises[nextIndex].duration,
           isPlaying: false,
@@ -135,6 +137,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       if(state.currentExerciseIndex>0) {
         final newIndex = state.currentExerciseIndex - 1;
         timer?.cancel();
+        soundService.pauseBackgroundMusic();
         state = state.copyWith(
           currentExerciseIndex: newIndex,
           timeRemaining: state.exercises[newIndex].duration,
@@ -152,7 +155,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       final timeToSave = state.totalTimeSpent - lastSavedTime;
       if(timeToSave <= 0) return;
       
-      print('💾 Saving incremental progress: ${timeToSave}s');
+      print(' Saving incremental progress: ${timeToSave}s');
       
       try{
         final token = await TokenStorage.getToken();
@@ -182,7 +185,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
       await _saveProgressIncremental();
       
       state = state.copyWith(isCompleted: true);
-      print('🏋️ WORKOUT COMPLETED');
+      print('WORKOUT COMPLETED');
     }
     
     @override 

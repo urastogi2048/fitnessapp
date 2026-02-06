@@ -213,8 +213,8 @@ class _BMICalculatorState extends State<BMICalculator> {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            const Color.fromARGB(255, 10, 18, 46),
-            const Color.fromARGB(255, 15, 25, 55),
+            const Color.fromARGB(255, 8, 13, 30),
+            const Color.fromARGB(255, 8, 13, 30),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
