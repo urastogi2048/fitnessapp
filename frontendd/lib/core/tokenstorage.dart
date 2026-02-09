@@ -9,7 +9,7 @@ class TokenStorage{
       await deleteToken();
       return;
     }
-    // Delete old token first before saving new one
+   
     await _storage.delete(key: _tokenKey);
     await Future.delayed(Duration(milliseconds: 100));
     
