@@ -1,4 +1,5 @@
 import 'package:frontendd/features/auth/qstate.dart';
+
 class UserState {
   final String Username;
   final String Email;
@@ -23,5 +24,4 @@ class UserState {
       qstate: qstate ?? this.qstate,
     );
   }
-
 }

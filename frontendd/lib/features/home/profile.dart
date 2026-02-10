@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,24 +11,17 @@ import '../../features/auth/authprovider.dart';
 import 'package:frontendd/services/notificationservice.dart';
 
 final profileProvider = FutureProvider<UserProfile>((ref) async {
-  
-  
   final authService = ref.read(authServiceProvider);
   final data = await authService.getMe();
-  
-  
-  
+
   final user = data['user'] as Map<String, dynamic>?;
-  
+
   if (user == null) {
-   
     throw Exception('User data missing from backend response');
   }
-  
- 
+
   final profile = UserProfile.fromJson(user);
- 
-  
+
   return profile;
 });
 
@@ -72,12 +64,11 @@ class UserProfile {
   }
 }
 
-
 class ProfileScreen extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;
-  
+
   const ProfileScreen({super.key, this.onBackToHome});
-  
+
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -89,19 +80,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: profileAsync.when(
-        loading: () => const Center(
-          child: CircularProgressIndicator(color: Colors.white),
-        ),
+        loading: () =>
+            const Center(child: CircularProgressIndicator(color: Colors.white)),
         error: (e, stack) => _errorState(context, e, stack, ref),
         data: (profile) {
           final double heightInMeters = (profile.height ?? 0) / 100;
           final double weight = profile.weight ?? 0;
-          final double bmi = (heightInMeters > 0) ? weight / (heightInMeters * heightInMeters) : 0.0;
+          final double bmi = (heightInMeters > 0)
+              ? weight / (heightInMeters * heightInMeters)
+              : 0.0;
 
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(25.0),
+                padding: EdgeInsets.all(25.0.w),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -119,28 +111,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           Icon(
                             FontAwesomeIcons.arrowLeft,
                             color: Colors.grey,
-                            size: 15,
+                            size: 15.sp,
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Text(
                             'Home',
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 16,
+                              fontSize: 16.sp,
                               fontFamily: GoogleFonts.manrope().fontFamily,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
                           'Profile',
                           style: TextStyle(
-                            fontSize: 28,
+                            fontSize: 28.sp,
                             color: Colors.white,
                             fontWeight: FontWeight.bold,
                             fontFamily: GoogleFonts.manrope().fontFamily,
@@ -151,82 +143,90 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             _showSettingsBottomSheet(context, profile);
                           },
                           child: Container(
-                            height: 44,
-                            width: 44,
+                            height: 44.h,
+                            width: 44.w,
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(255, 6, 25, 41),
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(12.r),
                             ),
-                            child: const Icon(
+                            child: Icon(
                               FontAwesomeIcons.gear,
                               color: Colors.white,
-                              size: 20,
+                              size: 20.sp,
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 12.0),
+                    SizedBox(height: 12.h),
                     Text(
-                      profile.username.isNotEmpty ? '@${profile.username}' : 'User Profile',
+                      profile.username.isNotEmpty
+                          ? '@${profile.username}'
+                          : 'User Profile',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 16.sp,
                         color: Colors.grey[600],
                         fontFamily: GoogleFonts.manrope(
                           fontWeight: FontWeight.w500,
                         ).fontFamily,
                       ),
                     ),
-                    const SizedBox(height: 20.0),
+                    SizedBox(height: 20.h),
 
                     // Hero User Card
                     Card(
-                    color: const Color.fromARGB(255, 8, 13, 30),
+                      color: const Color.fromARGB(255, 8, 13, 30),
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(20),
+                        borderRadius: BorderRadius.circular(20.r),
                       ),
                       child: Padding(
-                        padding: const EdgeInsets.all(20.0),
+                        padding: EdgeInsets.all(20.r),
                         child: Row(
                           children: [
                             Container(
-                              height: 70,
-                              width: 70,
+                              height: 70.h,
+                              width: 70.w,
                               decoration: BoxDecoration(
                                 color: Colors.purpleAccent.withOpacity(0.15),
                                 shape: BoxShape.circle,
                               ),
-                              child: const Icon(
+                              child: Icon(
                                 FontAwesomeIcons.userAstronaut,
                                 color: Colors.purpleAccent,
-                                size: 32,
+                                size: 32.sp,
                               ),
                             ),
-                            const SizedBox(width: 16),
+                            SizedBox(width: 16.w),
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    profile.username.isNotEmpty ? profile.username : 'User',
+                                    profile.username.isNotEmpty
+                                        ? profile.username
+                                        : 'User',
                                     style: TextStyle(
-                                      fontSize: 20,
+                                      fontSize: 20.sp,
                                       fontWeight: FontWeight.bold,
                                       color: Colors.white,
-                                      fontFamily: GoogleFonts.manrope().fontFamily,
+                                      fontFamily:
+                                          GoogleFonts.manrope().fontFamily,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  const SizedBox(height: 6),
+                                  SizedBox(height: 6.h),
                                   Text(
-                                    profile.email.isNotEmpty ? profile.email : 'No email',
+                                    profile.email.isNotEmpty
+                                        ? profile.email
+                                        : 'No email',
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize: 14.sp,
                                       color: Colors.white70,
-                                      fontFamily: GoogleFonts.manrope().fontFamily,
+                                      fontFamily:
+                                          GoogleFonts.manrope().fontFamily,
                                     ),
                                     maxLines: 1,
                                     overflow: TextOverflow.ellipsis,
@@ -238,7 +238,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ),
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Metrics Grid
                     Row(
@@ -246,28 +246,28 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Text(
                           'BODY METRICS',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             color: Colors.cyanAccent,
                             fontFamily: GoogleFonts.manrope(
                               fontWeight: FontWeight.bold,
                             ).fontFamily,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(
+                        SizedBox(width: 10.w),
+                        Icon(
                           FontAwesomeIcons.chartLine,
                           color: Colors.cyanAccent,
-                          size: 16,
+                          size: 16.sp,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
+                    SizedBox(height: 15.h),
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
                       physics: const NeverScrollableScrollPhysics(),
-                      mainAxisSpacing: 12,
-                      crossAxisSpacing: 12,
+                      mainAxisSpacing: 12.h,
+                      crossAxisSpacing: 12.w,
                       childAspectRatio: 1.15,
                       children: [
                         _metricCard(
@@ -279,14 +279,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                         _metricCard(
                           'Height',
-                          profile.height != null ? '${profile.height!.toStringAsFixed(0)}' : '--',
+                          profile.height != null
+                              ? '${profile.height!.toStringAsFixed(0)}'
+                              : '--',
                           'cm',
                           FontAwesomeIcons.rulerVertical,
                           Colors.amberAccent,
                         ),
                         _metricCard(
                           'Weight',
-                          profile.weight != null ? '${profile.weight!.toStringAsFixed(0)}' : '--',
+                          profile.weight != null
+                              ? '${profile.weight!.toStringAsFixed(0)}'
+                              : '--',
                           'kg',
                           FontAwesomeIcons.weightScale,
                           Colors.blueAccent,
@@ -300,7 +304,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
-                    const SizedBox(height: 24),
+                    SizedBox(height: 24.h),
 
                     // Body Profile Section
                     Row(
@@ -308,32 +312,43 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         Text(
                           'BODY PROFILE',
                           style: TextStyle(
-                            fontSize: 15,
+                            fontSize: 15.sp,
                             color: Colors.purpleAccent,
                             fontFamily: GoogleFonts.manrope(
                               fontWeight: FontWeight.bold,
                             ).fontFamily,
                           ),
                         ),
-                        const SizedBox(width: 10),
-                        const Icon(
+                        SizedBox(width: 10.w),
+                        Icon(
                           FontAwesomeIcons.dna,
                           color: Colors.purpleAccent,
-                          size: 16,
+                          size: 16.sp,
                         ),
                       ],
                     ),
-                    const SizedBox(height: 15),
-                    _profileInfoCard('Body Mass Index', _fallback(bmi.toStringAsFixed(2)), FontAwesomeIcons.venusMars),
-                    const SizedBox(height: 15),
-                    _profileInfoCard('Gender', _fallback(profile.gender), FontAwesomeIcons.venusMars),
-                    const SizedBox(height: 12),
-                    _profileInfoCard('Body Type', _fallback(profile.bodyType), FontAwesomeIcons.personRunning),
-                    const SizedBox(height: 32),
+                    SizedBox(height: 15.h),
+                    _profileInfoCard(
+                      'Body Mass Index',
+                      _fallback(bmi.toStringAsFixed(2)),
+                      FontAwesomeIcons.weightHanging,
+                    ),
+                    SizedBox(height: 15.h),
+                    _profileInfoCard(
+                      'Gender',
+                      _fallback(profile.gender),
+                      FontAwesomeIcons.venusMars,
+                    ),
+                    SizedBox(height: 12.h),
+                    _profileInfoCard(
+                      'Body Type',
+                      _fallback(profile.bodyType),
+                      FontAwesomeIcons.personRunning,
+                    ),
+                    SizedBox(height: 32.h),
 
-                    // Logout Button
                     _logoutButton(context, ref),
-                    const SizedBox(height: 20),
+                    SizedBox(height: 20.h),
                   ],
                 ),
               ),
@@ -354,25 +369,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Card(
       color: const Color.fromARGB(255, 8, 13, 30),
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Container(
-              height: 40,
-              width: 40,
+              height: 40.h,
+              width: 40.w,
               decoration: BoxDecoration(
                 color: accentColor.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: accentColor, size: 20),
+              child: Icon(icon, color: accentColor, size: 20.sp),
             ),
-            const SizedBox(height: 8),
+            SizedBox(height: 8.h),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -380,12 +393,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                   label,
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 12,
+                    fontSize: 12.sp,
                     fontWeight: FontWeight.w500,
                     fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                 ),
-                const SizedBox(height: 4),
+                SizedBox(height: 4.h),
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
@@ -394,7 +407,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         value,
                         style: TextStyle(
                           color: Colors.white,
-                          fontSize: 24,
+                          fontSize: 24.sp,
                           fontWeight: FontWeight.bold,
                           fontFamily: GoogleFonts.poppins().fontFamily,
                         ),
@@ -403,12 +416,12 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                     if (unit.isNotEmpty) ...[
-                      const SizedBox(width: 4),
+                      SizedBox(width: 4.w),
                       Text(
                         unit,
                         style: TextStyle(
                           color: Colors.white70,
-                          fontSize: 11,
+                          fontSize: 11.sp,
                           fontFamily: GoogleFonts.manrope().fontFamily,
                         ),
                       ),
@@ -427,23 +440,21 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Card(
       color: const Color.fromARGB(255, 8, 13, 30),
       elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(16),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0.r),
         child: Row(
           children: [
             Container(
-              height: 40,
-              width: 40,
+              height: 40.h,
+              width: 40.w,
               decoration: BoxDecoration(
                 color: Colors.purpleAccent.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.purpleAccent, size: 18),
+              child: Icon(icon, color: Colors.purpleAccent, size: 18.sp),
             ),
-            const SizedBox(width: 12),
+            SizedBox(width: 12.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -452,16 +463,16 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     label,
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     value,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
@@ -477,20 +488,40 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   Widget _metrics(UserProfile profile) {
     final metrics = [
-      {'label': 'Age', 'value': profile.age != null ? '${profile.age} yrs' : 'Not set', 'icon': Icons.cake_outlined, 'color': const Color.fromARGB(255, 1, 72, 4)},
-      {'label': 'Height', 'value': profile.height != null ? '${profile.height} cm' : 'Not set', 'icon': Icons.height, 'color': const Color.fromARGB(255, 187, 187, 1)},
-      {'label': 'Weight', 'value': profile.weight != null ? '${profile.weight} kg' : 'Not set', 'icon': Icons.monitor_weight_outlined, 'color': const Color.fromARGB(255, 2, 71, 128)},
-      {'label': 'Goal', 'value': _fallback(profile.goal), 'icon': Icons.flag_outlined, 'color': const Color.fromARGB(255, 136, 7, 7)},
+      {
+        'label': 'Age',
+        'value': profile.age != null ? '${profile.age} yrs' : 'Not set',
+        'icon': Icons.cake_outlined,
+        'color': const Color.fromARGB(255, 1, 72, 4),
+      },
+      {
+        'label': 'Height',
+        'value': profile.height != null ? '${profile.height} cm' : 'Not set',
+        'icon': Icons.height,
+        'color': const Color.fromARGB(255, 187, 187, 1),
+      },
+      {
+        'label': 'Weight',
+        'value': profile.weight != null ? '${profile.weight} kg' : 'Not set',
+        'icon': Icons.monitor_weight_outlined,
+        'color': const Color.fromARGB(255, 2, 71, 128),
+      },
+      {
+        'label': 'Goal',
+        'value': _fallback(profile.goal),
+        'icon': Icons.flag_outlined,
+        'color': const Color.fromARGB(255, 136, 7, 7),
+      },
     ];
 
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: metrics.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
-        mainAxisSpacing: 12,
-        crossAxisSpacing: 12,
+        mainAxisSpacing: 12.h,
+        crossAxisSpacing: 12.w,
         childAspectRatio: 1.3,
       ),
       itemBuilder: (context, index) {
@@ -514,21 +545,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }) {
     return Card(
       color: color,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: EdgeInsets.all(16.r),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Icon(icon, color: Colors.white, size: 28),
-            const SizedBox(height: 8),
+            Icon(icon, color: Colors.white, size: 28.sp),
+            SizedBox(height: 8.h),
             Text(
               label,
-              style: GoogleFonts.oswald(
-                color: Colors.white70,
-                fontSize: 13,
-              ),
+              style: GoogleFonts.oswald(color: Colors.white70, fontSize: 13.sp),
               maxLines: 1,
               overflow: TextOverflow.ellipsis,
             ),
@@ -536,7 +564,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               value,
               style: GoogleFonts.poppins(
                 color: Colors.white,
-                fontSize: 16,
+                fontSize: 16.sp,
                 fontWeight: FontWeight.bold,
               ),
               maxLines: 1,
@@ -552,13 +580,11 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     showModalBottomSheet(
       context: context,
       backgroundColor: const Color.fromARGB(255, 10, 10, 10),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(
-          top: Radius.circular(24),
-        ),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
       builder: (context) => Padding(
-        padding: const EdgeInsets.all(24.0),
+        padding: EdgeInsets.all(24.0.r),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -566,39 +592,51 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
             Text(
               'Settings',
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 24.sp,
                 fontWeight: FontWeight.bold,
                 color: Colors.white,
                 fontFamily: GoogleFonts.manrope().fontFamily,
               ),
             ),
-            const SizedBox(height: 24),
+            SizedBox(height: 24.h),
             _settingsOption(
               icon: FontAwesomeIcons.penToSquare,
               title: 'Edit Profile',
               subtitle: 'Update your questionnaire details',
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  Editprofile(userProfile: profile)));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => Editprofile(userProfile: profile),
+                  ),
+                );
               },
             ),
-            const SizedBox(height: 12),
+            SizedBox(height: 12.h),
             _settingsOption(
               icon: FontAwesomeIcons.calendarDays,
               title: 'Set Your Schedule',
               subtitle: 'Manange your weekly workout plan',
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) =>  EditWorkoutUI()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditWorkoutUI()),
+                );
               },
-                
             ),
-            const SizedBox(height: 12),
-            
+            SizedBox(height: 12.h),
+
             _settingsOption(
               icon: FontAwesomeIcons.circleQuestion,
               title: 'Help & Support',
               subtitle: 'Get help with the app',
               onTap: () {
-               Navigator.push(context, MaterialPageRoute(builder: (context) => const HelpAndSupportPage()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HelpAndSupportPage(),
+                  ),
+                );
               },
             ),
           ],
@@ -615,25 +653,25 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   }) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: BorderRadius.circular(12.r),
       child: Container(
-        padding: const EdgeInsets.all(16.0),
+        padding: EdgeInsets.all(16.0.r),
         decoration: BoxDecoration(
           color: const Color.fromARGB(255, 7, 26, 41),
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
         ),
         child: Row(
           children: [
             Container(
-              height: 40,
-              width: 40,
+              height: 40.h,
+              width: 40.w,
               decoration: BoxDecoration(
                 color: Colors.cyanAccent.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(icon, color: Colors.cyanAccent, size: 18),
+              child: Icon(icon, color: Colors.cyanAccent, size: 18.sp),
             ),
-            const SizedBox(width: 16),
+            SizedBox(width: 16.w),
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -642,27 +680,27 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     title,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 16,
+                      fontSize: 16.sp,
                       fontWeight: FontWeight.bold,
                       fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
                   ),
-                  const SizedBox(height: 4),
+                  SizedBox(height: 4.h),
                   Text(
                     subtitle,
                     style: TextStyle(
                       color: Colors.white70,
-                      fontSize: 12,
+                      fontSize: 12.sp,
                       fontFamily: GoogleFonts.manrope().fontFamily,
                     ),
                   ),
                 ],
               ),
             ),
-            const Icon(
+            Icon(
               FontAwesomeIcons.chevronRight,
               color: Colors.white54,
-              size: 14,
+              size: 14.sp,
             ),
           ],
         ),
@@ -673,12 +711,14 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   Widget _logoutButton(BuildContext context, WidgetRef ref) {
     return SizedBox(
       width: double.infinity,
-      height: 64,
+      height: 64.h,
       child: ElevatedButton(
         onPressed: () async {
           await ref.read(authProvider.notifier).logout();
           if (context.mounted) {
-            Navigator.of(context).pushNamedAndRemoveUntil('/login', (_) => false);
+            Navigator.of(
+              context,
+            ).pushNamedAndRemoveUntil('/login', (_) => false);
           }
         },
         style: ElevatedButton.styleFrom(
@@ -686,18 +726,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           foregroundColor: Colors.black,
           elevation: 0,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20.r),
           ),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(FontAwesomeIcons.rightFromBracket, size: 18),
-            const SizedBox(width: 12),
+            Icon(FontAwesomeIcons.rightFromBracket, size: 18.sp),
+            SizedBox(width: 12.w),
             Text(
               'SIGN OUT',
               style: GoogleFonts.inter(
-                fontSize: 18,
+                fontSize: 18.sp,
                 fontWeight: FontWeight.w900,
                 letterSpacing: 1.2,
               ),
@@ -706,59 +746,65 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
       ),
     );
-  } 
-  
+  }
 
-  Widget _errorState(BuildContext context, Object e, StackTrace stack, WidgetRef ref) {
+  Widget _errorState(
+    BuildContext context,
+    Object e,
+    StackTrace stack,
+    WidgetRef ref,
+  ) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(30),
+        padding: EdgeInsets.all(30.r),
         child: Card(
           color: const Color.fromARGB(255, 8, 13, 30),
           elevation: 0,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.r),
+          ),
           child: Padding(
-            padding: const EdgeInsets.all(30),
+            padding: EdgeInsets.all(30.r),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
                 Container(
-                  height: 70,
-                  width: 70,
+                  height: 70.h,
+                  width: 70.w,
                   decoration: BoxDecoration(
                     color: Colors.redAccent.withOpacity(0.15),
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
+                  child: Icon(
                     FontAwesomeIcons.triangleExclamation,
                     color: Colors.redAccent,
-                    size: 32,
+                    size: 32.sp,
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 Text(
                   'Error loading profile',
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 18,
+                    fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
                     fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: 10.h),
                 Text(
                   e.toString(),
                   style: TextStyle(
                     color: Colors.white70,
-                    fontSize: 14,
+                    fontSize: 14.sp,
                     fontFamily: GoogleFonts.manrope().fontFamily,
                   ),
                   textAlign: TextAlign.center,
                 ),
-                const SizedBox(height: 24),
+                SizedBox(height: 24.h),
                 SizedBox(
                   width: double.infinity,
-                  height: 50,
+                  height: 50.h,
                   child: ElevatedButton(
                     onPressed: () => ref.invalidate(profileProvider),
                     style: ElevatedButton.styleFrom(
@@ -766,18 +812,18 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       foregroundColor: Colors.black,
                       elevation: 0,
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(FontAwesomeIcons.arrowsRotate, size: 16),
-                        const SizedBox(width: 10),
+                        Icon(FontAwesomeIcons.arrowsRotate, size: 16.sp),
+                        SizedBox(width: 10.w),
                         Text(
                           'RETRY',
                           style: GoogleFonts.inter(
-                            fontSize: 16,
+                            fontSize: 16.sp,
                             fontWeight: FontWeight.w900,
                             letterSpacing: 1.2,
                           ),

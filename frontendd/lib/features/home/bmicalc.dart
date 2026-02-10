@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:numberpicker/numberpicker.dart';
+
 class BMICalculator extends StatefulWidget {
   const BMICalculator({super.key});
 
@@ -10,21 +11,23 @@ class BMICalculator extends StatefulWidget {
 }
 
 class _BMICalculatorState extends State<BMICalculator> {
-  final TextEditingController heightController = TextEditingController(text: '170');
-    final TextEditingController weightController = TextEditingController(text: '70');
-    //final double bmi;
-    bool ispressed = false;
-    @override
-    void dispose(){
-      heightController.dispose();
-      weightController.dispose();
-      super.dispose();
-    }
+  final TextEditingController heightController = TextEditingController(
+    text: '170',
+  );
+  final TextEditingController weightController = TextEditingController(
+    text: '70',
+  );
+  //final double bmi;
+  bool ispressed = false;
+  @override
+  void dispose() {
+    heightController.dispose();
+    weightController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    
-    
-    
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
@@ -34,162 +37,173 @@ class _BMICalculatorState extends State<BMICalculator> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-              InkWell(
-                onTap: () => Navigator.pop(context),
-                child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
-              ),
-              const SizedBox(height: 12.0),
-              Text(
-                'BMI Calculator',
-                style: TextStyle(
-                  fontSize: 28,
-                  color: Colors.white,
-                  fontFamily: GoogleFonts.manrope(
-                    fontWeight: FontWeight.bold,
-                  ).fontFamily,
-                ),
-              ),
-              const SizedBox(height: 5.0),
-              Text(
-                'Calculate your Body Mass Index',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey[600],
-                  fontFamily: GoogleFonts.manrope(
-                    fontWeight: FontWeight.w500,
-                  ).fontFamily,
-                ),
-              ),
-              const SizedBox(height: 20.0),
-              
-              // Height Picker
-              Text(
-                'Height (cm)',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 0, 230),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: GoogleFonts.manrope().fontFamily,
-                ),
-              ),
-              const SizedBox(height: 12.0),
-            NumberPicker(
-              minValue: 50,
-              maxValue: 250,
-              value: heightController.text.isEmpty ? 170 : int.parse(heightController.text),
-              itemHeight: 60,
-              axis: Axis.horizontal,
-              selectedTextStyle: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: GoogleFonts.manrope().fontFamily,
-              ),
-              textStyle: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-                fontFamily: GoogleFonts.manrope().fontFamily,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  heightController.text = value.toString();
-                });
-              },
-            ),
-              const SizedBox(height: 20.0),
-
-              // Weight Picker
-              Text(
-                'Weight (kg)',
-                style: TextStyle(
-                  color: const Color.fromARGB(255, 255, 102, 0),
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: GoogleFonts.manrope().fontFamily,
-                ),
-              ),
-              const SizedBox(height: 12.0),
-            NumberPicker(
-              minValue: 20,
-              maxValue: 200,
-              value: weightController.text.isEmpty ? 70 : int.parse(weightController.text),
-              itemHeight: 60,
-              axis: Axis.horizontal,
-              selectedTextStyle: TextStyle(
-                fontSize: 28,
-                fontWeight: FontWeight.bold,
-                color: Colors.white,
-                fontFamily: GoogleFonts.manrope().fontFamily,
-              ),
-              textStyle: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-                fontFamily: GoogleFonts.manrope().fontFamily,
-              ),
-              onChanged: (value) {
-                setState(() {
-                  weightController.text = value.toString();
-                });
-              },
-            ),
-              const SizedBox(height: 30.0),
-              
-            // Calculate Button
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                onPressed: () {
-                  setState(() {
-                    ispressed = true;
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color.fromARGB(255, 255, 255, 255),
-                  foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+                InkWell(
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(
+                    FontAwesomeIcons.arrowLeft,
+                    color: Colors.white,
                   ),
-                  elevation: 4,
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                  //  const Icon(FontAwesomeIcons.calculator, size: 20),
-                   // const SizedBox(width: 12),
-                    Text(
-                      'CALCULATE BMI',
-                      style: GoogleFonts.inter(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.2,
-                                ),
+                const SizedBox(height: 12.0),
+                Text(
+                  'BMI Calculator',
+                  style: TextStyle(
+                    fontSize: 28,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.bold,
+                    ).fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 5.0),
+                Text(
+                  'Calculate your Body Mass Index',
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey[600],
+                    fontFamily: GoogleFonts.manrope(
+                      fontWeight: FontWeight.w500,
+                    ).fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 20.0),
+
+                // Height Picker
+                Text(
+                  'Height (cm)',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 0, 230),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                NumberPicker(
+                  minValue: 50,
+                  maxValue: 250,
+                  value: heightController.text.isEmpty
+                      ? 170
+                      : int.parse(heightController.text),
+                  itemHeight: 60,
+                  axis: Axis.horizontal,
+                  selectedTextStyle: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      heightController.text = value.toString();
+                    });
+                  },
+                ),
+                const SizedBox(height: 20.0),
+
+                // Weight Picker
+                Text(
+                  'Weight (kg)',
+                  style: TextStyle(
+                    color: const Color.fromARGB(255, 255, 102, 0),
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                NumberPicker(
+                  minValue: 20,
+                  maxValue: 200,
+                  value: weightController.text.isEmpty
+                      ? 70
+                      : int.parse(weightController.text),
+                  itemHeight: 60,
+                  axis: Axis.horizontal,
+                  selectedTextStyle: TextStyle(
+                    fontSize: 28,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.grey,
+                    fontFamily: GoogleFonts.manrope().fontFamily,
+                  ),
+                  onChanged: (value) {
+                    setState(() {
+                      weightController.text = value.toString();
+                    });
+                  },
+                ),
+                const SizedBox(height: 30.0),
+
+                // Calculate Button
+                SizedBox(
+                  width: double.infinity,
+                  height: 56,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      setState(() {
+                        ispressed = true;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+                      foregroundColor: const Color.fromARGB(255, 0, 0, 0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      elevation: 4,
                     ),
-                  ],
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        //  const Icon(FontAwesomeIcons.calculator, size: 20),
+                        // const SizedBox(width: 12),
+                        Text(
+                          'CALCULATE BMI',
+                          style: GoogleFonts.inter(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w900,
+                            letterSpacing: 1.2,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 30.0),
+
+                // Result Display
+                if (ispressed &&
+                    heightController.text.isNotEmpty &&
+                    weightController.text.isNotEmpty)
+                  _buildResultCard(),
+              ],
             ),
-              const SizedBox(height: 30.0),
-              
-            // Result Display
-            if(ispressed && heightController.text.isNotEmpty && weightController.text.isNotEmpty)
-              _buildResultCard(),
-            ],
           ),
-        ),
         ),
       ),
     );
   }
-  
+
   Widget _buildResultCard() {
-    final double bmiValue = double.parse(weightController.text) / 
-        ((double.parse(heightController.text)/100) * (double.parse(heightController.text)/100));
-    
+    final double bmiValue =
+        double.parse(weightController.text) /
+        ((double.parse(heightController.text) / 100) *
+            (double.parse(heightController.text) / 100));
+
     Color bmiColor;
     String bmiCategory;
     IconData bmiIcon;
-    
+
     if (bmiValue < 18.5) {
       bmiColor = Colors.blue;
       bmiCategory = 'Underweight';
@@ -207,7 +221,7 @@ class _BMICalculatorState extends State<BMICalculator> {
       bmiCategory = 'Obese';
       bmiIcon = FontAwesomeIcons.faceFrown;
     }
-    
+
     return Container(
       padding: const EdgeInsets.all(24.0),
       decoration: BoxDecoration(
@@ -220,10 +234,7 @@ class _BMICalculatorState extends State<BMICalculator> {
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: bmiColor.withOpacity(0.5),
-          width: 2,
-        ),
+        border: Border.all(color: bmiColor.withOpacity(0.5), width: 2),
       ),
       child: Column(
         children: [
@@ -234,14 +245,10 @@ class _BMICalculatorState extends State<BMICalculator> {
               color: bmiColor.withOpacity(0.2),
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              bmiIcon,
-              size: 40,
-              color: bmiColor,
-            ),
+            child: Icon(bmiIcon, size: 40, color: bmiColor),
           ),
           const SizedBox(height: 16),
-          
+
           // BMI Label
           Text(
             'Your BMI',
@@ -252,7 +259,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
           ),
           const SizedBox(height: 8),
-          
+
           // BMI Value
           Text(
             bmiValue.toStringAsFixed(1),
@@ -264,7 +271,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
           ),
           const SizedBox(height: 12),
-          
+
           // Category Badge
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
@@ -284,7 +291,7 @@ class _BMICalculatorState extends State<BMICalculator> {
             ),
           ),
           const SizedBox(height: 16),
-          
+
           // BMI Categories Reference
           Container(
             padding: const EdgeInsets.all(16),
@@ -315,7 +322,7 @@ class _BMICalculatorState extends State<BMICalculator> {
       ),
     );
   }
-  
+
   Widget _buildCategoryRow(Color color, String category, String range) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
@@ -351,4 +358,5 @@ class _BMICalculatorState extends State<BMICalculator> {
         ],
       ),
     );
-  }}
+  }
+}

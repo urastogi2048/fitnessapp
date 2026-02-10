@@ -22,7 +22,6 @@ class _Suggestion {
   final Color color;
 }
 
-
 class Recoveryreadinesscard extends ConsumerStatefulWidget {
   const Recoveryreadinesscard({super.key});
 
@@ -105,7 +104,10 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
           children: [
             InkWell(
               onTap: () => Navigator.pop(context),
-              child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+              child: const Icon(
+                FontAwesomeIcons.arrowLeft,
+                color: Colors.white,
+              ),
             ),
             const SizedBox(height: 12.0),
             Text(
@@ -135,7 +137,6 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
-                    
                     Card(
                       color: const Color.fromARGB(255, 10, 18, 46),
                       child: Padding(
@@ -163,7 +164,12 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                   child: Icon(
                                     FontAwesomeIcons.cloudMoon,
                                     size: 40,
-                                    color: const Color.fromARGB(148, 223, 64, 251),
+                                    color: const Color.fromARGB(
+                                      148,
+                                      223,
+                                      64,
+                                      251,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -353,11 +359,9 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                          
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                
                                 Text(
                                   'BODY STATUS',
                                   style: TextStyle(
@@ -373,7 +377,12 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                   child: Icon(
                                     FontAwesomeIcons.personRunning,
                                     size: 40,
-                                    color: const Color.fromARGB(148, 251, 153, 64),
+                                    color: const Color.fromARGB(
+                                      148,
+                                      251,
+                                      153,
+                                      64,
+                                    ),
                                   ),
                                 ),
                               ],
@@ -839,7 +848,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     String statusText = '';
     Color statusColor = Colors.white;
     final suggestions = _buildSuggestions(scoreValue);
-    
+
     if (score >= 80) {
       statusText = 'EXCELLENT';
       statusColor = Colors.greenAccent;
@@ -860,162 +869,166 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
-           children: [
-             Align(
-               alignment: Alignment.centerLeft,
-               child: InkWell(
-                 onTap: () => Navigator.pop(context),
-                 child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
-               ),
-             ),
-             const SizedBox(height: 20.0),
-             Center ( 
-            child: Text(
-              'Analysis Complete',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-                fontFamily: GoogleFonts.manrope().fontFamily,
-                color: const Color.fromARGB(255, 148, 148, 148),
+          children: [
+            Align(
+              alignment: Alignment.centerLeft,
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: const Icon(
+                  FontAwesomeIcons.arrowLeft,
+                  color: Colors.white,
+                ),
               ),
             ),
-           ),
-           const SizedBox(height: 40),
-           Stack(
-             alignment: Alignment.center,
-             children: [
-               SizedBox(
-                 width: 240,
-                 height: 240,
-                 child: CircularProgressIndicator(
-                   value: overallscore! > 1 ? overallscore! / 100 : overallscore,
-                   strokeWidth: 18,
-                   backgroundColor: const Color.fromARGB(255, 23, 35, 68),
-                   color: statusColor,
-                   strokeCap: StrokeCap.round,
-                 ),
-               ),
-               Column(
-                 mainAxisSize: MainAxisSize.min,
-                 children: [
-                   Text(
-                     scoreValue.toStringAsFixed(1),
-                     style: TextStyle(
-                       fontSize: 72,
-                       fontWeight: FontWeight.bold,
-                       color: Colors.white,
-                       fontFamily: GoogleFonts.poppins().fontFamily,
-                     ),
-                   ),
-                   Text(
-                     statusText,
-                     style: TextStyle(
-                       fontSize: 16,
-                       fontWeight: FontWeight.w600,
-                       color: statusColor,
-                       letterSpacing: 2,
-                       fontFamily: GoogleFonts.oswald().fontFamily,
-                     ),
-                   ),
-      
-                  SizedBox(height: 10),
-                  
-                 ],
-               ),
-             ],
-           ),
-           SizedBox(height: 30),
-           if(overallscore! < 40)
-                    Text(
-                      'Consider taking a rest day or engaging in light recovery activities.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                    )
-                  else if(overallscore! < 60)
-                    Text(
-                      'You are recovering well, but listen to your body for any signs of fatigue.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                    )
-                  else if(overallscore! < 80)
-                    Text(
-                      'Good recovery! You are ready for your next workout session.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                    )
-                  else
-                    Text(
-                      'Excellent recovery! You are in peak condition for training.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontSize: 14,
-                        color: Colors.white70,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                    ),
-          SizedBox(height: 24),
-          if (suggestions.isNotEmpty)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            const SizedBox(height: 20.0),
+            Center(
+              child: Text(
+                'Analysis Complete',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                  color: const Color.fromARGB(255, 148, 148, 148),
+                ),
+              ),
+            ),
+            const SizedBox(height: 40),
+            Stack(
+              alignment: Alignment.center,
               children: [
-                Text(
-                  'Personalized suggestions',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700,
-                    fontFamily: GoogleFonts.manrope().fontFamily,
+                SizedBox(
+                  width: 240,
+                  height: 240,
+                  child: CircularProgressIndicator(
+                    value: overallscore! > 1
+                        ? overallscore! / 100
+                        : overallscore,
+                    strokeWidth: 18,
+                    backgroundColor: const Color.fromARGB(255, 23, 35, 68),
+                    color: statusColor,
+                    strokeCap: StrokeCap.round,
                   ),
                 ),
-                const SizedBox(height: 12),
-                ...suggestions
-                    .map((suggestion) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12.0),
-                          child: _suggestionCard(suggestion),
-                        ))
-                    .toList(),
-              ],
-            ),
-            SizedBox(
-                      width: double.infinity,
-                      height: 64,
-                      child: ElevatedButton(
-                        onPressed: 
-                        (){
-                          Navigator.of(context).pop();
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          elevation: 0,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                        ),
-                        child:  Text(
-                                'RETURN TO HOME',
-                                style: GoogleFonts.inter(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w900,
-                                  letterSpacing: 1.2,
-                                ),
-                              ),
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      scoreValue.toStringAsFixed(1),
+                      style: TextStyle(
+                        fontSize: 72,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontFamily: GoogleFonts.poppins().fontFamily,
                       ),
                     ),
-         ]
-         
+                    Text(
+                      statusText,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: statusColor,
+                        letterSpacing: 2,
+                        fontFamily: GoogleFonts.oswald().fontFamily,
+                      ),
+                    ),
+
+                    SizedBox(height: 10),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(height: 30),
+            if (overallscore! < 40)
+              Text(
+                'Consider taking a rest day or engaging in light recovery activities.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                ),
+              )
+            else if (overallscore! < 60)
+              Text(
+                'You are recovering well, but listen to your body for any signs of fatigue.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                ),
+              )
+            else if (overallscore! < 80)
+              Text(
+                'Good recovery! You are ready for your next workout session.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                ),
+              )
+            else
+              Text(
+                'Excellent recovery! You are in peak condition for training.',
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.white70,
+                  fontFamily: GoogleFonts.manrope().fontFamily,
+                ),
+              ),
+            SizedBox(height: 24),
+            if (suggestions.isNotEmpty)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Personalized suggestions',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: GoogleFonts.manrope().fontFamily,
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+                  ...suggestions
+                      .map(
+                        (suggestion) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: _suggestionCard(suggestion),
+                        ),
+                      )
+                      .toList(),
+                ],
+              ),
+            SizedBox(
+              width: double.infinity,
+              height: 64,
+              child: ElevatedButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  foregroundColor: Colors.black,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                child: Text(
+                  'RETURN TO HOME',
+                  style: GoogleFonts.inter(
+                    fontSize: 20,
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 1.2,
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -1107,6 +1120,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
         ? 'Enter a valid number'
         : null;
   }
+
   List<_Suggestion> _buildSuggestions(double scoreValue) {
     final suggestions = <_Suggestion>[];
 
@@ -1158,7 +1172,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Prioritize sleep time',
-          message: 'Aim for 7–9 hours tonight; short sleep suppresses recovery and readiness.',
+          message:
+              'Aim for 7–9 hours tonight; short sleep suppresses recovery and readiness.',
           icon: Icons.nightlight_round,
           color: Colors.purpleAccent,
         ),
@@ -1167,7 +1182,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Sleep duration is solid',
-          message: 'Maintain this routine; keep caffeine away from late hours to protect quality.',
+          message:
+              'Maintain this routine; keep caffeine away from late hours to protect quality.',
           icon: Icons.check_circle,
           color: Colors.blueAccent,
         ),
@@ -1176,7 +1192,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Keep sleep consistent',
-          message: 'Stay in the 7–8 hour lane; anchor bed/wake times to keep quality high.',
+          message:
+              'Stay in the 7–8 hour lane; anchor bed/wake times to keep quality high.',
           icon: Icons.schedule,
           color: Colors.tealAccent,
         ),
@@ -1198,7 +1215,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Quality on point',
-          message: 'Keep pre-bed routine steady; avoid late heavy meals to preserve this quality.',
+          message:
+              'Keep pre-bed routine steady; avoid late heavy meals to preserve this quality.',
           icon: Icons.verified,
           color: Colors.lightBlueAccent,
         ),
@@ -1210,7 +1228,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Manage fatigue',
-          message: 'Keep today easy, extend warm-up, and insert micro-breaks if you train.',
+          message:
+              'Keep today easy, extend warm-up, and insert micro-breaks if you train.',
           icon: Icons.local_hotel,
           color: Colors.deepOrangeAccent,
         ),
@@ -1219,7 +1238,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Energy available',
-          message: 'You can push, but still watch technique and cap volume if soreness creeps in.',
+          message:
+              'You can push, but still watch technique and cap volume if soreness creeps in.',
           icon: Icons.bolt,
           color: Colors.greenAccent,
         ),
@@ -1241,7 +1261,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'HR looks steady',
-          message: 'Maintain your routine; keep an eye on sudden spikes after hard blocks.',
+          message:
+              'Maintain your routine; keep an eye on sudden spikes after hard blocks.',
           icon: Icons.favorite_border,
           color: Colors.lightGreenAccent,
         ),
@@ -1263,7 +1284,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Soreness is low',
-          message: 'You can ramp intensity, but keep a cooldown to stay ahead of next-day stiffness.',
+          message:
+              'You can ramp intensity, but keep a cooldown to stay ahead of next-day stiffness.',
           icon: Icons.directions_run,
           color: Colors.cyanAccent,
         ),
@@ -1276,7 +1298,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'High load yesterday',
-          message: 'Keep today submax or technique-focused to bank recovery after the hard effort.',
+          message:
+              'Keep today submax or technique-focused to bank recovery after the hard effort.',
           icon: Icons.speed,
           color: Colors.amberAccent,
         ),
@@ -1285,7 +1308,8 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
       suggestions.add(
         const _Suggestion(
           title: 'Low load yesterday',
-          message: 'If you feel fresh, a moderate session is fine; still start with mobility prep.',
+          message:
+              'If you feel fresh, a moderate session is fine; still start with mobility prep.',
           icon: Icons.stacked_line_chart,
           color: Colors.lightBlue,
         ),
@@ -1307,8 +1331,6 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     }
 
     return suggestions;
-
-    
   }
 
   Widget _suggestionCard(_Suggestion suggestion) {
@@ -1328,10 +1350,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                 color: suggestion.color.withOpacity(0.15),
                 shape: BoxShape.circle,
               ),
-              child: Icon(
-                suggestion.icon,
-                color: suggestion.color,
-              ),
+              child: Icon(suggestion.icon, color: suggestion.color),
             ),
             const SizedBox(width: 12),
             Expanded(

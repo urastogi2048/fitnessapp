@@ -21,18 +21,16 @@ class WorkoutSessionState with _$WorkoutSessionState {
   factory WorkoutSessionState.initial({
     required List<Exercise> exercises,
     required BodyPart bodyPart,
-    
-  }) =>
-      WorkoutSessionState(
-        exercises: exercises,
-        currentExerciseIndex: 0,
-        timeRemaining: exercises.isNotEmpty ? exercises[0].duration : 0,
-        totalTimeSpent: 0,
-        isPlaying: false,
-        isCompleted: false,
-        bodyPart: bodyPart,
-        exerciseTimings: {},
-        isInCooldown: false,
-        cooldownTimeRemaining: 45,
-      );
+  }) => WorkoutSessionState(
+    exercises: exercises,
+    currentExerciseIndex: 0,
+    timeRemaining: exercises.isNotEmpty ? exercises[0].duration : 0,
+    totalTimeSpent: 0,
+    isPlaying: false,
+    isCompleted: false,
+    bodyPart: bodyPart,
+    exerciseTimings: {},
+    isInCooldown: false,
+    cooldownTimeRemaining: 45,
+  );
 }

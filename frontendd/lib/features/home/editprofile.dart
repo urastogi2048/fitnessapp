@@ -1,4 +1,3 @@
-
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,35 +10,38 @@ import 'package:frontendd/features/auth/qrepo.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:numberpicker/numberpicker.dart';
 
-class Editprofile extends ConsumerStatefulWidget  {
-   final UserProfile userProfile;
-   const Editprofile({super.key, required this.userProfile});
-   @override
+class Editprofile extends ConsumerStatefulWidget {
+  final UserProfile userProfile;
+  const Editprofile({super.key, required this.userProfile});
+  @override
   ConsumerState<Editprofile> createState() => _EditprofileState();
 }
-class _EditprofileState extends ConsumerState<Editprofile>{
+
+class _EditprofileState extends ConsumerState<Editprofile> {
   bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final notifier=ref.read(qprovider.notifier);
+      final notifier = ref.read(qprovider.notifier);
       notifier.setAge(widget.userProfile.age ?? 18);
       notifier.setGender(widget.userProfile.gender?.toLowerCase() ?? 'male');
       notifier.setWeight(widget.userProfile.weight?.toDouble() ?? 70.0);
       notifier.setHeight(widget.userProfile.height?.toDouble() ?? 170.0);
-      notifier.setBodyType(widget.userProfile.bodyType?.toLowerCase() ?? 'mesomorph');
-      notifier.setGoal(widget.userProfile.goal?.toLowerCase() ?? 'maintain fitness');
-
+      notifier.setBodyType(
+        widget.userProfile.bodyType?.toLowerCase() ?? 'mesomorph',
+      );
+      notifier.setGoal(
+        widget.userProfile.goal?.toLowerCase() ?? 'maintain fitness',
+      );
     });
-    
   }
 
   Future<void> _saveProfile() async {
-    setState(()=>_isLoading = true);
-    try{
-      final state=ref.read(qprovider);
+    setState(() => _isLoading = true);
+    try {
+      final state = ref.read(qprovider);
       await QRepo().updateProfile(
         age: state.age!,
         gender: state.gender!,
@@ -49,7 +51,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
         goal: state.goal!,
       );
       ref.invalidate(profileProvider);
-      if(mounted) {
+      if (mounted) {
         final snackBar = SnackBar(
           content: AwesomeSnackbarContent(
             title: 'Success!',
@@ -61,15 +63,14 @@ class _EditprofileState extends ConsumerState<Editprofile>{
           elevation: 0,
         );
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
-        
+
         // Wait a moment before popping to show the snackbar
         Future.delayed(Duration(seconds: 1), () {
-          if(mounted) Navigator.pop(context);
+          if (mounted) Navigator.pop(context);
         });
       }
-    }
-    catch(e){
-      if(mounted){
+    } catch (e) {
+      if (mounted) {
         final snackBar = SnackBar(
           content: AwesomeSnackbarContent(
             title: 'Error',
@@ -83,15 +84,12 @@ class _EditprofileState extends ConsumerState<Editprofile>{
         ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     } finally {
-      if(mounted){
-        setState(()=>_isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
       }
     }
-
-
   }
 
-  
   Widget _buildAgeSection(Qstate qstate) {
     final age = qstate.age ?? 18;
     return Column(
@@ -170,6 +168,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
       ],
     );
   }
+
   Widget _buildGenderSection(Qstate qstate) {
     final selected = qstate.gender;
 
@@ -195,17 +194,22 @@ class _EditprofileState extends ConsumerState<Editprofile>{
           ),
           child: Row(
             children: ['Male', 'Female'].map((gender) {
-              final isSelected = selected?.toLowerCase() == gender.toLowerCase();
+              final isSelected =
+                  selected?.toLowerCase() == gender.toLowerCase();
               return Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    ref.read(qprovider.notifier).setGender(gender.toLowerCase());
+                    ref
+                        .read(qprovider.notifier)
+                        .setGender(gender.toLowerCase());
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
                     margin: const EdgeInsets.symmetric(horizontal: 4),
                     decoration: BoxDecoration(
-                      color: isSelected ? Colors.deepPurple : Colors.transparent,
+                      color: isSelected
+                          ? Colors.deepPurple
+                          : Colors.transparent,
                       borderRadius: BorderRadius.circular(16),
                     ),
                     alignment: Alignment.center,
@@ -228,6 +232,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
       ],
     );
   }
+
   Widget _buildWeightSection(Qstate qstate) {
     final weight = qstate.weight ?? 70;
     return Column(
@@ -306,6 +311,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
       ],
     );
   }
+
   Widget _buildHeightSection(Qstate qstate) {
     final height = qstate.height ?? 170;
     return Column(
@@ -360,6 +366,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
       ],
     );
   }
+
   Widget _buildBodyTypeSection(Qstate qstate) {
     final selected = qstate.bodyType;
 
@@ -409,11 +416,14 @@ class _EditprofileState extends ConsumerState<Editprofile>{
           ),
           child: Row(
             children: ['Ectomorph', 'Mesomorph', 'Endomorph'].map((bodyType) {
-              final isSelected = selected?.toLowerCase() == bodyType.toLowerCase();
+              final isSelected =
+                  selected?.toLowerCase() == bodyType.toLowerCase();
               return Expanded(
                 child: GestureDetector(
                   onTap: () {
-                    ref.read(qprovider.notifier).setBodyType(bodyType.toLowerCase());
+                    ref
+                        .read(qprovider.notifier)
+                        .setBodyType(bodyType.toLowerCase());
                   },
                   child: AnimatedContainer(
                     duration: const Duration(milliseconds: 200),
@@ -442,6 +452,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
       ],
     );
   }
+
   Widget _buildGoalSection(Qstate qstate) {
     final selected = qstate.goal;
 
@@ -465,7 +476,9 @@ class _EditprofileState extends ConsumerState<Editprofile>{
             borderRadius: BorderRadius.circular(20),
           ),
           child: Column(
-            children: ['Lose Weight', 'Build Muscle', 'Maintain Fitness'].map((goal) {
+            children: ['Lose Weight', 'Build Muscle', 'Maintain Fitness'].map((
+              goal,
+            ) {
               final isSelected = selected?.toLowerCase() == goal.toLowerCase();
               return Padding(
                 padding: const EdgeInsets.only(bottom: 4),
@@ -482,7 +495,7 @@ class _EditprofileState extends ConsumerState<Editprofile>{
                     ),
                     alignment: Alignment.center,
                     padding: const EdgeInsets.symmetric(vertical: 16),
-                    child: Text(                                                            
+                    child: Text(
                       goal,
                       style: TextStyle(
                         fontSize: 16,
@@ -501,7 +514,6 @@ class _EditprofileState extends ConsumerState<Editprofile>{
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     final qstate = ref.watch(qprovider);
@@ -516,7 +528,10 @@ class _EditprofileState extends ConsumerState<Editprofile>{
               children: [
                 InkWell(
                   onTap: () => Navigator.pop(context),
-                  child: const Icon(FontAwesomeIcons.arrowLeft, color: Colors.white),
+                  child: const Icon(
+                    FontAwesomeIcons.arrowLeft,
+                    color: Colors.white,
+                  ),
                 ),
                 const SizedBox(height: 12.0),
                 Text(

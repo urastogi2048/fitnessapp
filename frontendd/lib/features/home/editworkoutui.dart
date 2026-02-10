@@ -11,7 +11,15 @@ class EditWorkoutUI extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final weeklyPlan = ref.watch(weeklyPlanProvider);
-    final days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+    final days = [
+      'Monday',
+      'Tuesday',
+      'Wednesday',
+      'Thursday',
+      'Friday',
+      'Saturday',
+      'Sunday',
+    ];
     final icons = [
       FontAwesomeIcons.dumbbell,
       FontAwesomeIcons.dumbbell,
@@ -107,7 +115,7 @@ class EditWorkoutUI extends ConsumerWidget {
                 ),
               ),
               SizedBox(height: 24.h),
-              
+
               // Days List
               ...List.generate(7, (index) {
                 return Padding(
@@ -117,7 +125,7 @@ class EditWorkoutUI extends ConsumerWidget {
                       color: const Color.fromARGB(255, 20, 20, 20),
                       borderRadius: BorderRadius.circular(16.r),
                       border: Border.all(
-                        color: weeklyPlan[index] == 'REST DAY' 
+                        color: weeklyPlan[index] == 'REST DAY'
                             ? Colors.orange.withOpacity(0.3)
                             : Colors.cyanAccent.withOpacity(0.2),
                         width: 1,
@@ -160,7 +168,9 @@ class EditWorkoutUI extends ConsumerWidget {
                                 ),
                                 SizedBox(height: 4.h),
                                 Text(
-                                  Workoutmapper.getDisplayName(weeklyPlan[index]),
+                                  Workoutmapper.getDisplayName(
+                                    weeklyPlan[index],
+                                  ),
                                   style: GoogleFonts.poppins(
                                     color: weeklyPlan[index] == 'REST DAY'
                                         ? Colors.orange
@@ -174,7 +184,10 @@ class EditWorkoutUI extends ConsumerWidget {
                           ),
                           // Dropdown
                           Container(
-                            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12.w,
+                              vertical: 4.h,
+                            ),
                             decoration: BoxDecoration(
                               color: const Color.fromARGB(255, 30, 30, 30),
                               borderRadius: BorderRadius.circular(10.r),
@@ -182,7 +195,12 @@ class EditWorkoutUI extends ConsumerWidget {
                             child: DropdownButton<String>(
                               value: weeklyPlan[index],
                               underline: const SizedBox(),
-                              dropdownColor: const Color.fromARGB(255, 30, 30, 30),
+                              dropdownColor: const Color.fromARGB(
+                                255,
+                                30,
+                                30,
+                                30,
+                              ),
                               icon: Icon(
                                 Icons.keyboard_arrow_down,
                                 color: Colors.white70,
@@ -192,7 +210,9 @@ class EditWorkoutUI extends ConsumerWidget {
                                 color: Colors.white,
                                 fontSize: 13.sp,
                               ),
-                              items: Workoutmapper.allworkouttypes.map((String workout) {
+                              items: Workoutmapper.allworkouttypes.map((
+                                String workout,
+                              ) {
                                 return DropdownMenuItem<String>(
                                   value: workout,
                                   child: Text(
@@ -203,8 +223,10 @@ class EditWorkoutUI extends ConsumerWidget {
                               }).toList(),
                               onChanged: (String? newValue) {
                                 if (newValue != null) {
-                                  ref.read(weeklyPlanProvider.notifier).updateDay(index, newValue);
-                                  
+                                  ref
+                                      .read(weeklyPlanProvider.notifier)
+                                      .updateDay(index, newValue);
+
                                   // Show feedback
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
@@ -212,8 +234,15 @@ class EditWorkoutUI extends ConsumerWidget {
                                         '${days[index]} updated to ${Workoutmapper.getDisplayName(newValue)}',
                                         style: GoogleFonts.poppins(),
                                       ),
-                                      duration: const Duration(milliseconds: 1000),
-                                      backgroundColor: const Color.fromARGB(255, 20, 80, 100),
+                                      duration: const Duration(
+                                        milliseconds: 1000,
+                                      ),
+                                      backgroundColor: const Color.fromARGB(
+                                        255,
+                                        20,
+                                        80,
+                                        100,
+                                      ),
                                     ),
                                   );
                                 }
@@ -226,9 +255,9 @@ class EditWorkoutUI extends ConsumerWidget {
                   ),
                 );
               }),
-              
+
               SizedBox(height: 20.h),
-              
+
               // Info Footer
               Container(
                 padding: EdgeInsets.all(16.w),

@@ -1,12 +1,5 @@
-enum BodyPart {
-  chest,
-  back,
-  legs,
-  arms,
-  shoulders,
-  core,
-  cardio,
-}
+enum BodyPart { chest, back, legs, arms, shoulders, core, cardio }
+
 class Exercise {
   final String name;
   final BodyPart bodypart;
@@ -18,5 +11,4 @@ class Exercise {
     required this.animation,
     required this.duration,
   });
-
 }

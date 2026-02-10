@@ -27,7 +27,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   /// 1. APP INITIALIZATION
   Future<void> checkAuthStatus() async {
     state = state.copyWith(isLoading: true);
-    
+
     try {
       final token = await TokenStorage.getToken();
       if (token == null || token.isEmpty) {
@@ -57,15 +57,15 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // COMPLETE WIPE before new login
     await TokenStorage.clearAll();
     await OnboardingStorage.clearCompleted();
-    
+
     state = state.copyWith(
       isLoading: true,
       isAuthenticated: false,
       username: null,
       onboardingCompleted: false,
-      error: null
+      error: null,
     );
-    
+
     try {
       if (email.trim().isEmpty || password.isEmpty) {
         throw Exception('Email and password cannot be empty');
@@ -73,7 +73,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
 
       final data = await authService.login(email, password);
       final token = data['token'];
-      
+
       if (token == null || token.toString().trim().isEmpty) {
         state = state.copyWith(isLoading: false, error: "No token received");
         return;
@@ -86,14 +86,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(
         isLoading: false,
         isAuthenticated: false,
-        error: 'Network error'
+        error: 'Network error',
       );
     } catch (e) {
       await TokenStorage.clearAll();
       state = state.copyWith(
         isLoading: false,
         isAuthenticated: false,
-        error: e.toString()
+        error: e.toString(),
       );
     }
   }
@@ -103,90 +103,89 @@ class AuthNotifier extends StateNotifier<AuthState> {
     // COMPLETE WIPE - clear everything
     await TokenStorage.clearAll();
     await OnboardingStorage.clearCompleted();
-    
+
     // Invalidate profile cache
     ref.invalidate(profileProvider);
     ref.invalidate(monthlyDaywiseProvider);
-ref.invalidate(weeklyDaywiseProvider);
-ref.invalidate(weeklyBodyPartwiseProvider);
-ref.invalidate(monthlyBodyPartwiseProvider);
+    ref.invalidate(weeklyDaywiseProvider);
+    ref.invalidate(weeklyBodyPartwiseProvider);
+    ref.invalidate(monthlyBodyPartwiseProvider);
 
-    
     // Reset state completely
     state = state.copyWith(
       isLoading: false,
       isAuthenticated: false,
       onboardingCompleted: false,
       username: null,
-      error: null
+      error: null,
     );
   }
 
   /// 5. FETCH USER & ONBOARDING STATUS
- Future<void> fetchUser() async {
-  for (int attempt = 1; attempt <= 2; attempt++) {
-    try {
-      final data = await authService.getMe();
+  Future<void> fetchUser() async {
+    for (int attempt = 1; attempt <= 2; attempt++) {
+      try {
+        final data = await authService.getMe();
 
-      if (!data.containsKey('user')) {
-        throw Exception('Invalid response: missing user data');
-      }
+        if (!data.containsKey('user')) {
+          throw Exception('Invalid response: missing user data');
+        }
 
-      final Map<String, dynamic> userData = data['user'] ?? {};
-      if (userData.isEmpty) {
-        throw Exception('User data is empty');
-      }
-      
-      final String? fetchedUsername = userData['username'];
-      final bool serverOnboarding = userData['onboardingCompleted'] == true;
-      final bool localOnboarding = await OnboardingStorage.isCompleted();
+        final Map<String, dynamic> userData = data['user'] ?? {};
+        if (userData.isEmpty) {
+          throw Exception('User data is empty');
+        }
 
-      state = state.copyWith(
-        isLoading: false,
-        isAuthenticated: true,
-        onboardingCompleted: serverOnboarding || localOnboarding,
-        username: fetchedUsername,
-        error: null,
-      );
-      return;
-      
-    } on SocketException {
-      if (attempt < 2) {
-        await Future.delayed(Duration(milliseconds: 500));
-        continue;
-      }
-    } catch (e) {
-      final errorStr = e.toString();
-      
-      if (errorStr.contains('401') || errorStr.contains('403') || errorStr.contains('Unauthorized')) {
-        await TokenStorage.clearAll();
+        final String? fetchedUsername = userData['username'];
+        final bool serverOnboarding = userData['onboardingCompleted'] == true;
+        final bool localOnboarding = await OnboardingStorage.isCompleted();
+
         state = state.copyWith(
           isLoading: false,
-          isAuthenticated: false,
-          username: null,
-          onboardingCompleted: false,
-          error: 'Session expired. Please login again.'
+          isAuthenticated: true,
+          onboardingCompleted: serverOnboarding || localOnboarding,
+          username: fetchedUsername,
+          error: null,
         );
         return;
-      }
-      
-      if (attempt < 2) {
-        await Future.delayed(Duration(milliseconds: 500));
-        continue;
+      } on SocketException {
+        if (attempt < 2) {
+          await Future.delayed(Duration(milliseconds: 500));
+          continue;
+        }
+      } catch (e) {
+        final errorStr = e.toString();
+
+        if (errorStr.contains('401') ||
+            errorStr.contains('403') ||
+            errorStr.contains('Unauthorized')) {
+          await TokenStorage.clearAll();
+          state = state.copyWith(
+            isLoading: false,
+            isAuthenticated: false,
+            username: null,
+            onboardingCompleted: false,
+            error: 'Session expired. Please login again.',
+          );
+          return;
+        }
+
+        if (attempt < 2) {
+          await Future.delayed(Duration(milliseconds: 500));
+          continue;
+        }
       }
     }
-  }
-  
-  await TokenStorage.clearAll();
-  state = state.copyWith(
-    isLoading: false,
-    isAuthenticated: false,
-    username: null,
-    onboardingCompleted: false,
-    error: 'Failed to load user data. Please try logging in again.'
-  );
-}
 
+    await TokenStorage.clearAll();
+    state = state.copyWith(
+      isLoading: false,
+      isAuthenticated: false,
+      username: null,
+      onboardingCompleted: false,
+      error: 'Failed to load user data. Please try logging in again.',
+    );
+  }
 }
 
 /// GLOBAL PROVIDER

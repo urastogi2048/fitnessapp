@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-class CustomAppBar extends StatelessWidget
-    implements PreferredSizeWidget {
+class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final VoidCallback? onBack;
   final List<Widget>? actions;
@@ -30,10 +29,7 @@ class CustomAppBar extends StatelessWidget
           height: preferredSize.height,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [
-                Color(0xFFB11226),
-                Color(0xFFE53935),
-              ],
+              colors: [Color(0xFFB11226), Color(0xFFE53935)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -84,8 +80,7 @@ class CustomAppBar extends StatelessWidget
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                         letterSpacing: 0.6,
-                        fontFamily:
-                            GoogleFonts.oswald().fontFamily,
+                        fontFamily: GoogleFonts.oswald().fontFamily,
                       ),
                     ),
                   ),
@@ -96,8 +91,7 @@ class CustomAppBar extends StatelessWidget
                       children: actions!
                           .map(
                             (widget) => Padding(
-                              padding:
-                                  const EdgeInsets.only(left: 8),
+                              padding: const EdgeInsets.only(left: 8),
                               child: widget,
                             ),
                           )

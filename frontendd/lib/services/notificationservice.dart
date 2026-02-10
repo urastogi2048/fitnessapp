@@ -11,7 +11,7 @@ class NotificationService {
   factory NotificationService() => _instance;
   NotificationService._internal();
 
-  static const int _streakHour = 7; 
+  static const int _streakHour = 7;
   static const int _streakMinute = 20;
 
   final FlutterLocalNotificationsPlugin _notificationsPlugin =
@@ -29,10 +29,10 @@ class NotificationService {
         AndroidInitializationSettings('@mipmap/ic_launcher');
     const DarwinInitializationSettings iosSettings =
         DarwinInitializationSettings(
-      requestAlertPermission: true,
-      requestBadgePermission: true,
-      requestSoundPermission: true,
-    );
+          requestAlertPermission: true,
+          requestBadgePermission: true,
+          requestSoundPermission: true,
+        );
 
     const InitializationSettings initSettings = InitializationSettings(
       android: androidSettings,
@@ -59,8 +59,9 @@ class NotificationService {
 
     final androidPlugin = _notificationsPlugin
         .resolvePlatformSpecificImplementation<
-            AndroidFlutterLocalNotificationsPlugin>();
-    
+          AndroidFlutterLocalNotificationsPlugin
+        >();
+
     await androidPlugin?.createNotificationChannel(streakChannel);
     await androidPlugin?.createNotificationChannel(testChannel);
 
@@ -81,22 +82,20 @@ class NotificationService {
       final exactAlarmStatus = await Permission.scheduleExactAlarm.request();
 
       // Request to ignore battery optimizations (OEMs may still require manual change)
-      final batteryOptStatus =
-          await Permission.ignoreBatteryOptimizations.request();
+      final batteryOptStatus = await Permission.ignoreBatteryOptimizations
+          .request();
 
       print(
-          '🔐 Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}');
+        '🔐 Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}',
+      );
 
       return notificationStatus.isGranted;
     } else if (Platform.isIOS) {
       final bool? granted = await _notificationsPlugin
           .resolvePlatformSpecificImplementation<
-              IOSFlutterLocalNotificationsPlugin>()
-          ?.requestPermissions(
-            alert: true,
-            badge: true,
-            sound: true,
-          );
+            IOSFlutterLocalNotificationsPlugin
+          >()
+          ?.requestPermissions(alert: true, badge: true, sound: true);
       return granted ?? false;
     }
     return true;
@@ -116,7 +115,7 @@ class NotificationService {
       _streakMinute,
       0,
     );
-    
+
     if (scheduledDate.isBefore(now)) {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
@@ -125,14 +124,14 @@ class NotificationService {
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'streak_reminder_channel',
-      'Streak Reminders',
-      channelDescription: 'Daily reminders to maintain your workout streak',
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
-    );
+          'streak_reminder_channel',
+          'Streak Reminders',
+          channelDescription: 'Daily reminders to maintain your workout streak',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        );
 
     const DarwinNotificationDetails iosDetails = DarwinNotificationDetails(
       presentAlert: true,
@@ -149,7 +148,7 @@ class NotificationService {
     print('🔐 Can schedule exact alarms: $canExact');
 
     await _notificationsPlugin.zonedSchedule(
-      0, 
+      0,
       '🔥 Keep Your Streak Alive!',
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
@@ -177,12 +176,12 @@ class NotificationService {
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'test_channel',
-      'Test Notifications',
-      channelDescription: 'Test notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-    );
+          'test_channel',
+          'Test Notifications',
+          channelDescription: 'Test notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+        );
 
     const NotificationDetails notificationDetails = NotificationDetails(
       android: androidDetails,
@@ -201,19 +200,20 @@ class NotificationService {
   }
 
   Future<void> _scheduleTestInMinutes(int minutes) async {
-    final scheduledDate = tz.TZDateTime.now(tz.local)
-        .add(Duration(minutes: minutes));
+    final scheduledDate = tz.TZDateTime.now(
+      tz.local,
+    ).add(Duration(minutes: minutes));
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
-      'test_channel',
-      'Test Notifications',
-      channelDescription: 'Test notifications',
-      importance: Importance.max,
-      priority: Priority.high,
-      playSound: true,
-      enableVibration: true,
-    );
+          'test_channel',
+          'Test Notifications',
+          channelDescription: 'Test notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+          playSound: true,
+          enableVibration: true,
+        );
 
     const NotificationDetails notificationDetails = NotificationDetails(
       android: androidDetails,
@@ -235,8 +235,10 @@ class NotificationService {
           UILocalNotificationDateInterpretation.absoluteTime,
     );
 
-    print('✅ Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)');
-    
+    print(
+      '✅ Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)',
+    );
+
     final pending = await _notificationsPlugin.pendingNotificationRequests();
     print('📌 Total pending after test schedule: ${pending.length}');
   }

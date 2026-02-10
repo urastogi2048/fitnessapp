@@ -34,7 +34,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   Widget build(BuildContext context) {
     // Watch auth state to disable button during loading
     final authstate = ref.watch(authProvider);
-    
+
     // Listen for auth errors and show snackbar
     ref.listen<String?>(authProvider.select((s) => s.error), (previous, next) {
       if (next != null && mounted) {
@@ -113,10 +113,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           ),
                         ),
                         const SizedBox(height: 24),
-                        
+
                         _inputField("Email", emailController),
                         const SizedBox(height: 16),
-                        _inputField("Password", passwordController, isPassword: true),
+                        _inputField(
+                          "Password",
+                          passwordController,
+                          isPassword: true,
+                        ),
 
                         const SizedBox(height: 24),
 
@@ -124,48 +128,72 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           width: double.infinity,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color.fromARGB(255, 145, 3, 3),
+                              backgroundColor: const Color.fromARGB(
+                                255,
+                                145,
+                                3,
+                                3,
+                              ),
                               padding: const EdgeInsets.symmetric(vertical: 16),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: authstate.isLoading ? null : () async {
-                              // Perform Login
-                              final email = emailController.text.trim();
-                              final password = passwordController.text.trim();
+                            onPressed: authstate.isLoading
+                                ? null
+                                : () async {
+                                    // Perform Login
+                                    final email = emailController.text.trim();
+                                    final password = passwordController.text
+                                        .trim();
 
-                              if (email.isEmpty || password.isEmpty) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text("Please fill in all fields")),
-                                );
-                                return;
-                              }
+                                    if (email.isEmpty || password.isEmpty) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          content: Text(
+                                            "Please fill in all fields",
+                                          ),
+                                        ),
+                                      );
+                                      return;
+                                    }
 
-                              await ref.read(authProvider.notifier).login(email, password);
-                              
-                              // After login completes, clear Navigator stack so AuthGate takes over
-                              if (mounted && ref.read(authProvider).isAuthenticated) {
-                                Navigator.of(context).popUntil((route) => route.isFirst);
-                              }
-                            },
+                                    await ref
+                                        .read(authProvider.notifier)
+                                        .login(email, password);
+
+                                    // After login completes, clear Navigator stack so AuthGate takes over
+                                    if (mounted &&
+                                        ref
+                                            .read(authProvider)
+                                            .isAuthenticated) {
+                                      Navigator.of(
+                                        context,
+                                      ).popUntil((route) => route.isFirst);
+                                    }
+                                  },
                             child: authstate.isLoading
-                              ? const SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                                    strokeWidth: 2,
+                                ? const SizedBox(
+                                    height: 20,
+                                    width: 20,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white,
+                                      ),
+                                      strokeWidth: 2,
+                                    ),
+                                  )
+                                : Text(
+                                    "Login",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.white,
+                                      fontFamily:
+                                          GoogleFonts.poppins().fontFamily,
+                                    ),
                                   ),
-                                )
-                              : Text(
-                                  "Login",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.white,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
-                                  ),
-                                ),
                           ),
                         ),
 
@@ -187,7 +215,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   if (context.mounted) {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                                      MaterialPageRoute(
+                                        builder: (context) => SignUpPage(),
+                                      ),
                                     );
                                   }
                                 },
@@ -196,7 +226,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   style: TextStyle(
                                     color: Colors.white,
                                     fontWeight: FontWeight.bold,
-                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                    fontFamily:
+                                        GoogleFonts.poppins().fontFamily,
                                   ),
                                 ),
                               ),
@@ -215,7 +246,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     );
   }
 
-  static Widget _inputField(String hint, TextEditingController controller, {bool isPassword = false}) {
+  static Widget _inputField(
+    String hint,
+    TextEditingController controller, {
+    bool isPassword = false,
+  }) {
     return TextField(
       controller: controller,
       obscureText: isPassword,

@@ -9,15 +9,15 @@ import 'package:frontendd/services/notificationservice.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try{
+  try {
     await NotificationService().initialize();
     final granted = await NotificationService().requestPermissions();
     if (granted) {
       await NotificationService().scheduleDailyStreakReminder();
-      print('✅ Daily streak reminder scheduled automatically on app start');
+      print('Daily streak reminder scheduled automatically on app start');
     }
   } catch (e) {
-    print('❌ Error initializing Notification Service: $e');
+    print('Error initializing Notification Service: $e');
   }
   runApp(const ProviderScope(child: MainApp()));
 }
@@ -69,9 +69,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
     if (_isInitialCheck) {
       return const Scaffold(
         backgroundColor: Color.fromARGB(255, 27, 27, 27),
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
+        body: Center(child: CircularProgressIndicator()),
       );
     }
 

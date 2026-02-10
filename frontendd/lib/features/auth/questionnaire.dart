@@ -10,36 +10,32 @@ import 'package:frontendd/core/onboardingstorage.dart';
 import 'package:frontendd/features/home/profile.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:numberpicker/numberpicker.dart';
+
 class QuestionnairePage extends ConsumerWidget {
   const QuestionnairePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     ref.listen<Qstate>(qprovider, (prev, next) async {
-      
       if (prev?.step != 5 && next.step == 6) {
         try {
           await QRepo().saveProfile(
             age: next.age ?? 18,
-            gender: next.gender?? "male",
+            gender: next.gender ?? "male",
             weight: next.weight ?? 70,
             height: next.height!,
             bodyType: next.bodyType!,
             goal: next.goal!,
           );
           await OnboardingStorage.markCompleted();
-         
-          await ref
-              .read(authProvider.notifier)
-              .fetchUser();
-       
-          ref.invalidate(profileProvider);
 
+          await ref.read(authProvider.notifier).fetchUser();
+
+          ref.invalidate(profileProvider);
         } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(e.toString())),
-          );
+          ScaffoldMessenger.of(
+            context,
+          ).showSnackBar(SnackBar(content: Text(e.toString())));
         }
       }
     });
@@ -96,7 +92,11 @@ class QuestionnairePage extends ConsumerWidget {
                     2 => WeightQuestion(qstate: qstate, ref: ref),
                     3 => HeightQuestion(qstate: qstate, ref: ref),
                     4 => BodyTypeQuestion(qstate: qstate, ref: ref),
-                    _ => GoalQuestion(qstate: qstate, ref: ref, context: context),
+                    _ => GoalQuestion(
+                      qstate: qstate,
+                      ref: ref,
+                      context: context,
+                    ),
                   },
                 ),
               ],
@@ -163,30 +163,27 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
           child: Stack(
             alignment: Alignment.center,
             children: [
-             
-             
-              
               NumberPicker(
-  value: age,
-  minValue: 10,
-  maxValue: 100,
-  itemHeight: 60,
-  axis: Axis.horizontal,
-  selectedTextStyle: TextStyle(
-    fontSize: 36,
-    fontWeight: FontWeight.bold,
-    color: const Color.fromARGB(255, 226, 46, 46),
-    fontFamily: GoogleFonts.poppins().fontFamily,
-  ),
-  textStyle: TextStyle(
-    fontSize: 18,
-    color: Colors.grey,
-    fontFamily: GoogleFonts.poppins().fontFamily,
-  ),
-  onChanged: (value) {
-    ref.read(qprovider.notifier).setAge(value);
-  },
-),
+                value: age,
+                minValue: 10,
+                maxValue: 100,
+                itemHeight: 60,
+                axis: Axis.horizontal,
+                selectedTextStyle: TextStyle(
+                  fontSize: 36,
+                  fontWeight: FontWeight.bold,
+                  color: const Color.fromARGB(255, 226, 46, 46),
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                ),
+                textStyle: TextStyle(
+                  fontSize: 18,
+                  color: Colors.grey,
+                  fontFamily: GoogleFonts.poppins().fontFamily,
+                ),
+                onChanged: (value) {
+                  ref.read(qprovider.notifier).setAge(value);
+                },
+              ),
             ],
           ),
         ),
@@ -225,8 +222,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -250,15 +246,13 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
-  
 }
 
 Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
   final selected = qstate.gender;
 
   Widget option(String label) {
-    final bool isSelected =
-        selected?.toLowerCase() == label.toLowerCase();
+    final bool isSelected = selected?.toLowerCase() == label.toLowerCase();
 
     return SizedBox(
       width: double.infinity,
@@ -277,15 +271,11 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
             const EdgeInsets.symmetric(vertical: 16),
           ),
           shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
         ),
         onPressed: () {
-          ref
-              .read(qprovider.notifier)
-              .setGender(label.toLowerCase());
+          ref.read(qprovider.notifier).setGender(label.toLowerCase());
         },
         child: Text(
           label,
@@ -306,8 +296,8 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-      Text(
-        'What is your gender?',
+        Text(
+          'What is your gender?',
           style: TextStyle(
             fontSize: 18,
             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -348,8 +338,7 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -369,11 +358,10 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
               ),
             ),
           ],
-        )
+        ),
       ],
     ),
   );
-  
 }
 
 Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
@@ -384,20 +372,60 @@ Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('What is your weight (kg)?', style: TextStyle(fontSize: 18, fontFamily: GoogleFonts.poppins().fontFamily, fontWeight: FontWeight.w500, color: Colors.white),),
+        Text(
+          'What is your weight (kg)?',
+          style: TextStyle(
+            fontSize: 18,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            fontWeight: FontWeight.w500,
+            color: Colors.white,
+          ),
+        ),
         SizedBox(height: 20),
-        AnimatedSwitcher(duration: Duration(milliseconds: 150),
-        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
-        child: Text('$weight', key: ValueKey(weight), style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, fontFamily: GoogleFonts.poppins().fontFamily, color: Colors.red),)
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 150),
+          transitionBuilder: (child, animation) =>
+              ScaleTransition(scale: animation, child: child),
+          child: Text(
+            '$weight',
+            key: ValueKey(weight),
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+              color: Colors.red,
+            ),
+          ),
         ),
         //SizedBox(height: 5),
-        Text('kg', style: TextStyle(fontSize: 16,color: Colors.grey.shade500, fontFamily: GoogleFonts.oswald().fontFamily),),
+        Text(
+          'kg',
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade500,
+            fontFamily: GoogleFonts.oswald().fontFamily,
+          ),
+        ),
         SizedBox(height: 20),
-        NumberPicker(minValue: 25, maxValue: 200, value: weight.toInt(), onChanged:(value) {
-          ref.read(qprovider.notifier).setWeight(value.toDouble());
-        }, axis: Axis.horizontal,
-        selectedTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red, fontFamily: GoogleFonts.poppins().fontFamily),
-        textStyle: TextStyle(fontSize: 16, color: Colors.grey, fontFamily: GoogleFonts.poppins().fontFamily),
+        NumberPicker(
+          minValue: 25,
+          maxValue: 200,
+          value: weight.toInt(),
+          onChanged: (value) {
+            ref.read(qprovider.notifier).setWeight(value.toDouble());
+          },
+          axis: Axis.horizontal,
+          selectedTextStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
         ),
         SizedBox(height: 40),
 
@@ -429,8 +457,7 @@ Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -450,39 +477,77 @@ Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
               ),
             ),
           ],
-        )
-    
+        ),
       ],
     ),
   );
-  
 }
+
 Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
-  final height =qstate.height ?? 170;
-  
+  final height = qstate.height ?? 170;
+
   return Container(
     color: const Color.fromARGB(255, 27, 27, 27),
     padding: const EdgeInsets.symmetric(horizontal: 24),
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text('What is your height (cm)?', style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500, fontFamily: GoogleFonts.poppins().fontFamily, color: Colors.white),),
-        SizedBox(height: 20),
-        AnimatedSwitcher(duration: Duration(milliseconds: 150),
-        transitionBuilder: (child, animation) => ScaleTransition(scale: animation, child: child),
-        child: Text('$height', key: ValueKey(height), style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.red, fontFamily: GoogleFonts.poppins().fontFamily ,) 
-          
-        ),),
-        Text("cm", style: TextStyle(fontSize: 16,color: Colors.grey.shade500, fontFamily: GoogleFonts.oswald().fontFamily),),
-        SizedBox(height: 20),
-        NumberPicker(minValue: 100, maxValue: 250, value: height.toInt(), onChanged: (value) {
-          ref.read(qprovider.notifier).setHeight(value.toDouble());
-        }, axis: Axis.horizontal, 
-        selectedTextStyle: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: Colors.red, fontFamily: GoogleFonts.poppins().fontFamily),
-        textStyle: TextStyle(fontSize: 16, color: Colors.grey, fontFamily: GoogleFonts.poppins().fontFamily),
+        Text(
+          'What is your height (cm)?',
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.w500,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+            color: Colors.white,
+          ),
         ),
         SizedBox(height: 20),
-       Row(
+        AnimatedSwitcher(
+          duration: Duration(milliseconds: 150),
+          transitionBuilder: (child, animation) =>
+              ScaleTransition(scale: animation, child: child),
+          child: Text(
+            '$height',
+            key: ValueKey(height),
+            style: TextStyle(
+              fontSize: 48,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+              fontFamily: GoogleFonts.poppins().fontFamily,
+            ),
+          ),
+        ),
+        Text(
+          "cm",
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.grey.shade500,
+            fontFamily: GoogleFonts.oswald().fontFamily,
+          ),
+        ),
+        SizedBox(height: 20),
+        NumberPicker(
+          minValue: 100,
+          maxValue: 250,
+          value: height.toInt(),
+          onChanged: (value) {
+            ref.read(qprovider.notifier).setHeight(value.toDouble());
+          },
+          axis: Axis.horizontal,
+          selectedTextStyle: TextStyle(
+            fontSize: 24,
+            fontWeight: FontWeight.bold,
+            color: Colors.red,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
+          textStyle: TextStyle(
+            fontSize: 16,
+            color: Colors.grey,
+            fontFamily: GoogleFonts.poppins().fontFamily,
+          ),
+        ),
+        SizedBox(height: 20),
+        Row(
           children: [
             Expanded(
               child: OutlinedButton(
@@ -510,8 +575,7 @@ Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -531,18 +595,17 @@ Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
               ),
             ),
           ],
-        )
-    
+        ),
       ],
     ),
-  ); 
+  );
 }
+
 Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
   final selected = qstate.bodyType;
 
   Widget option(String label) {
-    final bool isSelected =
-        selected?.toLowerCase() == label.toLowerCase();
+    final bool isSelected = selected?.toLowerCase() == label.toLowerCase();
 
     return SizedBox(
       width: double.infinity,
@@ -561,15 +624,11 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
             const EdgeInsets.symmetric(vertical: 16),
           ),
           shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
         ),
         onPressed: () {
-          ref
-              .read(qprovider.notifier)
-              .setBodyType(label.toLowerCase());
+          ref.read(qprovider.notifier).setBodyType(label.toLowerCase());
         },
         child: Text(
           label,
@@ -589,8 +648,8 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
     child: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-      Text(
-        'What is your body type?',
+        Text(
+          'What is your body type?',
           style: TextStyle(
             fontSize: 18,
             fontFamily: GoogleFonts.poppins().fontFamily,
@@ -636,8 +695,7 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
             Expanded(
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color.fromARGB(255, 226, 46, 46),
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
                   foregroundColor: Colors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                   shape: RoundedRectangleBorder(
@@ -661,14 +719,17 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
       ],
     ),
   );
-  
 }
-Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required BuildContext context}) {
+
+Widget GoalQuestion({
+  required Qstate qstate,
+  required WidgetRef ref,
+  required BuildContext context,
+}) {
   final selected = qstate.goal;
 
   Widget option(String label) {
-    final bool isSelected =
-        selected?.toLowerCase() == label.toLowerCase();
+    final bool isSelected = selected?.toLowerCase() == label.toLowerCase();
 
     return SizedBox(
       width: double.infinity,
@@ -687,15 +748,11 @@ Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required Bu
             const EdgeInsets.symmetric(vertical: 16),
           ),
           shape: MaterialStateProperty.all(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14),
-            ),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
         ),
         onPressed: () {
-          ref
-              .read(qprovider.notifier)
-              .setGoal(label.toLowerCase());
+          ref.read(qprovider.notifier).setGoal(label.toLowerCase());
         },
         child: Text(
           label,
@@ -761,34 +818,34 @@ Widget GoalQuestion({required Qstate qstate, required WidgetRef ref, required Bu
             const SizedBox(width: 12),
             Expanded(
               child: // Inside GoalQuestion widget
-ElevatedButton(
-  onPressed: () async {
-    // 1. Manually trigger the save
-    try {
-      final currentQ = ref.read(qprovider);
-      await QRepo().saveProfile(
-        age: currentQ.age!,
-        gender: currentQ.gender!,
-        weight: currentQ.weight!,
-        height: currentQ.height!,
-        bodyType: currentQ.bodyType!,
-        goal: currentQ.goal!, // Ensure the goal is set before clicking
-      );
+              ElevatedButton(
+                onPressed: () async {
+                  // 1. Manually trigger the save
+                  try {
+                    final currentQ = ref.read(qprovider);
+                    await QRepo().saveProfile(
+                      age: currentQ.age!,
+                      gender: currentQ.gender!,
+                      weight: currentQ.weight!,
+                      height: currentQ.height!,
+                      bodyType: currentQ.bodyType!,
+                      goal: currentQ
+                          .goal!, // Ensure the goal is set before clicking
+                    );
 
-      // 2. Mark locally
-      await OnboardingStorage.markCompleted();
+                    // 2. Mark locally
+                    await OnboardingStorage.markCompleted();
 
-      // 3. Refresh Auth State - This is what makes HomeScreen appear
-      await ref.read(authProvider.notifier).fetchUser();
-      
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error saving: $e"))
-      );
-    }
-  },
-  child: const Text("Finish"),
-)
+                    // 3. Refresh Auth State - This is what makes HomeScreen appear
+                    await ref.read(authProvider.notifier).fetchUser();
+                  } catch (e) {
+                    ScaffoldMessenger.of(
+                      context,
+                    ).showSnackBar(SnackBar(content: Text("Error saving: $e")));
+                  }
+                },
+                child: const Text("Finish"),
+              ),
             ),
           ],
         ),

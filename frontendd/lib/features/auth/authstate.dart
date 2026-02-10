@@ -1,5 +1,5 @@
 class AuthState {
-  final bool isLoading;        
+  final bool isLoading;
   final bool isAuthenticated;
   final bool onboardingCompleted;
   final String? username;
@@ -25,8 +25,7 @@ class AuthState {
     return AuthState(
       isLoading: isLoading ?? this.isLoading,
       isAuthenticated: isAuthenticated ?? this.isAuthenticated,
-      onboardingCompleted:
-      onboardingCompleted ?? this.onboardingCompleted,
+      onboardingCompleted: onboardingCompleted ?? this.onboardingCompleted,
       username: username ?? this.username,
       error: error,
     );

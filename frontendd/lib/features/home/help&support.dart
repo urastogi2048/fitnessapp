@@ -60,7 +60,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
       'category': 'Workouts',
       'icon': FontAwesomeIcons.chartLine,
     },
-    
+
     {
       'question': 'Can I sync across multiple devices?',
       'answer':
@@ -96,16 +96,15 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _fadeController, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _fadeController, curve: Curves.easeIn));
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(
-      CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
-    );
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+          CurvedAnimation(parent: _slideController, curve: Curves.easeOutCubic),
+        );
 
     _fadeController.forward();
     _slideController.forward();
@@ -123,7 +122,8 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
     return _faqs.where((faq) {
       final matchesCategory =
           _selectedCategory == 'All' || faq['category'] == _selectedCategory;
-      final matchesSearch = _searchQuery.isEmpty ||
+      final matchesSearch =
+          _searchQuery.isEmpty ||
           faq['question'].toLowerCase().contains(_searchQuery.toLowerCase()) ||
           faq['answer'].toLowerCase().contains(_searchQuery.toLowerCase());
       return matchesCategory && matchesSearch;
@@ -136,12 +136,11 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: Stack(
         children: [
-        
           Positioned.fill(
             child: AnimatedContainer(
               duration: const Duration(seconds: 3),
               decoration: BoxDecoration(
-                color:  const Color.fromARGB(255, 27, 27, 27),
+                color: const Color.fromARGB(255, 27, 27, 27),
               ),
             ),
           ),
@@ -228,13 +227,10 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
 
                       // FAQ List
                       SliverList(
-                        delegate: SliverChildBuilderDelegate(
-                          (context, index) {
-                            final faq = _filteredFaqs[index];
-                            return _buildFAQCard(faq, index);
-                          },
-                          childCount: _filteredFaqs.length,
-                        ),
+                        delegate: SliverChildBuilderDelegate((context, index) {
+                          final faq = _filteredFaqs[index];
+                          return _buildFAQCard(faq, index);
+                        }, childCount: _filteredFaqs.length),
                       ),
 
                       // Contact Section
@@ -375,10 +371,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                 _searchQuery = value;
               });
             },
-            style: GoogleFonts.manrope(
-              color: Colors.white,
-              fontSize: 15.sp,
-            ),
+            style: GoogleFonts.manrope(color: Colors.white, fontSize: 15.sp),
             decoration: InputDecoration(
               hintText: 'Search for answers...',
               hintStyle: GoogleFonts.manrope(
@@ -449,10 +442,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                     decoration: BoxDecoration(
                       gradient: isSelected
                           ? const LinearGradient(
-                              colors: [
-                                Colors.deepPurple,
-                                Colors.purpleAccent,
-                              ],
+                              colors: [Colors.deepPurple, Colors.purpleAccent],
                             )
                           : null,
                       color: isSelected
@@ -479,8 +469,9 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                       category,
                       style: GoogleFonts.manrope(
                         fontSize: 13.sp,
-                        fontWeight:
-                            isSelected ? FontWeight.bold : FontWeight.w600,
+                        fontWeight: isSelected
+                            ? FontWeight.bold
+                            : FontWeight.w600,
                         color: Colors.white,
                       ),
                     ),
@@ -501,10 +492,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
       builder: (context, value, child) {
         return Transform.translate(
           offset: Offset(0, 30 * (1 - value)),
-          child: Opacity(
-            opacity: value,
-            child: child,
-          ),
+          child: Opacity(opacity: value, child: child),
         );
       },
       child: Padding(
@@ -523,9 +511,9 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                 ),
               ),
               child: Theme(
-                data: Theme.of(context).copyWith(
-                  dividerColor: Colors.transparent,
-                ),
+                data: Theme.of(
+                  context,
+                ).copyWith(dividerColor: Colors.transparent),
                 child: ExpansionTile(
                   tilePadding: EdgeInsets.symmetric(
                     horizontal: 20.w,
@@ -670,10 +658,7 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
           builder: (context, value, child) {
             return Transform.scale(
               scale: value,
-              child: Opacity(
-                opacity: value,
-                child: child,
-              ),
+              child: Opacity(opacity: value, child: child),
             );
           },
           child: Material(
@@ -682,7 +667,9 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
               onTap: () async {
                 try {
                   if (method['title'] == 'Email Support') {
-                    final Uri emailUrl = Uri.parse('mailto:urfitnessdude@gmail.com');
+                    final Uri emailUrl = Uri.parse(
+                      'mailto:urfitnessdude@gmail.com',
+                    );
                     if (await canLaunchUrl(emailUrl)) {
                       await launchUrl(emailUrl);
                     } else {
@@ -696,9 +683,14 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
                       }
                     }
                   } else if (method['title'] == 'Join our Discord') {
-                    final Uri discordUrl = Uri.parse('https://discord.gg/8YrtqP3a3V');
+                    final Uri discordUrl = Uri.parse(
+                      'https://discord.gg/8YrtqP3a3V',
+                    );
                     if (await canLaunchUrl(discordUrl)) {
-                      await launchUrl(discordUrl, mode: LaunchMode.externalApplication);
+                      await launchUrl(
+                        discordUrl,
+                        mode: LaunchMode.externalApplication,
+                      );
                     } else {
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
@@ -808,7 +800,12 @@ class _HelpAndSupportPageState extends State<HelpAndSupportPage>
               child: Container(
                 padding: EdgeInsets.all(24.w),
                 decoration: BoxDecoration(
-                  color: const Color.fromARGB(255, 10, 18, 46).withOpacity(0.95),
+                  color: const Color.fromARGB(
+                    255,
+                    10,
+                    18,
+                    46,
+                  ).withOpacity(0.95),
                   borderRadius: BorderRadius.circular(24.r),
                   border: Border.all(
                     color: (method['color'] as Color).withOpacity(0.3),

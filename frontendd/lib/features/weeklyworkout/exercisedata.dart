@@ -3,7 +3,6 @@ import 'exercise_animations.dart';
 
 class ExerciseData {
   static List<Exercise> getExercises(BodyPart bodyPart, {String? goal}) {
-    
     final normalizedGoal = goal?.toLowerCase() ?? '';
 
     switch (bodyPart) {
@@ -86,56 +85,50 @@ class ExerciseData {
               name: 'Resistance Band Chest Fly x1',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.resistanceBandFly,
-              duration: 40,  
-              ),
-               Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'Resistance Band Chest Fly x2',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.resistanceBandFly,
-              duration: 40,  
-              ),
-               Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'Resistance Band Chest Fly x3',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.resistanceBandFly,
-              duration: 40,  
-              ),
-               Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'Chair Dips x1',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.dips,
-              duration: 40,  
-              ),
-              Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'Chair Dips x2',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.dips,
-              duration: 40,  
-              ),Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'Chair Dips x3',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.dips,
-              duration: 40,  
-              ),
-              Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'PushUps x1',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.pushUp,
-              duration: 40,  
-              ),
-              Exercise(
+              duration: 40,
+            ),
+            Exercise(
               name: 'PushUps x2',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.pushUp,
-              duration: 40,  
-              ),
-
-
-                        
-
-            
-            
-            
+              duration: 40,
+            ),
           ];
         } else if (normalizedGoal.contains('lose weight')) {
           return [
@@ -187,12 +180,8 @@ class ExerciseData {
               animation: ExerciseAnimations.dumbbellPress,
               duration: 35,
             ),
-
-            
-            
           ];
         } else {
-       
           return [
             Exercise(
               name: 'Dumbell Press x1',
@@ -218,23 +207,25 @@ class ExerciseData {
               animation: ExerciseAnimations.pushUp,
               duration: 45,
             ),
-             Exercise(
+            Exercise(
               name: 'Inclined PushUps x2',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.pushUp,
               duration: 45,
-            ), Exercise(
+            ),
+            Exercise(
               name: 'Inclined PushUps x3',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.pushUp,
               duration: 45,
-            ), Exercise(
+            ),
+            Exercise(
               name: 'Inclined PushUps x4',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.pushUp,
               duration: 45,
             ),
-             Exercise(
+            Exercise(
               name: 'Dumbbell Floor Fly x1',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.dumbbellFloorFly,
@@ -276,13 +267,13 @@ class ExerciseData {
               animation: ExerciseAnimations.resistanceBandFly,
               duration: 30,
             ),
-             Exercise(
+            Exercise(
               name: 'Resistance Band Fly x2',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.resistanceBandFly,
               duration: 30,
             ),
-             Exercise(
+            Exercise(
               name: 'Resistance Band Fly x3',
               bodypart: BodyPart.chest,
               animation: ExerciseAnimations.resistanceBandFly,
@@ -329,12 +320,14 @@ class ExerciseData {
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
               duration: 35,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Jump Squats x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
               duration: 35,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Jump Squats x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
@@ -346,17 +339,19 @@ class ExerciseData {
               animation: ExerciseAnimations.alternatingLunges,
               duration: 40,
             ),
-            Exercise(                   
+            Exercise(
               name: 'Alternating Lunges x2',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.alternatingLunges,
               duration: 40,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Alternating Lunges x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.alternatingLunges,
               duration: 40,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Alternating Lunges x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.alternatingLunges,
@@ -367,17 +362,20 @@ class ExerciseData {
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.highKnees,
               duration: 40,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'High Knees x2',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.highKnees,
               duration: 40,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'High Knees x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.highKnees,
               duration: 40,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'High Knees x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.highKnees,
@@ -389,18 +387,18 @@ class ExerciseData {
               animation: ExerciseAnimations.bearCrawl,
               duration: 30,
             ),
-             Exercise(
+            Exercise(
               name: 'Bear Crawls x2',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.bearCrawl,
               duration: 30,
-            ), Exercise(
+            ),
+            Exercise(
               name: 'Bear Crawls x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.bearCrawl,
               duration: 30,
             ),
-            
           ];
         } else if (normalizedGoal.contains('build muscle')) {
           return [
@@ -415,18 +413,20 @@ class ExerciseData {
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
               duration: 45,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Bodyweight Squats x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
               duration: 45,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Bodyweight Squats x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.squat,
               duration: 45,
             ),
-          
+
             Exercise(
               name: 'Bulgarian Split Squat x1',
               bodypart: BodyPart.legs,
@@ -438,85 +438,84 @@ class ExerciseData {
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 50,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Bulgarian Split Squat x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 50,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Bulgarian Split Squat x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 50,
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Deadlift x1',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.deadlift,
               duration: 40,
-              
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Deadlift x2',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.deadlift,
               duration: 40,
-              
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Deadlift x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.deadlift,
               duration: 40,
-              
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Deadlift x4',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.deadlift,
               duration: 40,
-              
             ),
             Exercise(
               name: 'Walking Lunges x1',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 40,
-              
             ),
-             Exercise(
+            Exercise(
               name: 'Walking Lunges x2',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 40,
-              
-            ), Exercise(
+            ),
+            Exercise(
               name: 'Walking Lunges x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.lunge,
               duration: 40,
-              
-            ), Exercise(
-              name: 'Lying Leg Curls x1',
-              bodypart: BodyPart.legs,
-              animation: ExerciseAnimations.legCurl,
-              duration: 40,
-              
             ),
             Exercise(
               name: 'Lying Leg Curls x1',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.legCurl,
               duration: 40,
-              
-            ),Exercise(
+            ),
+            Exercise(
+              name: 'Lying Leg Curls x1',
+              bodypart: BodyPart.legs,
+              animation: ExerciseAnimations.legCurl,
+              duration: 40,
+            ),
+            Exercise(
               name: 'Lying Leg Curls x1',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.legCurl,
               duration: 45,
-              
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Standing Calf Raises x1',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.calfRaise,
               duration: 45,
-              
             ),
 
             Exercise(
@@ -524,15 +523,13 @@ class ExerciseData {
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.calfRaise,
               duration: 40,
-              
-            ),Exercise(
+            ),
+            Exercise(
               name: 'Standing Calf Raises x3',
               bodypart: BodyPart.legs,
               animation: ExerciseAnimations.calfRaise,
               duration: 40,
-              
             ),
-
           ];
         } else {
           return [
@@ -1991,7 +1988,7 @@ class ExerciseData {
               animation: ExerciseAnimations.plank,
               duration: 45,
             ),
-             Exercise(
+            Exercise(
               name: 'Walking in Place',
               bodypart: BodyPart.cardio,
               animation: ExerciseAnimations.walkingInPlace,
@@ -2096,7 +2093,7 @@ class ExerciseData {
               animation: ExerciseAnimations.bicycleCrunch,
               duration: 40,
             ),
-             Exercise(
+            Exercise(
               name: 'Jogging / Cycling',
               bodypart: BodyPart.cardio,
               animation: ExerciseAnimations.highKnees,

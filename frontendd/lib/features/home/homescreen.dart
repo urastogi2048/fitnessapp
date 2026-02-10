@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:frontendd/components/homeappbar.dart';
+
 import 'package:frontendd/features/home/bmicalc.dart';
 import 'package:frontendd/features/home/profile.dart';
 import 'package:frontendd/features/progress/statui.dart';
@@ -21,6 +21,7 @@ import 'package:frontendd/features/home/streakservice.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:frontendd/services/notificationservice.dart';
 import 'package:frontendd/features/home/workoutmapper.dart';
+
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
@@ -92,7 +93,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     //   'CORE + CARDIO DAY',
     //   'REST DAY',
     // ];
-    final weekdays=ref.watch(weeklyPlanProvider);
+    final weekdays = ref.watch(weeklyPlanProvider);
     String workout = weekdays[DateTime.now().weekday - 1];
     return SafeArea(
       child: Scaffold(
@@ -115,13 +116,15 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 padding: EdgeInsets.all(16.0.w),
                 child: Column(
                   children: [
-                    SizedBox(
-                      height: 65.h,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Column(
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Flexible(
+                          flex: 3,
+                          child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
                                 'Fitness Dude',
@@ -130,6 +133,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                               Text(
                                 "${today.substring(0, 3)}, $day ${DateFormat.MMM().format(date)}",
@@ -137,53 +142,59 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   fontSize: 16.sp,
                                   color: Colors.white70,
                                 ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ],
                           ),
-                          SizedBox(width: 65.w),
+                        ),
+                        SizedBox(width: 8.w),
 
-                          InkWell(
-                            onTap: () => Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const BMICalculator(),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                            
-                              children: [
-                                Icon(
-                                  FontAwesomeIcons.weightScale,
-                                  color: Colors.blueAccent,
-                                  size: 20,
-                                ),
-                                SizedBox(height: 4.h),
-                                Text(
-                                  'BMI ',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                Text(
-                                  'Calculator',
-                                  style: GoogleFonts.poppins(
-                                    color: Colors.white,
-                                    fontSize: 8.sp,
-                                    //fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                                              
-                              ],
+                        InkWell(
+                          onTap: () => Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BMICalculator(),
                             ),
                           ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.weightScale,
+                                color: Colors.blueAccent,
+                                size: 20.sp,
+                              ),
+                              SizedBox(height: 2.h),
+                              Text(
+                                'BMI',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 10.sp,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              Text(
+                                'Calc',
+                                style: GoogleFonts.poppins(
+                                  color: Colors.white,
+                                  fontSize: 8.sp,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
 
+                        SizedBox(width: 8.w),
 
-                          SizedBox(width: 20.w),
-
-                          streak.when(
+                        Flexible(
+                          flex: 1,
+                          child: streak.when(
                             loading: () => const SizedBox.shrink(),
                             error: (err, stack) => const SizedBox.shrink(),
                             data: (streak) => InkWell(
@@ -235,7 +246,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                           ),
                                         SizedBox(height: 20.h),
                                         Container(
-                                          padding: const EdgeInsets.all(16),
+                                          padding: EdgeInsets.all(14.w),
                                           decoration: BoxDecoration(
                                             color: const Color.fromARGB(
                                               255,
@@ -341,43 +352,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 );
                               },
                               child: Row(
+                                mainAxisSize: MainAxisSize.min,
                                 children: [
-                                  // Lottie.asset(
-                                  //   'assets/lottie/streak2.json',
-                                  //   width: 50,
-                                  //   height: 50,
-                                  // ),
-                                  const Icon(
+                                  Icon(
                                     FontAwesomeIcons.fireFlameCurved,
                                     color: Colors.orange,
-                                    size: 28,
+                                    size: 24.sp,
                                   ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${streak.currentStreak}',
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
+                                  SizedBox(width: 4.w),
+                                  Flexible(
+                                    child: Text(
+                                      '${streak.currentStreak}',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 16.sp,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                 ],
                               ),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
                     SizedBox(height: 10.h),
                     Consumer(
                       builder: (context, ref, child) {
                         final profileAsync = ref.watch(profileProvider);
-                        
+
                         return InkWell(
                           onTap: () {
-                            final todayWorkout = weekdays[DateTime.now().weekday - 1];
-                            final bodyPart = Workoutmapper.getBodyPart(todayWorkout);
-                            
+                            final todayWorkout =
+                                weekdays[DateTime.now().weekday - 1];
+                            final bodyPart = Workoutmapper.getBodyPart(
+                              todayWorkout,
+                            );
+
                             if (bodyPart == null) {
                               // Rest Day
                               ScaffoldMessenger.of(context).showSnackBar(
@@ -391,161 +405,184 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               // Navigate to workout with user's goal
                               profileAsync.whenData((profile) {
                                 final goal = profile.goal ?? 'balanced';
-                                final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
-                                
+                                final exercises = ExerciseData.getExercises(
+                                  bodyPart,
+                                  goal: goal,
+                                );
+
                                 if (context.mounted) {
                                   Navigator.push(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => ExerciseExecutionPage(
-                                        exercises: exercises,
-                                        bodyPart: bodyPart,
-                                      ),
+                                      builder: (context) =>
+                                          ExerciseExecutionPage(
+                                            exercises: exercises,
+                                            bodyPart: bodyPart,
+                                          ),
                                     ),
                                   );
                                 }
                               });
                             }
                           },
-                      child: SizedBox(
-                        height: 200.h,
-                        width: double.infinity,
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.r),
-                          ),
                           child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(20.r),
-                              gradient: const LinearGradient(
-                                colors: [
-                                  Color.fromARGB(255, 47, 25, 25),
-                                  Color.fromARGB(255, 104, 17, 17),
-                                ],
-                                begin: Alignment.bottomRight,
-                                end: Alignment.topLeft,
-                              ),
+                            constraints: BoxConstraints(
+                              minHeight: 160.h,
+                              maxHeight: 220.h,
                             ),
-                            child: Stack(
-                              children: [
-                                Positioned(
-                                  top: 20.h,
-                                  right: 20.w,
-                                  child: Opacity(
-                                    opacity: 0.5,
-                                    child: Icon(
-                                      FontAwesomeIcons.arrowRight,
-                                      color: const Color.fromARGB(255, 175, 173, 173),
-                                      size: 15,
-                                    ),
+                            width: double.infinity,
+                            child: Card(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(20.r),
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(20.r),
+                                  gradient: const LinearGradient(
+                                    colors: [
+                                      Color.fromARGB(255, 47, 25, 25),
+                                      Color.fromARGB(255, 104, 17, 17),
+                                    ],
+                                    begin: Alignment.bottomRight,
+                                    end: Alignment.topLeft,
                                   ),
                                 ),
-                                Positioned(
-                                  right: 0,
-                                  bottom: 0,
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.only(
-                                      bottomRight: Radius.circular(20.r),
-                                    ),
-                                    child: Opacity(
-                                      opacity: 0.80,
-                                      child: Image.asset(
-                                        'assets/images/Symbol.png',
-                                        width: 150.w,
-                                        height: 150.h,
-                                        fit: BoxFit.cover,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                
-                                // Main co
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                child: Stack(
                                   children: [
-                                    // Top section with label
-                                    Padding(
-                                      padding: EdgeInsets.all(16.w),
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 12.w,
-                                          vertical: 6.h,
-                                        ),
-                                        decoration: ShapeDecoration(
-                                          color: const Color(0x33EF4444),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(4.r),
+                                    Positioned(
+                                      top: 20.h,
+                                      right: 20.w,
+                                      child: Opacity(
+                                        opacity: 0.5,
+                                        child: Icon(
+                                          FontAwesomeIcons.arrowRight,
+                                          color: const Color.fromARGB(
+                                            255,
+                                            175,
+                                            173,
+                                            173,
                                           ),
+                                          size: 14.sp,
                                         ),
-                                        child: Text(
-                                          'TODAY\'S FOCUS',
-                                          style: TextStyle(
-                                            color: const Color(0xFFF87171),
-                                            fontSize: 10.sp,
-                                            fontFamily: 'Inter',
-                                            fontWeight: FontWeight.w700,
-                                            letterSpacing: 0.50,
+                                      ),
+                                    ),
+                                    Positioned(
+                                      right: 0,
+                                      bottom: 0,
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(20.r),
+                                        ),
+                                        child: Opacity(
+                                          opacity: 0.80,
+                                          child: Image.asset(
+                                            'assets/images/Symbol.png',
+                                            width: 120.w,
+                                            height: 120.h,
+                                            fit: BoxFit.contain,
                                           ),
                                         ),
                                       ),
                                     ),
-                                    
-                                   
-                                    Expanded(
-                                      child: Padding(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 16.w,
-                                          vertical: 12.h,
-                                        ),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          children: [
-                                            Text(
-                                              workout,
+
+                                    // Main co
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        // Top section with label
+                                        Padding(
+                                          padding: EdgeInsets.all(16.w),
+                                          child: Container(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 12.w,
+                                              vertical: 6.h,
+                                            ),
+                                            decoration: ShapeDecoration(
+                                              color: const Color(0x33EF4444),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(4.r),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              'TODAY\'S FOCUS',
                                               style: TextStyle(
-                                                color: const Color.fromARGB(
-                                                  255,
-                                                  210,
-                                                  200,
-                                                  200,
-                                                ),
-                                                fontSize: 40.sp,
-                                                fontStyle: FontStyle.italic,
+                                                color: const Color(0xFFF87171),
+                                                fontSize: 10.sp,
                                                 fontFamily: 'Inter',
-                                                fontWeight: FontWeight.w900,
-                                                height: 1.1,
+                                                fontWeight: FontWeight.w700,
+                                                letterSpacing: 0.50,
                                               ),
                                             ),
-                                            SizedBox(height: 4.h),
-                                            Text(
-                                              'Tap to start your workout',
-                                              style: TextStyle(
-                                                color: const Color.fromARGB(
-                                                  255,
-                                                  149,
-                                                  142,
-                                                  142,
-                                                ),
-                                                fontSize: 14.sp,
-                                                fontFamily: GoogleFonts.poppins()
-                                                    .fontFamily,
-                                                fontWeight: FontWeight.w500,
-                                              ),
-                                            ),
-                                          ],
+                                          ),
                                         ),
-                                      ),
+
+                                        Expanded(
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                              horizontal: 16.w,
+                                              vertical: 12.h,
+                                            ),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                Text(
+                                                  workout,
+                                                  style: TextStyle(
+                                                    color: const Color.fromARGB(
+                                                      255,
+                                                      210,
+                                                      200,
+                                                      200,
+                                                    ),
+                                                    fontSize: 32.sp,
+                                                    fontStyle: FontStyle.italic,
+                                                    fontFamily: 'Inter',
+                                                    fontWeight: FontWeight.w900,
+                                                    height: 1.1,
+                                                  ),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                SizedBox(height: 4.h),
+                                                Text(
+                                                  'Tap to start your workout',
+                                                  style: TextStyle(
+                                                    color: const Color.fromARGB(
+                                                      255,
+                                                      149,
+                                                      142,
+                                                      142,
+                                                    ),
+                                                    fontSize: 12.sp,
+                                                    fontFamily:
+                                                        GoogleFonts.poppins()
+                                                            .fontFamily,
+                                                    fontWeight: FontWeight.w500,
+                                                  ),
+                                                  maxLines: 1,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ],
                                 ),
-                              ],
+                              ),
                             ),
                           ),
-                        ),
-                      ),
-                    );
+                        );
                       },
                     ),
 
@@ -561,26 +598,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           );
                         }
                       },
-                      child: SizedBox(
-                        height: 100,
+                      child: Container(
+                        constraints: BoxConstraints(
+                          minHeight: 90.h,
+                          maxHeight: 120.h,
+                        ),
                         width: double.infinity,
                         child: Card(
                           color: const Color.fromARGB(255, 8, 13, 30),
-                          
+
                           child: Row(
                             children: [
-                              
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Icon(
                                   FontAwesomeIcons.heartPulse,
                                   color: const Color.fromARGB(255, 110, 8, 118),
-                                  size: 40,
+                                  size: 36.sp,
                                 ),
                               ),
-                              SizedBox(
-                                width: 16.w,
-                              ),
+                              SizedBox(width: 16.w),
                               Expanded(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
@@ -590,35 +627,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                       'Recovery Score',
                                       style: TextStyle(
                                         color: Colors.white,
-                                        fontSize: 18.sp,
+                                        fontSize: 16.sp,
                                         fontWeight: FontWeight.bold,
-                                        //fontStyle: FontStyle.italic,
                                         fontFamily:
                                             GoogleFonts.manrope().fontFamily,
                                       ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
                                     SizedBox(height: 8.h),
                                     Text(
-
                                       'Ready to train? See your recovery score.',
                                       style: TextStyle(
                                         color: Colors.white70,
-                                        fontSize: 12.sp,
+                                        fontSize: 11.sp,
                                         fontFamily:
                                             GoogleFonts.manrope().fontFamily,
                                       ),
+                                      maxLines: 2,
+                                      overflow: TextOverflow.ellipsis,
                                     ),
-
                                   ],
                                 ),
                               ),
                               Icon(
                                 FontAwesomeIcons.arrowUpRightDots,
                                 color: const Color.fromARGB(179, 117, 116, 116),
-                                size: 15,
+                                size: 14.sp,
                               ),
                             ],
-
                           ),
                         ),
                       ),
@@ -635,12 +672,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             },
                             child: _smallCard(
                               color: const Color.fromARGB(255, 8, 13, 30),
-                             // lottie: 'assets/lottie/bodypart.json',
+                              // lottie: 'assets/lottie/bodypart.json',
                               text: "Custom",
                               icon: FontAwesomeIcons.dumbbell,
                               minitext: "Choose your workout",
                               iconColor: Colors.blue,
-                              iconSize: 50,
+                              iconSize: 42.sp,
                             ),
                           ),
                         ),
@@ -648,9 +685,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         Expanded(
                           child: InkWell(
                             onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                builder: (context) =>  StatsUI(),
-                              ));
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => StatsUI(),
+                                ),
+                              );
                             },
                             child: _smallCard(
                               color: Color.fromARGB(255, 8, 13, 30),
@@ -658,8 +698,13 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               text: "Progress",
                               minitext: "View analytics",
                               icon: FontAwesomeIcons.chartLine,
-                              iconColor: const Color.fromARGB(255, 161, 170, 34),
-                              iconSize: 50,
+                              iconColor: const Color.fromARGB(
+                                255,
+                                161,
+                                170,
+                                34,
+                              ),
+                              iconSize: 42.sp,
                             ),
                           ),
                         ),
@@ -669,7 +714,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     const SizedBox(height: 20),
 
                     SizedBox(
-                      height: 200,
+                      height: 180.h,
                       child: InfiniteCarousel.builder(
                         itemCount: carouselimages.length,
                         itemExtent: MediaQuery.of(context).size.width * 0.8,
@@ -693,8 +738,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
 
                     const SizedBox(height: 20),
-
-                    
                   ],
                 ),
               ),
@@ -719,33 +762,35 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           Icon(
                             FontAwesomeIcons.arrowLeft,
                             color: Colors.grey,
-                            size: 15,
+                            size: 15.sp,
                           ),
-                          SizedBox(width: 10),
+                          SizedBox(width: 10.w),
                           Text(
                             'Home',
                             style: TextStyle(
                               color: Colors.grey,
-                              fontSize: 16,
+                              fontSize: 14.sp,
                               fontFamily: GoogleFonts.manrope().fontFamily,
                             ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                      
                         ],
-                      
                       ),
                     ),
-                    SizedBox(height: 10),
+                    SizedBox(height: 10.h),
                     Text(
                       'Workouts',
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 28,
+                        fontSize: 24.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: GoogleFonts.manrope().fontFamily,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    SizedBox(height: 25),
+                    SizedBox(height: 20.h),
 
                     _buildWorkoutCard(
                       context,
@@ -753,7 +798,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.chest,
                       Icons.fitness_center,
                       ref,
-                      const Color.fromARGB(132, 255, 82, 82)
+                      const Color.fromARGB(132, 255, 82, 82),
                     ),
                     _buildWorkoutCard(
                       context,
@@ -770,7 +815,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       Icons.self_improvement,
 
                       ref,
-                      const Color.fromARGB(144, 33, 149, 243)
+                      const Color.fromARGB(144, 33, 149, 243),
                     ),
                     _buildWorkoutCard(
                       context,
@@ -778,7 +823,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.arms,
                       Icons.sports_martial_arts,
                       ref,
-                      const Color.fromARGB(136, 156, 39, 176)
+                      const Color.fromARGB(136, 156, 39, 176),
                     ),
                     _buildWorkoutCard(
                       context,
@@ -786,7 +831,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.shoulders,
                       Icons.accessibility_new,
                       ref,
-                      const Color.fromARGB(136, 0, 188, 212)
+                      const Color.fromARGB(136, 0, 188, 212),
                     ),
                     _buildWorkoutCard(
                       context,
@@ -794,7 +839,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.core,
                       Icons.shield_moon,
                       ref,
-                      const Color.fromARGB(136, 76, 175, 80)
+                      const Color.fromARGB(136, 76, 175, 80),
                     ),
                     _buildWorkoutCard(
                       context,
@@ -802,7 +847,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       BodyPart.cardio,
                       Icons.favorite,
                       ref,
-                      const Color.fromARGB(136, 255, 87, 34)
+                      const Color.fromARGB(136, 255, 87, 34),
                     ),
                   ],
                 );
@@ -823,7 +868,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         bottomNavigationBar: SlidingClippedNavBar(
           backgroundColor: const Color(0xFF121212),
           activeColor: Colors.redAccent,
-          iconSize: 28,
+          iconSize: 24.sp,
           selectedIndex: selectedIndex,
           onButtonPressed: (index) {
             setState(() {
@@ -840,49 +885,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 
-  Widget _bigCard({
-    required Color color,
-    required String lottie,
-    required String title,
-    required String subtitle,
-  }) {
-    return SizedBox(
-      height: 160,
-      child: Card(
-        color: color,
-        child: Row(
-          children: [
-            Lottie.asset(lottie, width: 120, height: 120),
-            Expanded(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    title,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: GoogleFonts.poppins().fontFamily,
-                    ),
-                  ),
-                  const SizedBox(height: 12),
-                  Text(
-                    subtitle,
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontFamily: GoogleFonts.oswald().fontFamily,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
   Widget _smallCard({
     required Color color,
     //required String lottie,
@@ -892,8 +894,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     Color? iconColor,
     double? iconSize,
   }) {
-    return SizedBox(
-      height: 140,
+    return Container(
+      constraints: BoxConstraints(minHeight: 120.h, maxHeight: 160.h),
       child: Card(
         color: color,
         child: Padding(
@@ -907,30 +909,34 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Icon(
                     icon,
                     color: iconColor ?? Colors.white,
-                    size: iconSize ?? 50,
+                    size: iconSize ?? 42.sp,
                   ),
-                  const SizedBox(height: 12),
+                  SizedBox(height: 10.h),
                   Expanded(
                     child: Text(
                       text,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 16,
+                        fontSize: 14.sp,
                         fontWeight: FontWeight.bold,
                         fontFamily: GoogleFonts.manrope().fontFamily,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
-                  const SizedBox(height: 2),
+                  SizedBox(height: 2.h),
                   Expanded(
                     child: Text(
                       minitext,
                       style: TextStyle(
                         color: const Color.fromARGB(255, 155, 152, 152),
                         fontWeight: FontWeight.bold,
-                        fontSize: 12,
+                        fontSize: 11.sp,
                         fontFamily: GoogleFonts.manrope().fontFamily,
                       ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ),
                 ],
@@ -943,7 +949,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Icon(
                     FontAwesomeIcons.arrowUpRightFromSquare,
                     color: const Color.fromARGB(255, 175, 173, 173),
-                    size: 15,
+                    size: 14.sp,
                   ),
                 ),
               ),
@@ -965,7 +971,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     // Get exercise count for the body part
     final profileAsync = ref.watch(profileProvider);
     int exerciseCount = 8; // default
-    
+
     profileAsync.whenData((profile) {
       final goal = profile.goal ?? 'balanced';
       final exercises = ExerciseData.getExercises(bodyPart, goal: goal);
@@ -1003,22 +1009,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           padding: const EdgeInsets.all(16.0),
           child: Row(
             children: [
-           
               Container(
-                height: 48,
-                width: 48,
-                
+                height: 44.h,
+                width: 44.w,
+
                 decoration: BoxDecoration(
-                  color: color?.withOpacity(0.2) ?? Colors.grey.withOpacity(0.2),
+                  color:
+                      color?.withOpacity(0.2) ?? Colors.grey.withOpacity(0.2),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  icon,
-                  color: color ?? Colors.white,
-                  size: 24,
-                ),
+                child: Icon(icon, color: color ?? Colors.white, size: 22.sp),
               ),
-              const SizedBox(width: 16),
+              SizedBox(width: 16.w),
               // Title and subtitle
               Expanded(
                 child: Column(
@@ -1030,34 +1032,38 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       style: TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.w600,
-                        fontSize: 16,
+                        fontSize: 15.sp,
                         fontFamily: GoogleFonts.manrope().fontFamily,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
-                    const SizedBox(height: 4),
+                    SizedBox(height: 4.h),
                     Text(
                       '$exerciseCount Exercises • 45m',
                       style: TextStyle(
                         color: Colors.grey[500],
-                        fontSize: 13,
+                        fontSize: 12.sp,
                         fontFamily: GoogleFonts.manrope().fontFamily,
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
               ),
               // Play button
               Container(
-                height: 36,
-                width: 36,
+                height: 32.h,
+                width: 32.w,
                 decoration: BoxDecoration(
                   color: Colors.white.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Icon(
+                child: Icon(
                   Icons.play_arrow_rounded,
                   color: Colors.white,
-                  size: 20,
+                  size: 18.sp,
                 ),
               ),
             ],
