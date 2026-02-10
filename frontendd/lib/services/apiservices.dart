@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class ApiService{
-  static const String baseUrl="https://fitnessapp-backend-fpmk.onrender.com";
+  static const String baseUrl="http://13.205.213.61";
   static const Duration timeout = Duration(seconds: 30);
   
   Future<Map<String, dynamic>> post(

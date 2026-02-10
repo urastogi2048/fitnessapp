@@ -12,26 +12,23 @@ import '../../features/auth/authprovider.dart';
 import 'package:frontendd/services/notificationservice.dart';
 
 final profileProvider = FutureProvider<UserProfile>((ref) async {
-  print('🔍 ProfileProvider: Starting to fetch user profile...');
+  
   
   final authService = ref.read(authServiceProvider);
   final data = await authService.getMe();
   
-  print('📦 ProfileProvider: Raw response data: $data');
+  
   
   final user = data['user'] as Map<String, dynamic>?;
   
   if (user == null) {
-    print('❌ ProfileProvider: User data is null in response');
+   
     throw Exception('User data missing from backend response');
   }
   
-  print('👤 ProfileProvider: User data received: $user');
-  print('📋 ProfileProvider: Profile field: ${user['profile']}');
-  
+ 
   final profile = UserProfile.fromJson(user);
-  print('✅ ProfileProvider: Successfully parsed profile - username: ${profile.username}, email: ${profile.email}');
-  print('🏋️ ProfileProvider: Profile details - age: ${profile.age}, height: ${profile.height}, weight: ${profile.weight}');
+ 
   
   return profile;
 });
@@ -80,7 +77,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
   final VoidCallback? onBackToHome;
   
   const ProfileScreen({super.key, this.onBackToHome});
-
+  
   @override
   ConsumerState<ProfileScreen> createState() => _ProfileScreenState();
 }
@@ -89,7 +86,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final profileAsync = ref.watch(profileProvider);
-
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: profileAsync.when(
@@ -98,6 +94,10 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         ),
         error: (e, stack) => _errorState(context, e, stack, ref),
         data: (profile) {
+          final double heightInMeters = (profile.height ?? 0) / 100;
+          final double weight = profile.weight ?? 0;
+          final double bmi = (heightInMeters > 0) ? weight / (heightInMeters * heightInMeters) : 0.0;
+
           return SafeArea(
             child: SingleChildScrollView(
               child: Padding(
@@ -323,6 +323,8 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         ),
                       ],
                     ),
+                    const SizedBox(height: 15),
+                    _profileInfoCard('Body Mass Index', _fallback(bmi.toStringAsFixed(2)), FontAwesomeIcons.venusMars),
                     const SizedBox(height: 15),
                     _profileInfoCard('Gender', _fallback(profile.gender), FontAwesomeIcons.venusMars),
                     const SizedBox(height: 12),

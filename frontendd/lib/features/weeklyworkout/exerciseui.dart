@@ -501,7 +501,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
           children: [
             Text(
               '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: GoogleFonts.manrope(
+              style: GoogleFonts.poppins(
                 color: Colors.white,
                 fontSize: 45,
                 fontWeight: FontWeight.bold,
@@ -509,7 +509,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
             ),
             Text(
               sessionState.isPlaying ? 'In Progress' : 'Paused',
-              style: GoogleFonts.manrope(
+              style: GoogleFonts.poppins(
                 color: sessionState.isPlaying ? Colors.lightGreenAccent  : Colors.redAccent,
                 fontSize: 13,
               ),

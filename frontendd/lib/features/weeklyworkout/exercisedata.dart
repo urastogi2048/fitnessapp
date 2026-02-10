@@ -752,25 +752,25 @@ class ExerciseData {
             Exercise(
               name: 'Romanian Deadlift x1',
               bodypart: BodyPart.back,
-              animation: ExerciseAnimations.squat,
+              animation: ExerciseAnimations.romanianDeadlift,
               duration: 30,
             ),
             Exercise(
               name: 'Romanian Deadlift x2',
               bodypart: BodyPart.back,
-              animation: ExerciseAnimations.squat,
+              animation: ExerciseAnimations.romanianDeadlift,
               duration: 30,
             ),
             Exercise(
               name: 'Romanian Deadlift x3',
               bodypart: BodyPart.back,
-              animation: ExerciseAnimations.squat,
+              animation: ExerciseAnimations.romanianDeadlift,
               duration: 30,
             ),
             Exercise(
               name: 'Romanian Deadlift x4',
               bodypart: BodyPart.back,
-              animation: ExerciseAnimations.squat,
+              animation: ExerciseAnimations.romanianDeadlift,
               duration: 30,
             ),
             Exercise(
