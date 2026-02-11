@@ -415,7 +415,7 @@ class _EditprofileState extends ConsumerState<Editprofile> {
             borderRadius: BorderRadius.circular(20),
           ),
           child: Row(
-            children: ['Ectomorph', 'Mesomorph', 'Endomorph'].map((bodyType) {
+            children: ['Slim', 'Athletic', 'Heavy'].map((bodyType) {
               final isSelected =
                   selected?.toLowerCase() == bodyType.toLowerCase();
               return Expanded(

@@ -151,42 +151,46 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         SizedBox(width: 8.w),
 
                         InkWell(
+                          borderRadius: BorderRadius.circular(12),
                           onTap: () => Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const BMICalculator(),
                             ),
                           ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Icon(
-                                FontAwesomeIcons.weightScale,
-                                color: Colors.blueAccent,
-                                size: 20.sp,
-                              ),
-                              SizedBox(height: 2.h),
-                              Text(
-                                'BMI',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 10.sp,
-                                  fontWeight: FontWeight.bold,
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  FontAwesomeIcons.weightScale,
+                                  color: Colors.blueAccent,
+                                  size: 20.sp,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                              Text(
-                                'Calc',
-                                style: GoogleFonts.poppins(
-                                  color: Colors.white,
-                                  fontSize: 8.sp,
+                                SizedBox(height: 2.h),
+                                Text(
+                                  'BMI',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 10.sp,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                              ),
-                            ],
+                                Text(
+                                  'Calc',
+                                  style: GoogleFonts.poppins(
+                                    color: Colors.white,
+                                    fontSize: 8.sp,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ],
+                            ),
                           ),
                         ),
 
@@ -198,6 +202,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             loading: () => const SizedBox.shrink(),
                             error: (err, stack) => const SizedBox.shrink(),
                             data: (streak) => InkWell(
+                              borderRadius: BorderRadius.circular(12),
                               onTap: () {
                                 showDialog(
                                   context: context,
@@ -351,28 +356,31 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   ),
                                 );
                               },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Icon(
-                                    FontAwesomeIcons.fireFlameCurved,
-                                    color: Colors.orange,
-                                    size: 24.sp,
-                                  ),
-                                  SizedBox(width: 4.w),
-                                  Flexible(
-                                    child: Text(
-                                      '${streak.currentStreak}',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16.sp,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                      maxLines: 1,
-                                      overflow: TextOverflow.ellipsis,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Icon(
+                                      FontAwesomeIcons.fireFlameCurved,
+                                      color: Colors.orange,
+                                      size: 24.sp,
                                     ),
-                                  ),
-                                ],
+                                    SizedBox(width: 4.w),
+                                    Flexible(
+                                      child: Text(
+                                        '${streak.currentStreak}',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 16.sp,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -384,69 +392,70 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       builder: (context, ref, child) {
                         final profileAsync = ref.watch(profileProvider);
 
-                        return InkWell(
-                          onTap: () {
-                            final todayWorkout =
-                                weekdays[DateTime.now().weekday - 1];
-                            final bodyPart = Workoutmapper.getBodyPart(
-                              todayWorkout,
-                            );
-
-                            if (bodyPart == null) {
-                              // Rest Day
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    "It's Rest Day! Take a break and recharge for the week ahead.",
-                                  ),
-                                ),
-                              );
-                            } else {
-                              // Navigate to workout with user's goal
-                              profileAsync.whenData((profile) {
-                                final goal = profile.goal ?? 'balanced';
-                                final exercises = ExerciseData.getExercises(
-                                  bodyPart,
-                                  goal: goal,
-                                );
-
-                                if (context.mounted) {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          ExerciseExecutionPage(
-                                            exercises: exercises,
-                                            bodyPart: bodyPart,
-                                          ),
-                                    ),
-                                  );
-                                }
-                              });
-                            }
-                          },
-                          child: Container(
-                            constraints: BoxConstraints(
-                              minHeight: 160.h,
-                              maxHeight: 220.h,
+                        return Container(
+                          constraints: BoxConstraints(
+                            minHeight: 160.h,
+                            maxHeight: 220.h,
+                          ),
+                          width: double.infinity,
+                          child: Card(
+                            clipBehavior: Clip.antiAlias,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20.r),
                             ),
-                            width: double.infinity,
-                            child: Card(
-                              shape: RoundedRectangleBorder(
+                            child: Ink(
+                              decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(20.r),
-                              ),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20.r),
-                                  gradient: const LinearGradient(
-                                    colors: [
-                                      Color.fromARGB(255, 47, 25, 25),
-                                      Color.fromARGB(255, 104, 17, 17),
-                                    ],
-                                    begin: Alignment.bottomRight,
-                                    end: Alignment.topLeft,
-                                  ),
+                                gradient: const LinearGradient(
+                                  colors: [
+                                    Color.fromARGB(255, 47, 25, 25),
+                                    Color.fromARGB(255, 104, 17, 17),
+                                  ],
+                                  begin: Alignment.bottomRight,
+                                  end: Alignment.topLeft,
                                 ),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  final todayWorkout =
+                                      weekdays[DateTime.now().weekday - 1];
+                                  final bodyPart = Workoutmapper.getBodyPart(
+                                    todayWorkout,
+                                  );
+
+                                  if (bodyPart == null) {
+                                    // Rest Day
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                          "It's Rest Day! Take a break and recharge for the week ahead.",
+                                        ),
+                                      ),
+                                    );
+                                  } else {
+                                    // Navigate to workout with user's goal
+                                    profileAsync.whenData((profile) {
+                                      final goal = profile.goal ?? 'balanced';
+                                      final exercises = ExerciseData.getExercises(
+                                        bodyPart,
+                                        goal: goal,
+                                      );
+
+                                      if (context.mounted) {
+                                        Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (context) =>
+                                                ExerciseExecutionPage(
+                                              exercises: exercises,
+                                              bodyPart: bodyPart,
+                                            ),
+                                          ),
+                                        );
+                                      }
+                                    });
+                                  }
+                                },
                                 child: Stack(
                                   children: [
                                     Positioned(
@@ -587,26 +596,26 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     ),
 
                     const SizedBox(height: 16),
-                    InkWell(
-                      onTap: () {
-                        if (context.mounted) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => Recoveryreadinesscard(),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        constraints: BoxConstraints(
-                          minHeight: 90.h,
-                          maxHeight: 120.h,
-                        ),
-                        width: double.infinity,
-                        child: Card(
-                          color: const Color.fromARGB(255, 8, 13, 30),
-
+                    Container(
+                      constraints: BoxConstraints(
+                        minHeight: 90.h,
+                        maxHeight: 120.h,
+                      ),
+                      width: double.infinity,
+                      child: Card(
+                        clipBehavior: Clip.antiAlias,
+                        color: const Color.fromARGB(255, 8, 13, 30),
+                        child: InkWell(
+                          onTap: () {
+                            if (context.mounted) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Recoveryreadinesscard(),
+                                ),
+                              );
+                            }
+                          },
                           child: Row(
                             children: [
                               Padding(
@@ -664,26 +673,24 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: InkWell(
+                          child: _smallCard(
                             onTap: () {
                               setState(() {
                                 selectedIndex = 1;
                               });
                             },
-                            child: _smallCard(
-                              color: const Color.fromARGB(255, 8, 13, 30),
-                              // lottie: 'assets/lottie/bodypart.json',
-                              text: "Custom",
-                              icon: FontAwesomeIcons.dumbbell,
-                              minitext: "Choose your workout",
-                              iconColor: Colors.blue,
-                              iconSize: 42.sp,
-                            ),
+                            color: const Color.fromARGB(255, 8, 13, 30),
+                            // lottie: 'assets/lottie/bodypart.json',
+                            text: "Custom",
+                            icon: FontAwesomeIcons.dumbbell,
+                            minitext: "Choose your workout",
+                            iconColor: Colors.blue,
+                            iconSize: 42.sp,
                           ),
                         ),
                         const SizedBox(width: 12),
                         Expanded(
-                          child: InkWell(
+                          child: _smallCard(
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -692,20 +699,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 ),
                               );
                             },
-                            child: _smallCard(
-                              color: Color.fromARGB(255, 8, 13, 30),
-                              //lottie: 'assets/lottie/growth.json',
-                              text: "Progress",
-                              minitext: "View analytics",
-                              icon: FontAwesomeIcons.chartLine,
-                              iconColor: const Color.fromARGB(
+                            color: Color.fromARGB(255, 8, 13, 30),
+                            //lottie: 'assets/lottie/growth.json',
+                            text: "Progress",
+                            minitext: "View analytics",
+                            icon: FontAwesomeIcons.chartLine,
+                            iconColor: const Color.fromARGB(
                                 255,
                                 161,
                                 170,
                                 34,
                               ),
-                              iconSize: 42.sp,
-                            ),
+                            iconSize: 42.sp,
                           ),
                         ),
                       ],
@@ -750,32 +755,37 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   padding: const EdgeInsets.all(20.0),
                   children: [
                     InkWell(
+                      borderRadius: BorderRadius.circular(12),
                       onTap: () {
                         setState(() {
                           selectedIndex = 0;
                         });
                       },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.arrowLeft,
-                            color: Colors.grey,
-                            size: 15.sp,
-                          ),
-                          SizedBox(width: 10.w),
-                          Text(
-                            'Home',
-                            style: TextStyle(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Icon(
+                              FontAwesomeIcons.arrowLeft,
                               color: Colors.grey,
-                              fontSize: 14.sp,
-                              fontFamily: GoogleFonts.manrope().fontFamily,
+                              size: 15.sp,
                             ),
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ],
+                            SizedBox(width: 10.w),
+                            Text(
+                              'Home',
+                              style: TextStyle(
+                                color: Colors.grey,
+                                fontSize: 14.sp,
+                                fontFamily: GoogleFonts.manrope().fontFamily,
+                              ),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                     SizedBox(height: 10.h),
@@ -893,67 +903,72 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     required String minitext,
     Color? iconColor,
     double? iconSize,
+    VoidCallback? onTap,
   }) {
     return Container(
       constraints: BoxConstraints(minHeight: 120.h, maxHeight: 160.h),
       child: Card(
+        clipBehavior: Clip.antiAlias,
         color: color,
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Stack(
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // Lottie.asset(lottie, width: 70, height: 70),
-                  Icon(
-                    icon,
-                    color: iconColor ?? Colors.white,
-                    size: iconSize ?? 42.sp,
-                  ),
-                  SizedBox(height: 10.h),
-                  Expanded(
-                    child: Text(
-                      text,
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // Lottie.asset(lottie, width: 70, height: 70),
+                    Icon(
+                      icon,
+                      color: iconColor ?? Colors.white,
+                      size: iconSize ?? 42.sp,
                     ),
-                  ),
-                  SizedBox(height: 2.h),
-                  Expanded(
-                    child: Text(
-                      minitext,
-                      style: TextStyle(
-                        color: const Color.fromARGB(255, 155, 152, 152),
-                        fontWeight: FontWeight.bold,
-                        fontSize: 11.sp,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
+                    SizedBox(height: 10.h),
+                    Expanded(
+                      child: Text(
+                        text,
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.bold,
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
                     ),
-                  ),
-                ],
-              ),
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Opacity(
-                  opacity: 0.5,
-                  child: Icon(
-                    FontAwesomeIcons.arrowUpRightFromSquare,
-                    color: const Color.fromARGB(255, 175, 173, 173),
-                    size: 14.sp,
+                    SizedBox(height: 2.h),
+                    Expanded(
+                      child: Text(
+                        minitext,
+                        style: TextStyle(
+                          color: const Color.fromARGB(255, 155, 152, 152),
+                          fontWeight: FontWeight.bold,
+                          fontSize: 11.sp,
+                          fontFamily: GoogleFonts.manrope().fontFamily,
+                        ),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
+                  ],
+                ),
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Icon(
+                      FontAwesomeIcons.arrowUpRightFromSquare,
+                      color: const Color.fromARGB(255, 175, 173, 173),
+                      size: 14.sp,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -979,6 +994,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     });
 
     return Card(
+      clipBehavior: Clip.antiAlias,
       color: const Color.fromARGB(255, 8, 13, 30), // dark neon blue base
       elevation: 0,
       margin: const EdgeInsets.only(bottom: 12),

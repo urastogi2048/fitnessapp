@@ -139,6 +139,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                         ),
                         InkWell(
+                          borderRadius: BorderRadius.circular(12.r),
                           onTap: () {
                             _showSettingsBottomSheet(context, profile);
                           },
