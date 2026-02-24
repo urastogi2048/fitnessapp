@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
+import 'package:frontendd/core/logger.dart';
 import 'package:frontendd/features/auth/signup.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -148,6 +149,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         .trim();
 
                                     if (email.isEmpty || password.isEmpty) {
+                                      Logger.warn('Login validation failed: missing email or password');
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(
@@ -160,6 +162,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                       return;
                                     }
 
+                                    Logger.debug('Login attempt for: ${email.length > 4 ? email.substring(0, 4) + '...' : email}');
                                     await ref
                                         .read(authProvider.notifier)
                                         .login(email, password);
@@ -169,9 +172,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         ref
                                             .read(authProvider)
                                             .isAuthenticated) {
+                                      Logger.info('Login successful for: ${email.length > 4 ? email.substring(0, 4) + '...' : email}');
                                       Navigator.of(
                                         context,
                                       ).popUntil((route) => route.isFirst);
+                                    } else {
+                                      Logger.warn('Login failed for: ${email.length > 4 ? email.substring(0, 4) + '...' : email}');
                                     }
                                   },
                             child: authstate.isLoading

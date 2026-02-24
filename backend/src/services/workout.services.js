@@ -68,25 +68,31 @@ export const getStreak=async(userId)=> {
     const workoutDays=Array.from(workoutDaysSet).map(time=>new Date(time)).sort((a,b)=>a-b);
     const today=normaliseDate(new Date());
     let currentStreak=0;
-    let checkDate=new Date(today);
+    
+    // Check if performed workout today
+    const todayHasWorkout = workoutDays.some(d => d.getTime() === today.getTime());
+
+    let checkDate = new Date(today);
+    
+    // If no workout today, we start checking from yesterday to see if the streak is still active
+    if (!todayHasWorkout) {
+        checkDate.setDate(checkDate.getDate() - 1);
+    }
+
     while(true){
-        const found= workoutDays.some(d=>d.getTime()===checkDate.getTime());
+        const found = workoutDays.some(d => d.getTime() === checkDate.getTime());
         if(found){
             currentStreak++;
-            checkDate.setDate(checkDate.getDate()-1);
+            checkDate.setDate(checkDate.getDate() - 1);
+        } else {
+            break;
         }
-        else break;
-        
     }
-    const todayHasWorkout=workoutDays.some(d=>d.getTime()===today.getTime());
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayHasWorkout = workoutDays.some(d => d.getTime() === yesterday.getTime());
     
-    // Only break streak if neither today nor yesterday has workout
-    if(!todayHasWorkout && !yesterdayHasWorkout){
-        currentStreak=0;
-    }
+    // If today has workout, currentStreak includes today.
+    // If today has NO workout, currentStreak counts up to yesterday.
+    // If yesterday also had no workout, currentStreak will be 0.
+
     let longestStreak=1;
     let tempStreak=1;
     for(let i=1;i<workoutDays.length;i++){
@@ -107,11 +113,11 @@ export const getStreak=async(userId)=> {
     if(workoutDays.length===1){
         longestStreak=1;
     }
-    const lastWorkoutDay= workoutDays[workoutDays.length-1];
+    const lastWorkoutDay = workoutDays[workoutDays.length - 1];
     return {
         currentStreak,
         longestStreak,
-        lastWorkoutDay: lastWorkoutDay.toISOString().slice('T')[0],
+        lastWorkoutDay: lastWorkoutDay.toISOString().split('T')[0],
     }
 
 

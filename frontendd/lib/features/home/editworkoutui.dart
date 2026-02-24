@@ -50,6 +50,7 @@ class EditWorkoutUI extends ConsumerWidget {
         centerTitle: true,
       ),
       body: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Padding(
           padding: EdgeInsets.all(20.w),
           child: Column(

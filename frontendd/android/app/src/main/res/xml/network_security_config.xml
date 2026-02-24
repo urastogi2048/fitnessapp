@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Network security config: allow cleartext only for the development backend IP
+     and emulator loopback. Keeps cleartext scoped instead of global. Remove
+     this file or the domain entries when switching to HTTPS in production. -->
+<network-security-config>
+  <base-config cleartextTrafficPermitted="false" />
+
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="false">13.205.213.61</domain>
+  </domain-config>
+
+  <domain-config cleartextTrafficPermitted="true">
+    <domain includeSubdomains="false">10.0.2.2</domain>
+  </domain-config>
+</network-security-config>

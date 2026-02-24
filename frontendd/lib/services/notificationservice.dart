@@ -5,6 +5,7 @@ import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
+import 'package:frontendd/core/logger.dart';
 
 class NotificationService {
   static final NotificationService _instance = NotificationService._internal();
@@ -66,12 +67,12 @@ class NotificationService {
     await androidPlugin?.createNotificationChannel(testChannel);
 
     _initialized = true;
-    print('✅ Notification Service initialized with timezone: ${tz.local.name}');
+    Logger.debug('Notification Service initialized with timezone: ${tz.local.name}');
   }
 
   /// Handle notification tap
   void _onNotificationTapped(NotificationResponse response) {
-    print('🔔 Notification tapped: ${response.payload}');
+    Logger.debug('Notification tapped: ${response.payload}');
   }
 
   /// Request notification permissions
@@ -85,9 +86,7 @@ class NotificationService {
       final batteryOptStatus = await Permission.ignoreBatteryOptimizations
           .request();
 
-      print(
-        '🔐 Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}',
-      );
+      Logger.debug('Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}');
 
       return notificationStatus.isGranted;
     } else if (Platform.isIOS) {
@@ -120,7 +119,7 @@ class NotificationService {
       scheduledDate = scheduledDate.add(const Duration(days: 1));
     }
 
-    print('🕒 Now: ${now.toLocal()} | Scheduled: ${scheduledDate.toLocal()}');
+    Logger.debug('Now: ${now.toLocal()} | Scheduled: ${scheduledDate.toLocal()}');
 
     const AndroidNotificationDetails androidDetails =
         AndroidNotificationDetails(
@@ -145,7 +144,7 @@ class NotificationService {
     );
 
     final canExact = await Permission.scheduleExactAlarm.isGranted;
-    print('🔐 Can schedule exact alarms: $canExact');
+    Logger.debug('Can schedule exact alarms: $canExact');
 
     await _notificationsPlugin.zonedSchedule(
       0,
@@ -161,12 +160,12 @@ class NotificationService {
       matchDateTimeComponents: DateTimeComponents.time,
     );
 
-    print('✅ Daily streak reminder scheduled for ${scheduledDate.toLocal()}');
+    Logger.debug('Daily streak reminder scheduled for ${scheduledDate.toLocal()}');
 
     final pending = await _notificationsPlugin.pendingNotificationRequests();
-    print('📌 Pending scheduled notifications: ${pending.length}');
+    Logger.debug('Pending scheduled notifications: ${pending.length}');
     for (final p in pending) {
-      print('   - ID ${p.id}: ${p.title}');
+      Logger.debug(' - ID ${p.id}: ${p.title}');
     }
   }
 
@@ -235,12 +234,10 @@ class NotificationService {
           UILocalNotificationDateInterpretation.absoluteTime,
     );
 
-    print(
-      '✅ Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)',
-    );
+    Logger.debug('Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)');
 
     final pending = await _notificationsPlugin.pendingNotificationRequests();
-    print('📌 Total pending after test schedule: ${pending.length}');
+    Logger.debug('Total pending after test schedule: ${pending.length}');
   }
 
   /// Cancel the daily streak reminder

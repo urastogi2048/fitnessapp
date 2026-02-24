@@ -21,7 +21,7 @@ class ExerciseAnimations {
   static const String gobletSquat = 'assets/lottie/squat.json';
   static const String stepUp =
       'https://media0.giphy.com/media/v1.Y2lkPTc5MGI3NjExaXk0NGVlejZ5aHZ3Y2lrMWJneXE1MHR1a3E4ajM1MHRkeGducDl3dSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/GCfe8FEQQ3akJ5REmL/giphy.gif';
-  static const String calfRaise = 'assets/lottie/calfra ises.json';
+  static const String calfRaise = 'https://media2.giphy.com/media/v1.Y2lkPTc5MGI3NjExcmdtOXJpdXRhNHVwcTF2bTV5d2JxYzEzYmZnaHZqaG15YTRiZTNtbCZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/ehL7WCDG3cR4YjfMlX/giphy.gif';
   static const String nordicCurl =
       'https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExYXM3OWwzaWM4c25rZTFnd2o4YWt4OGk0YXN2ajE5d2ptMXFmdnU1ZiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/xT0xeJdR4UGSF1ZKLA/giphy.gif';
   static const String hipThrust =

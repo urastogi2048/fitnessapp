@@ -38,7 +38,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   final date = DateTime.now();
   final day = DateTime.now().day;
   final List<String> carouselimages = [
-    'assets/images/carousel.jpg',
     'assets/images/carousel2.jpg',
     'assets/images/carousel3.jpg',
     'assets/images/carousel4.jpg',
@@ -112,6 +111,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             //   ),
             // ),
             SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.all(16.0.w),
                 child: Column(
@@ -752,6 +752,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             Consumer(
               builder: (context, ref, child) {
                 return ListView(
+                  physics: const BouncingScrollPhysics(),
                   padding: const EdgeInsets.all(20.0),
                   children: [
                     InkWell(

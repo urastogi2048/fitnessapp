@@ -32,6 +32,7 @@ class _BMICalculatorState extends State<BMICalculator> {
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           child: Padding(
             padding: const EdgeInsets.all(25.0),
             child: Column(

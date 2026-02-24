@@ -131,6 +131,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,

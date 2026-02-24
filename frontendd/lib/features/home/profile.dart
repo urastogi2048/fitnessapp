@@ -92,6 +92,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           return SafeArea(
             child: SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
               child: Padding(
                 padding: EdgeInsets.all(25.0.w),
                 child: Column(
@@ -266,7 +267,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                     GridView.count(
                       crossAxisCount: 2,
                       shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
+                      physics: const BouncingScrollPhysics(),
                       mainAxisSpacing: 12.h,
                       crossAxisSpacing: 12.w,
                       childAspectRatio: 1.15,
@@ -517,7 +518,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
     return GridView.builder(
       shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
+      physics: const BouncingScrollPhysics(),
       itemCount: metrics.length,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,

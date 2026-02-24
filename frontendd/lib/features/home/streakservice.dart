@@ -46,27 +46,13 @@ final cachedStreakProvider = StateProvider<StreakData?>((ref) => null);
 
 final streakProvider = FutureProvider<StreakData>((ref) async {
   final service = ref.read(streakServiceProvider);
-  final cached = ref.read(cachedStreakProvider);
   final fetched = await service.fetchStreak();
 
   StreakData resolved = fetched;
 
-  if (fetched.currentStreak == 0 && fetched.lastWorkoutDay != null) {
-    final lastDay = DateTime.tryParse(fetched.lastWorkoutDay!);
-    if (lastDay != null && cached != null && cached.currentStreak > 0) {
-      final daysSince = DateTime.now()
-          .difference(DateTime(lastDay.year, lastDay.month, lastDay.day))
-          .inDays;
-
-      if (daysSince <= 1) {
-        resolved = StreakData(
-          currentStreak: cached.currentStreak,
-          longestStreak: fetched.longestStreak,
-          lastWorkoutDay: fetched.lastWorkoutDay,
-        );
-      }
-    }
-  }
+  // The logic to patch currentStreak from cached data is removed because
+  // the backend now correctly handles counting streaks up to the previous day
+  // if today's workout hasn't been done yet.
 
   // Update cache for future reads.
   ref.read(cachedStreakProvider.notifier).state = resolved;

@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:frontendd/features/auth/login.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
+import 'package:frontendd/core/logger.dart';
 
 class SignUpPage extends ConsumerStatefulWidget {
   const SignUpPage({super.key});
@@ -155,6 +156,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               if (username.isEmpty ||
                                   !isValidEmail(email) ||
                                   !isValidPassword(password)) {
+                                Logger.warn('Signup validation failed');
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                     content: Text(
@@ -165,6 +167,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                 return;
                               }
 
+                              Logger.debug('Signup attempt for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
                               await ref
                                   .read(authProvider.notifier)
                                   .signup(username, email, password);
@@ -173,6 +176,7 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                               if (currentState.error == null &&
                                   !currentState.isLoading) {
                                 if (context.mounted) {
+                                  Logger.info('Signup successful for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     const SnackBar(
                                       content: Text(
@@ -183,6 +187,8 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
 
                                   Navigator.pop(context);
                                 }
+                              } else {
+                                Logger.warn('Signup failed for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
                               }
                             },
                             child: ref.watch(authProvider).isLoading

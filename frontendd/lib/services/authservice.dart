@@ -1,4 +1,5 @@
 import 'package:frontendd/core/tokenstorage.dart';
+import 'package:frontendd/core/logger.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
@@ -7,31 +8,33 @@ import 'apiservices.dart';
 class AuthService {
   final ApiService api;
   static const String _recoveryUrl =
-      'http://13.232.4.125/predict';
+      'https://recoveryscore.duckdns.org/predict';
   AuthService(this.api);
   Future<void> signup(String username, String email, String password) async {
+    Logger.debug('AuthService.signup called for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
     await api.post("/auth/signup", {
       "username": username,
       "email": email,
       "password": password,
     });
+    Logger.info('AuthService.signup succeeded for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
+    Logger.debug('AuthService.login called for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
     final data = await api.post("/auth/login", {
       "email": email,
       "password": password,
     });
+    Logger.info('AuthService.login request completed for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
     return data;
   }
 
   Future<Map<String, dynamic>> getMe() async {
     final token = await TokenStorage.getToken();
 
-    print(' AuthService.getMe() called');
-    print(
-      ' Token from storage: ${token != null ? "EXISTS (${token.substring(0, 30)}...)" : "NULL/MISSING"}',
-    );
+    Logger.debug('AuthService.getMe() called');
+    Logger.debug('Token from storage: ${token != null ? "EXISTS" : "NULL/MISSING"}');
 
     if (token == null) {
       throw Exception('No authentication token found. Please login again.');
@@ -43,7 +46,7 @@ class AuthService {
   Future<Map<String, dynamic>> getRecoveryMetrics(
     Map<String, dynamic> userMetrics,
   ) async {
-    print(' AuthService.getRecoveryMetrics() called');
+    Logger.debug('AuthService.getRecoveryMetrics() called');
     //print('POST $_recoveryUrl');
     try {
       // Call external ML service
@@ -52,7 +55,7 @@ class AuthService {
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode(userMetrics),
       );
-      print('status: ${response.statusCode}, body: ${response.body}');
+      Logger.debug('Recovery ML service status: ${response.statusCode}');
 
       if (response.statusCode != 200) {
         throw Exception(
@@ -85,8 +88,8 @@ class AuthService {
 
       return {"overallscore": score};
     } catch (e) {
-      print('Error calling ML service: $e');
-      throw Exception('Failed to fetch recovery metrics: $e');
+      Logger.error('Error calling ML service', e, null);
+      throw Exception('Failed to fetch recovery metrics');
     }
   }
 

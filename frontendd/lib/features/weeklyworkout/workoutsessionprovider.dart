@@ -6,7 +6,7 @@ import 'package:state_notifier/state_notifier.dart';
 import 'workout_session_state.dart';
 import 'exercisemodel.dart';
 import 'package:frontendd/services/soundservice.dart';
-
+import 'package:frontendd/core/logger.dart';
 class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
   Timer? timer;
   Timer? saveTimer;
@@ -151,7 +151,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
     final timeToSave = state.totalTimeSpent - lastSavedTime;
     if (timeToSave <= 0) return;
 
-    print(' Saving incremental progress: ${timeToSave}s');
+    Logger.debug('Saving incremental progress: ${timeToSave}s');
 
     try {
       final token = await TokenStorage.getToken();
@@ -162,10 +162,10 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
           'bodyPart': state.bodyPart.name,
         }, token: token);
         lastSavedTime = state.totalTimeSpent;
-        print('✅ Progress saved (${timeToSave}s)');
+        Logger.debug('Progress saved (${timeToSave}s)');
       }
-    } catch (e) {
-      print('❌ Error saving progress: $e');
+    } catch (e, st) {
+      Logger.error('Error saving progress', e, st);
     }
   }
 
@@ -176,7 +176,7 @@ class WorkoutSessionNotifier extends StateNotifier<WorkoutSessionState> {
     await _saveProgressIncremental();
 
     state = state.copyWith(isCompleted: true);
-    print('WORKOUT COMPLETED');
+    Logger.debug('WORKOUT COMPLETED');
   }
 
   @override

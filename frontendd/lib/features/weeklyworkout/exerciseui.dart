@@ -250,6 +250,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Padding(
               padding: const EdgeInsets.all(25.0),
               child: Column(
@@ -648,6 +649,7 @@ class ExerciseExecutionPage extends ConsumerWidget {
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: SingleChildScrollView(
+          physics: const BouncingScrollPhysics(),
           padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 32.h),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,

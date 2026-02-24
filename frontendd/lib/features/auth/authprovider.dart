@@ -5,6 +5,7 @@ import 'dart:io';
 import '../../services/authservice.dart';
 import '../../services/apiservices.dart';
 import '../../core/tokenstorage.dart';
+import '../../core/logger.dart';
 import '../../core/onboardingstorage.dart';
 import 'authstate.dart';
 import '../home/profile.dart' show profileProvider;
@@ -45,10 +46,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signup(String username, String email, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
+      Logger.debug('Signup request for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
       await authService.signup(username, email, password);
+      Logger.info('Signup successful for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
       state = state.copyWith(isLoading: false, error: null);
     } catch (e) {
-      state = state.copyWith(isLoading: false, error: e.toString());
+      Logger.error('Signup failed', e, null);
+      // Provide a sanitized error message to the UI
+      state = state.copyWith(isLoading: false, error: 'Unable to create account');
     }
   }
 
@@ -70,7 +75,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       if (email.trim().isEmpty || password.isEmpty) {
         throw Exception('Email and password cannot be empty');
       }
-
+      Logger.debug('Login request for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
       final data = await authService.login(email, password);
       final token = data['token'];
 
@@ -80,6 +85,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       }
 
       await TokenStorage.saveToken(token.toString());
+      Logger.info('Login successful, fetching user');
       await fetchUser();
     } on SocketException {
       await TokenStorage.clearAll();
@@ -90,11 +96,22 @@ class AuthNotifier extends StateNotifier<AuthState> {
       );
     } catch (e) {
       await TokenStorage.clearAll();
-      state = state.copyWith(
-        isLoading: false,
-        isAuthenticated: false,
-        error: e.toString(),
-      );
+      Logger.error('Login failed', e, null);
+
+      final err = e.toString().toLowerCase();
+      if (err.contains('401') || err.contains('invalid') || err.contains('credentials') || err.contains('unauthorized')) {
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: false,
+          error: 'Incorrect email or password',
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: false,
+          error: 'Login failed. Please try again.',
+        );
+      }
     }
   }
 

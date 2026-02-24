@@ -6,20 +6,46 @@ import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
 import 'package:frontendd/features/home/homescreen.dart';
 import 'package:frontendd/services/notificationservice.dart';
+import 'dart:async';
+import 'package:frontendd/core/logger.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  try {
-    await NotificationService().initialize();
-    final granted = await NotificationService().requestPermissions();
-    if (granted) {
-      await NotificationService().scheduleDailyStreakReminder();
-      print('Daily streak reminder scheduled automatically on app start');
+
+  // Global handlers to prevent stack traces / sensitive data from being
+  // printed in release builds. In debug non-release mode details are
+  // still available via Logger.
+  FlutterError.onError = (details) {
+    Logger.error('Flutter framework error', details.exception, details.stack);
+    if (!isInDebugMode) {
+      // swallow in non-debug (release) mode
+      return;
     }
-  } catch (e) {
-    print('Error initializing Notification Service: $e');
-  }
-  runApp(const ProviderScope(child: MainApp()));
+    FlutterError.presentError(details);
+  };
+
+  await runZonedGuarded(() async {
+    try {
+      await NotificationService().initialize();
+      final granted = await NotificationService().requestPermissions();
+      if (granted) {
+        await NotificationService().scheduleDailyStreakReminder();
+        Logger.debug('Daily streak reminder scheduled automatically on app start');
+      }
+    } catch (e, st) {
+      Logger.error('Error initializing Notification Service', e, st);
+    }
+
+    runApp(const ProviderScope(child: MainApp()));
+  }, (error, stack) {
+    Logger.error('Uncaught error', error, stack);
+  });
+}
+
+bool get isInDebugMode {
+  var inDebug = false;
+  assert(inDebug = true);
+  return inDebug;
 }
 
 class MainApp extends StatelessWidget {

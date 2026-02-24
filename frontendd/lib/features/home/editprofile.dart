@@ -523,6 +523,7 @@ class _EditprofileState extends ConsumerState<Editprofile> {
         child: Padding(
           padding: const EdgeInsets.all(25.0),
           child: SingleChildScrollView(
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

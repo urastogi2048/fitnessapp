@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-
+import 'package:frontendd/core/logger.dart';
 import 'package:syncfusion_flutter_sliders/sliders.dart';
 import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:frontendd/features/recoveryfeature/recoverystate.dart';
@@ -98,6 +98,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     return Padding(
       padding: const EdgeInsets.all(25.0),
       child: SingleChildScrollView(
+        physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,6 +136,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
             Form(
               key: _formkey,
               child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   children: [
                     Card(
@@ -864,6 +866,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     }
 
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Padding(
         padding: const EdgeInsets.all(25.0),
         child: Column(
@@ -1055,7 +1058,7 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     setState(() => isloading = true);
 
     try {
-      debugPrint('Submitting recovery metrics');
+      Logger.debug('Submitting recovery metrics');
 
       final userMetrics = {
         "sleep_hours": double.parse(_sleepHoursController.text),
