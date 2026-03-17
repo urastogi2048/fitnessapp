@@ -1,11 +1,14 @@
 import express from "express";
 import { protect } from "../middlewares/authmiddleware.js";
 import { saveProfile } from "../controllers/user.controller.js";
+import { decryptProfilePayload } from "../utils/profileEncryption.js";
 
 const router = express.Router();
 
 router.get("/me", protect, (req, res) => {
   const user = req.user;
+  const rawProfile = user.profile?.toObject ? user.profile.toObject() : user.profile;
+  const profile = decryptProfilePayload(rawProfile || {});
   
   console.log('/user/me called for user:', user._id);
   console.log('User data:', {
@@ -22,7 +25,7 @@ router.get("/me", protect, (req, res) => {
       username: user.username,
       email: user.email,
       onboardingCompleted: user.onboardingCompleted,
-      profile: user.profile,
+      profile,
     },
   });
 });

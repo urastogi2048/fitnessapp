@@ -52,18 +52,15 @@ const UserSchema = new mongoose.Schema(
 
     profile: {
         age: {
-            type: Number,
-            min: 10,
-            max: 100,
+            type: mongoose.Schema.Types.Mixed,
         },
         gender: {
-            type: String,
-            enum: ["male", "female"],
+            type: mongoose.Schema.Types.Mixed,
         },
-        weight: Number,   // kg
-        height: Number,   // cm
-        bodyType: String,
-        goal: String,
+        weight: mongoose.Schema.Types.Mixed,   // kg
+        height: mongoose.Schema.Types.Mixed,   // cm
+        bodyType: mongoose.Schema.Types.Mixed,
+        goal: mongoose.Schema.Types.Mixed,
     },
 
     
