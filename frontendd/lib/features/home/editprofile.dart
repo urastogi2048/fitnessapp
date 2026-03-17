@@ -146,7 +146,7 @@ class _EditprofileState extends ConsumerState<Editprofile> {
         SizedBox(height: 12),
         NumberPicker(
           value: age,
-          minValue: 10,
+          minValue: 13,
           maxValue: 100,
           itemHeight: 60,
           axis: Axis.horizontal,

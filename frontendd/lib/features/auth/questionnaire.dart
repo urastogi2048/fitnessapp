@@ -165,7 +165,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
             children: [
               NumberPicker(
                 value: age,
-                minValue: 10,
+                minValue: 13,
                 maxValue: 100,
                 itemHeight: 60,
                 axis: Axis.horizontal,

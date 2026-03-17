@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter/services.dart';
 import 'package:frontendd/features/auth/authprovider.dart';
 import 'package:frontendd/features/auth/login.dart';
 import 'package:frontendd/features/auth/questionnaire.dart';
@@ -9,8 +10,20 @@ import 'package:frontendd/services/notificationservice.dart';
 import 'dart:async';
 import 'package:frontendd/core/logger.dart';
 
+const _appBackgroundColor = Color(0xFF1B1B1B);
+const _systemUiOverlayStyle = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.light,
+  statusBarBrightness: Brightness.dark,
+  systemNavigationBarColor: _appBackgroundColor,
+  systemNavigationBarIconBrightness: Brightness.light,
+  systemNavigationBarDividerColor: _appBackgroundColor,
+);
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
+  SystemChrome.setSystemUIOverlayStyle(_systemUiOverlayStyle);
 
   // Global handlers to prevent stack traces / sensitive data from being
   // printed in release builds. In debug non-release mode details are
@@ -60,6 +73,15 @@ class MainApp extends StatelessWidget {
       builder: (_, child) {
         return MaterialApp(
           debugShowCheckedModeBanner: false,
+          theme: ThemeData(
+            brightness: Brightness.dark,
+            scaffoldBackgroundColor: _appBackgroundColor,
+            appBarTheme: const AppBarTheme(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              systemOverlayStyle: _systemUiOverlayStyle,
+            ),
+          ),
           home: const AuthGate(),
         );
       },
@@ -94,7 +116,7 @@ class _AuthGateState extends ConsumerState<AuthGate> {
 
     if (_isInitialCheck) {
       return const Scaffold(
-        backgroundColor: Color.fromARGB(255, 27, 27, 27),
+        backgroundColor: _appBackgroundColor,
         body: Center(child: CircularProgressIndicator()),
       );
     }
