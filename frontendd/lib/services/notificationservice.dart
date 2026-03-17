@@ -79,14 +79,7 @@ class NotificationService {
   Future<bool> requestPermissions() async {
     if (Platform.isAndroid) {
       final notificationStatus = await Permission.notification.request();
-      // Android 12+ exact alarm permission (required for exact scheduling)
-      final exactAlarmStatus = await Permission.scheduleExactAlarm.request();
-
-      // Request to ignore battery optimizations (OEMs may still require manual change)
-      final batteryOptStatus = await Permission.ignoreBatteryOptimizations
-          .request();
-
-      Logger.debug('Permissions -> notifications=${notificationStatus.isGranted}, exactAlarm=${exactAlarmStatus.isGranted}, ignoreBatteryOpt=${batteryOptStatus.isGranted}');
+      Logger.debug('Permissions -> notifications=${notificationStatus.isGranted}');
 
       return notificationStatus.isGranted;
     } else if (Platform.isIOS) {
@@ -143,18 +136,13 @@ class NotificationService {
       iOS: iosDetails,
     );
 
-    final canExact = await Permission.scheduleExactAlarm.isGranted;
-    Logger.debug('Can schedule exact alarms: $canExact');
-
     await _notificationsPlugin.zonedSchedule(
       0,
       '🔥 Keep Your Streak Alive!',
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: canExact
-          ? AndroidScheduleMode.exactAllowWhileIdle
-          : AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
       matchDateTimeComponents: DateTimeComponents.time,
@@ -219,22 +207,18 @@ class NotificationService {
       iOS: DarwinNotificationDetails(),
     );
 
-    final canExact = await Permission.scheduleExactAlarm.isGranted;
-
     await _notificationsPlugin.zonedSchedule(
       998,
       '⏰ Scheduled Test',
       'If you see this, scheduled notifications work!',
       scheduledDate,
       notificationDetails,
-      androidScheduleMode: canExact
-          ? AndroidScheduleMode.exactAllowWhileIdle
-          : AndroidScheduleMode.inexactAllowWhileIdle,
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
       uiLocalNotificationDateInterpretation:
           UILocalNotificationDateInterpretation.absoluteTime,
     );
 
-    Logger.debug('Scheduled test notification for ${scheduledDate.toLocal()} (exact: $canExact)');
+    Logger.debug('Scheduled test notification for ${scheduledDate.toLocal()}');
 
     final pending = await _notificationsPlugin.pendingNotificationRequests();
     Logger.debug('Total pending after test schedule: ${pending.length}');
