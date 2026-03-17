@@ -4,9 +4,9 @@ const ALGORITHM = "aes-256-gcm";
 const ENCRYPTION_PREFIX = "enc:v1";
 
 function getEncryptionKey() {
-  const secret = process.env.PROFILE_ENCRYPTION_KEY;
+  const secret = process.env.PROFILE_ENCRYPTION_KEY || process.env.JWT_SECRET;
   if (!secret) {
-    throw new Error("PROFILE_ENCRYPTION_KEY is not configured");
+    throw new Error("PROFILE_ENCRYPTION_KEY (or JWT_SECRET fallback) is not configured");
   }
 
   // Derive a fixed 32-byte key from any non-empty secret string.
