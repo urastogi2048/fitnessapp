@@ -1,28 +1,20 @@
-import 'package:flutter/foundation.dart';
-
 /// Centralized logger.
 ///
-/// - In non-release builds this prints to console using `debugPrint`.
-/// - In release builds it is a no-op (prevents leaking backend or stack traces).
+/// Logging is intentionally disabled to keep debug console output clean.
 class Logger {
   static void debug(String message) {
-    if (!kReleaseMode) debugPrint(message);
+    // Intentionally no-op: debug logs disabled.
   }
 
   static void info(String message) {
-    if (!kReleaseMode) debugPrint(message);
+    // Intentionally no-op: info logs disabled.
   }
 
   static void warn(String message) {
-    if (!kReleaseMode) debugPrint('WARN: $message');
+    // Intentionally no-op: warning logs disabled.
   }
 
   static void error(String message, [Object? error, StackTrace? stack]) {
-    if (!kReleaseMode) {
-      debugPrint('ERROR: $message');
-      if (error != null) debugPrint(error.toString());
-      if (stack != null) debugPrint(stack.toString());
-    }
-    // In release builds we intentionally avoid printing details.
+    // Intentionally no-op: error logs disabled.
   }
 }

@@ -47,7 +47,6 @@ class AuthService {
     Map<String, dynamic> userMetrics,
   ) async {
     Logger.debug('AuthService.getRecoveryMetrics() called');
-    //print('POST $_recoveryUrl');
     try {
       // Call external ML service
       final response = await http.post(
