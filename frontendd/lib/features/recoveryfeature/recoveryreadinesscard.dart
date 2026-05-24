@@ -251,18 +251,18 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                 },
                               ),
                             ),
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _sleepHoursController,
-                                decoration: InputDecoration(
-                                  labelText: 'Sleep Hours',
-                                ),
-                                keyboardType: TextInputType.number,
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _sleepHoursController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Sleep Hours',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
 
                             SizedBox(height: 40),
                             Text(
@@ -335,18 +335,18 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                 }).toList(),
                               ),
                             ),
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _sleepQualityController,
-                                decoration: InputDecoration(
-                                  labelText: 'Sleep Quality (1-5)',
-                                ),
-                                keyboardType: TextInputType.number,
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _sleepQualityController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Sleep Quality (1-5)',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -591,32 +591,32 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                 ),
 
                                 /// Hidden Form field (keeps validation + submit working)
-                                SizedBox(
-                                  height: 0,
-                                  child: TextFormField(
-                                    controller: _muscleSorenessController,
-                                    enabled: false,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      isDense: true,
-                                    ),
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   height: 0,
+                                //   child: TextFormField(
+                                //     controller: _muscleSorenessController,
+                                //     enabled: false,
+                                //     decoration: const InputDecoration(
+                                //       border: InputBorder.none,
+                                //       isDense: true,
+                                //     ),
+                                //   ),
+                                // ),
                               ],
                             ),
 
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _fatigueLevelController,
-                                decoration: InputDecoration(
-                                  labelText: 'Fatigue Level (1-5)',
-                                ),
-                                keyboardType: TextInputType.number,
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _fatigueLevelController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Fatigue Level (1-5)',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
@@ -748,54 +748,54 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
                                 //SizedBox(width: 15.0),
                               ],
                             ),
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _prevDayIntensityController,
-                                decoration: InputDecoration(
-                                  labelText: 'Previous Day Intensity (0.0-1.0)',
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) => _validateNumber(
-                                  value,
-                                  'Previous day intensity',
-                                ),
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _prevDayIntensityController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Previous Day Intensity (0.0-1.0)',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     validator: (value) => _validateNumber(
+                            //       value,
+                            //       'Previous day intensity',
+                            //     ),
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
                             SizedBox(height: 8.0),
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _workoutStreakController,
-                                decoration: InputDecoration(
-                                  labelText: 'Workout Streak (days)',
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) =>
-                                    _validateNumber(value, 'Workout streak'),
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _workoutStreakController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Workout Streak (days)',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     validator: (value) =>
+                            //         _validateNumber(value, 'Workout streak'),
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
                             SizedBox(height: 8.0),
-                            SizedBox(
-                              height: 0,
-                              child: TextFormField(
-                                controller: _restingHRController,
-                                decoration: InputDecoration(
-                                  labelText: 'Resting Heart Rate',
-                                ),
-                                keyboardType: TextInputType.number,
-                                validator: (value) => _validateNumber(
-                                  value,
-                                  'Resting heart rate',
-                                ),
-                                readOnly: true,
-                                enabled: false,
-                              ),
-                            ),
+                            // SizedBox(
+                            //   height: 0,
+                            //   child: TextFormField(
+                            //     controller: _restingHRController,
+                            //     decoration: InputDecoration(
+                            //       labelText: 'Resting Heart Rate',
+                            //     ),
+                            //     keyboardType: TextInputType.number,
+                            //     validator: (value) => _validateNumber(
+                            //       value,
+                            //       'Resting heart rate',
+                            //     ),
+                            //     readOnly: true,
+                            //     enabled: false,
+                            //   ),
+                            // ),
                           ],
                         ),
                       ),
