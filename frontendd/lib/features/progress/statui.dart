@@ -213,19 +213,23 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                           child: monthlyAsync.when(
                             data: (monthlyData) => LineChart(
                               LineChartData(
+                                minY: 0,
                                 titlesData: FlTitlesData(
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-
-                                      getTitlesWidget: (value, meta) => Text(
-                                        monthlyData.date[value.toInt()]
-                                            .substring(5, 10),
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily:
-                                              GoogleFonts.manrope().fontFamily,
+                                      reservedSize: 40,
+                                      getTitlesWidget: (value, meta) => Transform.rotate(
+                                        angle: 0.785,
+                                        child: Text(
+                                          monthlyData.date[value.toInt()]
+                                              .substring(5, 10),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            fontFamily:
+                                                GoogleFonts.manrope().fontFamily,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -348,14 +352,18 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      getTitlesWidget: (value, meta) => Text(
-                                        weeklydaywisedata.date[value.toInt()]
-                                            .substring(5, 10),
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily:
-                                              GoogleFonts.manrope().fontFamily,
+                                      reservedSize: 40,
+                                      getTitlesWidget: (value, meta) => Transform.rotate(
+                                        angle: 0.785,
+                                        child: Text(
+                                          weeklydaywisedata.date[value.toInt()]
+                                              .substring(5, 10),
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 10,
+                                            fontFamily:
+                                                GoogleFonts.manrope().fontFamily,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -446,13 +454,17 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                                   bottomTitles: AxisTitles(
                                     sideTitles: SideTitles(
                                       showTitles: true,
-                                      getTitlesWidget: (value, meta) => Text(
-                                        data2.bodyPart[value.toInt()],
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 12,
-                                          fontFamily:
-                                              GoogleFonts.manrope().fontFamily,
+                                      reservedSize: 45,
+                                      getTitlesWidget: (value, meta) => Transform.rotate(
+                                        angle: 0.785,
+                                        child: Text(
+                                          data2.bodyPart[value.toInt()],
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 11,
+                                            fontFamily:
+                                                GoogleFonts.manrope().fontFamily,
+                                          ),
                                         ),
                                       ),
                                     ),

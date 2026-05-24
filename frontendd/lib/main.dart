@@ -29,6 +29,8 @@ void main() async {
   // printed in release builds. In debug non-release mode details are
   // still available via Logger.
   FlutterError.onError = (details) {
+    print('FLUTTER ERROR: ${details.exception}');
+    print('STACK: ${details.stack}');
     Logger.error('Flutter framework error', details.exception, details.stack);
     if (!isInDebugMode) {
       // swallow in non-debug (release) mode
@@ -37,7 +39,7 @@ void main() async {
     FlutterError.presentError(details);
   };
 
-  await runZonedGuarded(() async {
+  runZonedGuarded(() async {
     try {
       await NotificationService().initialize();
       final granted = await NotificationService().requestPermissions();
@@ -48,11 +50,11 @@ void main() async {
     } catch (e, st) {
       Logger.error('Error initializing Notification Service', e, st);
     }
-
-    runApp(const ProviderScope(child: MainApp()));
   }, (error, stack) {
     Logger.error('Uncaught error', error, stack);
   });
+
+  runApp(const ProviderScope(child: MainApp()));
 }
 
 bool get isInDebugMode {

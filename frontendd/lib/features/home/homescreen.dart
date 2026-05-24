@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 
 import 'package:frontendd/features/home/bmicalc.dart';
 import 'package:frontendd/features/home/profile.dart';
@@ -415,7 +416,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   end: Alignment.topLeft,
                                 ),
                               ),
-                              child: InkWell(
+              child: InkWell(
                                 onTap: () {
                                   final todayWorkout =
                                       weekdays[DateTime.now().weekday - 1];
@@ -424,11 +425,18 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   );
 
                                   if (bodyPart == null) {
-                                    // Rest Day
+                                    // Rest Day - clear any existing snackbars before showing new one
+                                    ScaffoldMessenger.of(context).clearSnackBars();
                                     ScaffoldMessenger.of(context).showSnackBar(
                                       SnackBar(
-                                        content: Text(
-                                          "It's Rest Day! Take a break and recharge for the week ahead.",
+                                        elevation: 0,
+                                        behavior: SnackBarBehavior.floating,
+                                        backgroundColor: Colors.transparent,
+                                        content: AwesomeSnackbarContent(
+                                          title: 'Rest Day',
+                                          message:
+                                              "Take a break and recharge for the week ahead.",
+                                          contentType: ContentType.warning,
                                         ),
                                       ),
                                     );
