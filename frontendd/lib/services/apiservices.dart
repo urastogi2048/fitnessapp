@@ -1,5 +1,7 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:frontendd/core/network_exception.dart';
 
 class ApiService {
   static const String baseUrl = "https://fitnessdude.duckdns.org";
@@ -23,9 +25,7 @@ class ApiService {
           .timeout(
             timeout,
             onTimeout: () {
-              throw Exception(
-                'Request timeout - backend may be starting up, please try again',
-              );
+              throw NetworkException('Request timeout - no internet connection');
             },
           );
 
@@ -42,6 +42,10 @@ class ApiService {
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data;
+    } on NetworkException {
+      rethrow;
+    } on SocketException catch (e) {
+      throw NetworkException('No internet connection: $e');
     } catch (e) {
       rethrow;
     }
@@ -60,9 +64,7 @@ class ApiService {
           .timeout(
             timeout,
             onTimeout: () {
-              throw Exception(
-                'Request timeout - backend may be starting up, please try again',
-              );
+              throw NetworkException('Request timeout - no internet connection');
             },
           );
 
@@ -79,6 +81,10 @@ class ApiService {
 
       final data = jsonDecode(response.body);
       return data;
+    } on NetworkException {
+      rethrow;
+    } on SocketException catch (e) {
+      throw NetworkException('No internet connection: $e');
     } catch (e) {
       rethrow;
     }
@@ -102,9 +108,7 @@ class ApiService {
           .timeout(
             timeout,
             onTimeout: () {
-              throw Exception(
-                'Request timeout - backend may be starting up, please try again',
-              );
+              throw NetworkException('Request timeout - no internet connection');
             },
           );
 
@@ -121,6 +125,10 @@ class ApiService {
 
       final data = jsonDecode(response.body) as Map<String, dynamic>;
       return data;
+    } on NetworkException {
+      rethrow;
+    } on SocketException catch (e) {
+      throw NetworkException('No internet connection: $e');
     } catch (e) {
       rethrow;
     }

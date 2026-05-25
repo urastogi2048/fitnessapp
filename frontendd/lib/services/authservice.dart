@@ -11,22 +11,26 @@ class AuthService {
       'https://recoveryscore.duckdns.org/predict';
   AuthService(this.api);
   Future<void> signup(String username, String email, String password) async {
-    Logger.debug('AuthService.signup called for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
+    final normalizedEmail = email.trim().toLowerCase();
+    final trimmedPassword = password.trim();
+    Logger.debug('AuthService.signup called for: ${normalizedEmail.length > 4 ? normalizedEmail.substring(0,4) + '...' : normalizedEmail}');
     await api.post("/auth/signup", {
       "username": username,
-      "email": email,
-      "password": password,
+      "email": normalizedEmail,
+      "password": trimmedPassword,
     });
-    Logger.info('AuthService.signup succeeded for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
+    Logger.info('AuthService.signup succeeded for: ${normalizedEmail.length > 4 ? normalizedEmail.substring(0,4) + '...' : normalizedEmail}');
   }
 
   Future<Map<String, dynamic>> login(String email, String password) async {
-    Logger.debug('AuthService.login called for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
+    final normalizedEmail = email.trim().toLowerCase();
+    final trimmedPassword = password.trim();
+    Logger.debug('AuthService.login called for: ${normalizedEmail.length > 4 ? normalizedEmail.substring(0,4) + '...' : normalizedEmail}');
     final data = await api.post("/auth/login", {
-      "email": email,
-      "password": password,
+      "email": normalizedEmail,
+      "password": trimmedPassword,
     });
-    Logger.info('AuthService.login request completed for: ${email.length > 4 ? email.substring(0,4) + '...' : email}');
+    Logger.info('AuthService.login request completed for: ${normalizedEmail.length > 4 ? normalizedEmail.substring(0,4) + '...' : normalizedEmail}');
     return data;
   }
 

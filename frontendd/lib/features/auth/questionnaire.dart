@@ -190,7 +190,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
 
         const SizedBox(height: 40),
 
-        // 🔥 NEXT / PREVIOUS BUTTONS
+        // NEXT / PREVIOUS BUTTONS
         Row(
           children: [
             if (qstate.step > 0) ...[

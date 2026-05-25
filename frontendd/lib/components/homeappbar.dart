@@ -80,7 +80,7 @@
 //                               ),
 //                             ),
 //                             title: Text(
-//                               "Your Streak 🔥",
+//                               "Your Streak",
 //                               style: GoogleFonts.poppins(
 //                                 color: Colors.white,
 //                                 fontSize: 20,

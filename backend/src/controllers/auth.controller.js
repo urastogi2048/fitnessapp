@@ -2,32 +2,40 @@ import { generatetoken } from "../utils/jwt.js";
 import User from "../models/user.models.js";
 import { signupservice } from "../services/auth.services.js";
 import { loginservice } from "../services/auth.services.js";
-export const signupcontroller =async (req,res)=> {
+
+export const signupcontroller = async (req,res)=> {
     try{
-    const {username, email, password} =req.body;
-    
-    if (!username || !email || !password) {
-        return res.status(400).json({
-            error: "All fields are required"
+        const {username, email, password} = req.body;
+        
+        if (!username || !email || !password) {
+            return res.status(400).json({
+                error: "All fields are required"
+            });
+        }
+        
+        const newUser = await signupservice({username, email, password});
+        
+        res.status(201).json({
+            message: "User signed up successfully",
         });
     }
-    
-    await signupservice({username, email, password});
-    
-    res.status(201).json({
-        message: "User signed up successfully",
-    });}
     catch(error){
         res.status(400).json({
             error: error.message,
         });
     }
-    
-
 };
+
 export const logincontroller = async (req,res)=>{
     try{
         const {email, password} = req.body;
+        
+        if (!email || !password) {
+            return res.status(400).json({
+                error: "Email and password required"
+            });
+        }
+        
         const user = await loginservice({email, password});
         const token = generatetoken(
             {

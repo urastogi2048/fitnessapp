@@ -6,6 +6,7 @@ import '../../services/authservice.dart';
 import '../../services/apiservices.dart';
 import '../../core/tokenstorage.dart';
 import '../../core/logger.dart';
+import '../../core/network_exception.dart';
 import '../../core/onboardingstorage.dart';
 import 'authstate.dart';
 import '../home/profile.dart' show profileProvider;
@@ -36,7 +37,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
         return;
       }
       await fetchUser();
+    } on NetworkException catch (e) {
+      // Network error during init - keep session if token exists
+      Logger.warn('Network error during auth check - keeping session alive');
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: true,
+        error: 'No internet connection. Using cached session.',
+      );
     } catch (e) {
+      // Other errors - clear session
+      Logger.error('Error checking auth status', e, null);
       await TokenStorage.clearAll();
       state = state.copyWith(isLoading: false, isAuthenticated: false);
     }
@@ -52,8 +63,14 @@ class AuthNotifier extends StateNotifier<AuthState> {
       state = state.copyWith(isLoading: false, error: null);
     } catch (e) {
       Logger.error('Signup failed', e, null);
-      // Provide a sanitized error message to the UI
-      state = state.copyWith(isLoading: false, error: 'Unable to create account');
+      // Show actual error message from backend, fallback to generic if needed
+      String errorMessage = 'Unable to create account';
+      if (e.toString().contains('already exists')) {
+        errorMessage = 'Email already registered';
+      } else if (e.toString().contains('Invalid')) {
+        errorMessage = e.toString();
+      }
+      state = state.copyWith(isLoading: false, error: errorMessage);
     }
   }
 
@@ -87,12 +104,21 @@ class AuthNotifier extends StateNotifier<AuthState> {
       await TokenStorage.saveToken(token.toString());
       Logger.info('Login successful, fetching user');
       await fetchUser();
+    } on NetworkException catch (e) {
+      // Network error during login - show error but don't stay logged in
+      Logger.error('Login failed - network error', e, null);
+      await TokenStorage.clearAll();
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: false,
+        error: 'No internet connection. Please check your connection and try again.',
+      );
     } on SocketException {
       await TokenStorage.clearAll();
       state = state.copyWith(
         isLoading: false,
         isAuthenticated: false,
-        error: 'Network error',
+        error: 'No internet connection. Please check your connection and try again.',
       );
     } catch (e) {
       await TokenStorage.clearAll();
@@ -165,17 +191,53 @@ class AuthNotifier extends StateNotifier<AuthState> {
           error: null,
         );
         return;
-      } on SocketException {
+      } on NetworkException catch (e) {
+        // NETWORK ERROR - DO NOT clear token or logout
+        // Keep user logged in with cached session
+        Logger.warn('Network error on attempt $attempt: keeping session alive');
+        
         if (attempt < 2) {
-          await Future.delayed(Duration(milliseconds: 500));
+          await Future.delayed(Duration(milliseconds: 500 * attempt));
           continue;
         }
+        
+        // After retries, assume offline but keep authenticated
+        Logger.warn('Network unavailable after retries - keeping session alive for offline mode');
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: true, // CRITICAL: Keep authenticated
+          onboardingCompleted: true, // Assume onboarding done if we got this far
+          username: state.username, // Keep cached username
+          error: 'No internet connection. Some features may be limited.',
+        );
+        return;
+      } on SocketException catch (e) {
+        // SOCKET ERROR - Same as NetworkException
+        Logger.warn('Socket error on attempt $attempt: keeping session alive');
+        
+        if (attempt < 2) {
+          await Future.delayed(Duration(milliseconds: 500 * attempt));
+          continue;
+        }
+        
+        // After retries, assume offline but keep authenticated
+        Logger.warn('Socket error after retries - keeping session alive for offline mode');
+        state = state.copyWith(
+          isLoading: false,
+          isAuthenticated: true, // CRITICAL: Keep authenticated
+          onboardingCompleted: true,
+          username: state.username,
+          error: 'No internet connection. Some features may be limited.',
+        );
+        return;
       } catch (e) {
         final errorStr = e.toString();
 
         if (errorStr.contains('401') ||
             errorStr.contains('403') ||
             errorStr.contains('Unauthorized')) {
+          // ACTUAL AUTH ERROR - Only then clear token
+          Logger.error('Authentication error (401/403) - logging out user', e, null);
           await TokenStorage.clearAll();
           state = state.copyWith(
             isLoading: false,
@@ -187,21 +249,31 @@ class AuthNotifier extends StateNotifier<AuthState> {
           return;
         }
 
+        // Other errors - retry
         if (attempt < 2) {
-          await Future.delayed(Duration(milliseconds: 500));
+          await Future.delayed(Duration(milliseconds: 500 * attempt));
           continue;
         }
       }
     }
 
-    await TokenStorage.clearAll();
-    state = state.copyWith(
-      isLoading: false,
-      isAuthenticated: false,
-      username: null,
-      onboardingCompleted: false,
-      error: 'Failed to load user data. Please try logging in again.',
-    );
+    // Final fallback - if we still have token, keep user logged in
+    final existingToken = await TokenStorage.getToken();
+    if (existingToken != null && existingToken.isNotEmpty) {
+      Logger.warn('Failed to fetch user but token exists - keeping session alive');
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: true,
+        onboardingCompleted: true,
+        error: 'Unable to load user data. Please check your connection.',
+      );
+    } else {
+      state = state.copyWith(
+        isLoading: false,
+        isAuthenticated: false,
+        error: 'Failed to load user data. Please try logging in again.',
+      );
+    }
   }
 }
 

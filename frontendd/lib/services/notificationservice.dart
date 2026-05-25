@@ -138,7 +138,7 @@ class NotificationService {
 
     await _notificationsPlugin.zonedSchedule(
       0,
-      '🔥 Keep Your Streak Alive!',
+      'Keep Your Streak Alive!',
       'Don\'t break your streak! Complete a workout today to keep the fire burning.',
       scheduledDate,
       notificationDetails,

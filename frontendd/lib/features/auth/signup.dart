@@ -148,9 +148,11 @@ class _SignUpPageState extends ConsumerState<SignUpPage> {
                                 borderRadius: BorderRadius.circular(14),
                               ),
                             ),
-                            onPressed: () async {
+                            onPressed: ref.watch(authProvider).isLoading
+                                ? null  // Disable button during loading to prevent double-submit
+                                : () async {
                               final email = emailCtrl.text.trim();
-                              final password = passwordCtrl.text;
+                              final password = passwordCtrl.text.trim();
                               final username = usernameCtrl.text.trim();
 
                               if (username.isEmpty ||
