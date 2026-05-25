@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:frontendd/components/custom_app_header.dart';
 import 'package:frontendd/features/home/editprofile.dart';
 import 'package:frontendd/features/home/editworkoutui.dart';
 import 'package:frontendd/features/home/help&support.dart';
@@ -91,76 +92,39 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               : 0.0;
 
           return SafeArea(
-            child: SingleChildScrollView(
-              physics: const BouncingScrollPhysics(),
-              child: Padding(
-                padding: EdgeInsets.all(25.0.w),
+            child: Padding(
+              padding: EdgeInsets.all(25.0.w),
+              child: SingleChildScrollView(
+                physics: const BouncingScrollPhysics(),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // Header Section
-                    InkWell(
-                      onTap: () {
-                        if (widget.onBackToHome != null) {
-                          widget.onBackToHome!();
-                        }
-                      },
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.arrowLeft,
-                            color: Colors.grey,
-                            size: 15.sp,
+                    // Custom App Header
+                    CustomAppHeader(
+                      backLabel: 'Home',
+                      onBackPressed: widget.onBackToHome,
+                      title: 'Profile',
+                      trailing: InkWell(
+                        borderRadius: BorderRadius.circular(12.r),
+                        onTap: () {
+                          _showSettingsBottomSheet(context, profile);
+                        },
+                        child: Container(
+                          height: 44.h,
+                          width: 44.w,
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 6, 25, 41),
+                            borderRadius: BorderRadius.circular(12.r),
                           ),
-                          SizedBox(width: 10.w),
-                          Text(
-                            'Home',
-                            style: TextStyle(
-                              color: Colors.grey,
-                              fontSize: 16.sp,
-                              fontFamily: GoogleFonts.manrope().fontFamily,
-                            ),
+                          child: Icon(
+                            FontAwesomeIcons.gear,
+                            color: Colors.white,
+                            size: 20.sp,
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          'Profile',
-                          style: TextStyle(
-                            fontSize: 28.sp,
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontFamily: GoogleFonts.manrope().fontFamily,
-                          ),
-                        ),
-                        InkWell(
-                          borderRadius: BorderRadius.circular(12.r),
-                          onTap: () {
-                            _showSettingsBottomSheet(context, profile);
-                          },
-                          child: Container(
-                            height: 44.h,
-                            width: 44.w,
-                            decoration: BoxDecoration(
-                              color: const Color.fromARGB(255, 6, 25, 41),
-                              borderRadius: BorderRadius.circular(12.r),
-                            ),
-                            child: Icon(
-                              FontAwesomeIcons.gear,
-                              color: Colors.white,
-                              size: 20.sp,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 12.h),
+                    SizedBox(height: 24.h),
                     Text(
                       profile.username.isNotEmpty
                           ? '@${profile.username}'

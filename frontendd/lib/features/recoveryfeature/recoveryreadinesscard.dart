@@ -7,6 +7,8 @@ import 'package:syncfusion_flutter_core/theme.dart';
 import 'package:frontendd/features/recoveryfeature/recoverystate.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:frontendd/components/custom_app_header.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class _Suggestion {
   const _Suggestion({
@@ -90,49 +92,37 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
-      body: overallscore == null ? buildform() : buildresult(),
+      body: SafeArea(
+        child: overallscore == null ? buildform() : buildresult(),
+      ),
     );
   }
 
   Widget buildform() {
     return Padding(
-      padding: const EdgeInsets.all(25.0),
+      padding: EdgeInsets.all(25.0.w),
       child: SingleChildScrollView(
         physics: const BouncingScrollPhysics(),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            InkWell(
-              onTap: () => Navigator.pop(context),
-              child: const Icon(
-                FontAwesomeIcons.arrowLeft,
-                color: Colors.white,
-              ),
+            CustomAppHeader(
+              backLabel: 'Home',
+              title: 'Daily Check-In',
             ),
-            const SizedBox(height: 12.0),
-            Text(
-              'Daily Check-In',
-              style: TextStyle(
-                fontSize: 28,
-                color: Colors.white,
-                fontFamily: GoogleFonts.manrope(
-                  fontWeight: FontWeight.bold,
-                ).fontFamily,
-              ),
-            ),
-            const SizedBox(height: 5.0),
+            SizedBox(height: 5.h),
             Text(
               'Full body and mind analysis',
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 16.sp,
                 color: Colors.grey[600],
                 fontFamily: GoogleFonts.manrope(
                   fontWeight: FontWeight.w500,
                 ).fontFamily,
               ),
             ),
-            const SizedBox(height: 20.0),
+            SizedBox(height: 20.h),
             Form(
               key: _formkey,
               child: SingleChildScrollView(
@@ -868,34 +858,19 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
     return SingleChildScrollView(
       physics: const BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(25.0),
+        padding: EdgeInsets.all(25.0.w),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Align(
               alignment: Alignment.centerLeft,
-              child: InkWell(
-                onTap: () => Navigator.pop(context),
-                child: const Icon(
-                  FontAwesomeIcons.arrowLeft,
-                  color: Colors.white,
-                ),
+              child: CustomAppHeader(
+                backLabel: 'Back',
+                title: 'Analysis Complete',
               ),
             ),
-            const SizedBox(height: 20.0),
-            Center(
-              child: Text(
-                'Analysis Complete',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: GoogleFonts.manrope().fontFamily,
-                  color: const Color.fromARGB(255, 148, 148, 148),
-                ),
-              ),
-            ),
-            const SizedBox(height: 40),
+            SizedBox(height: 40.h),
             Stack(
               alignment: Alignment.center,
               children: [

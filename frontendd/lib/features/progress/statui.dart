@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontendd/components/custom_app_header.dart';
 import 'package:frontendd/features/progress/statmodels.dart';
 import 'package:frontendd/features/progress/statprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -129,44 +131,29 @@ class _StatsUIState extends ConsumerState<StatsUI> {
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(25.0),
+          padding: EdgeInsets.all(25.0.w),
           child: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                InkWell(
-                  onTap: () => Navigator.pop(context),
-                  child: const Icon(
-                    FontAwesomeIcons.arrowLeft,
-                    color: Colors.white,
-                  ),
+                CustomAppHeader(
+                  backLabel: 'Home',
+                  title: 'Progress Dashboard',
                 ),
-                const SizedBox(height: 12.0),
-                Text(
-                  'Progress Dashboard',
-                  style: TextStyle(
-                    fontSize: 28,
-                    color: Colors.white,
-                    fontFamily: GoogleFonts.manrope(
-                      fontWeight: FontWeight.bold,
-                    ).fontFamily,
-                  ),
-                ),
-                const SizedBox(height: 5.0),
+                SizedBox(height: 24.h),
                 Text(
                   'Track your fitness journey',
                   style: TextStyle(
-                    fontSize: 16,
+                    fontSize: 14.sp,
                     color: Colors.grey[600],
                     fontFamily: GoogleFonts.manrope(
                       fontWeight: FontWeight.w500,
                     ).fontFamily,
                   ),
                 ),
-                const SizedBox(height: 20.0),
-                SizedBox(height: 20.0),
+                SizedBox(height: 24.h),
                 Card(
                   color: const Color.fromARGB(255, 8, 13, 30),
                   child: Padding(
@@ -274,6 +261,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                                   LineChartBarData(
                                     spots: monthlyDaywisespots(monthlyData),
                                     isCurved: true,
+                                    preventCurveOverShooting: true,
                                     dotData: FlDotData(show: false),
                                     //belowBarData: BarAreaData(show: false),
                                     barWidth: 3,

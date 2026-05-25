@@ -6,6 +6,8 @@ class Qstate {
   double? height;
   String? bodyType;
   String? goal;
+  String? errorMessage;
+  
   Qstate({
     this.step = 0,
     this.age,
@@ -14,6 +16,7 @@ class Qstate {
     this.height,
     this.bodyType,
     this.goal,
+    this.errorMessage,
   });
   Qstate copyWith({
     int? step,
@@ -23,6 +26,7 @@ class Qstate {
     double? height,
     String? bodyType,
     String? goal,
+    String? errorMessage,
   }) {
     return Qstate(
       step: step ?? this.step,
@@ -32,6 +36,7 @@ class Qstate {
       height: height ?? this.height,
       bodyType: bodyType ?? this.bodyType,
       goal: goal ?? this.goal,
+      errorMessage: errorMessage ?? this.errorMessage,
     );
   }
 }

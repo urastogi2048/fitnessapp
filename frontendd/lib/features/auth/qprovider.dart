@@ -30,26 +30,36 @@ class QNotifier extends StateNotifier<Qstate> {
   }
 
   void nextStep() {
+    String? error;
+    
     if (state.step == 0 && state.age == null) {
+      error = 'Please select your age';
+    } else if (state.step == 1 && state.gender == null) {
+      error = 'Please select your gender';
+    } else if (state.step == 2 && state.weight == null) {
+      error = 'Please enter your weight';
+    } else if (state.step == 3 && state.height == null) {
+      error = 'Please enter your height';
+    } else if (state.step == 4 && state.bodyType == null) {
+      error = 'Please select your body type';
+    } else if (state.step == 5 && state.goal == null) {
+      error = 'Please select your fitness goal';
+    }
+    
+    if (error != null) {
+      state = state.copyWith(errorMessage: error);
       return;
     }
-    if (state.step == 1 && state.gender == null) {
-      return;
-    }
-    if (state.step == 2 && state.weight == null) {
-      return;
-    }
-    if (state.step == 3 && state.height == null) {
-      return;
-    }
-    if (state.step == 4 && state.bodyType == null) {
-      return;
-    }
-    if (state.step == 5 && state.goal == null) {
-      return;
-    }
+    
+    state = state.copyWith(step: state.step + 1, errorMessage: null);
+  }
+  
+  void clearError() {
+    state = state.copyWith(errorMessage: null);
+  }
 
-    state = state.copyWith(step: state.step + 1);
+  void setError(String errorMessage) {
+    state = state.copyWith(errorMessage: errorMessage);
   }
 
   void previousStep() {

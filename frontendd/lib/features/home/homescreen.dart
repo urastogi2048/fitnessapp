@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:awesome_snackbar_content/awesome_snackbar_content.dart';
+import 'package:frontendd/components/custom_app_header.dart';
 
 import 'package:frontendd/features/home/bmicalc.dart';
 import 'package:frontendd/features/home/profile.dart';
@@ -759,59 +760,23 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             // Workouts screen
             Consumer(
               builder: (context, ref, child) {
-                return ListView(
-                  physics: const BouncingScrollPhysics(),
-                  padding: const EdgeInsets.all(20.0),
-                  children: [
-                    InkWell(
-                      borderRadius: BorderRadius.circular(12),
-                      onTap: () {
-                        setState(() {
-                          selectedIndex = 0;
-                        });
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Icon(
-                              FontAwesomeIcons.arrowLeft,
-                              color: Colors.grey,
-                              size: 15.sp,
-                            ),
-                            SizedBox(width: 10.w),
-                            Text(
-                              'Home',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: 14.sp,
-                                fontFamily: GoogleFonts.manrope().fontFamily,
-                              ),
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                          ],
-                        ),
+                return Padding(
+                  padding: EdgeInsets.all(25.0.w),
+                  child: ListView(
+                    physics: const BouncingScrollPhysics(),
+                    children: [
+                      CustomAppHeader(
+                        backLabel: 'Home',
+                        title: 'Workouts',
+                        onBackPressed: () {
+                          setState(() {
+                            selectedIndex = 0;
+                          });
+                        },
                       ),
-                    ),
-                    SizedBox(height: 10.h),
-                    Text(
-                      'Workouts',
-                      style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 24.sp,
-                        fontWeight: FontWeight.bold,
-                        fontFamily: GoogleFonts.manrope().fontFamily,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: 20.h),
+                      SizedBox(height: 24.h),
 
-                    _buildWorkoutCard(
+                      _buildWorkoutCard(
                       context,
                       'Chest Workout',
                       BodyPart.chest,
@@ -869,7 +834,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                       const Color.fromARGB(136, 255, 87, 34),
                     ),
                   ],
-                );
+                ));
               },
             ),
 

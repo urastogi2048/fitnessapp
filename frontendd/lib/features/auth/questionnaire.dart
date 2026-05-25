@@ -86,18 +86,58 @@ class QuestionnairePage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 20.0),
                 Expanded(
-                  child: switch (qstate.step) {
-                    0 => AgeQuestion(qstate: qstate, ref: ref),
-                    1 => GenderQuestion(qstate: qstate, ref: ref),
-                    2 => WeightQuestion(qstate: qstate, ref: ref),
-                    3 => HeightQuestion(qstate: qstate, ref: ref),
-                    4 => BodyTypeQuestion(qstate: qstate, ref: ref),
-                    _ => GoalQuestion(
-                      qstate: qstate,
-                      ref: ref,
-                      context: context,
-                    ),
-                  },
+                  child: Column(
+                    children: [
+                      if (qstate.errorMessage != null)
+                        Container(
+                          padding: const EdgeInsets.all(12),
+                          margin: const EdgeInsets.only(bottom: 16),
+                          decoration: BoxDecoration(
+                            color: const Color.fromARGB(255, 226, 46, 46).withOpacity(0.15),
+                            border: Border.all(
+                              color: const Color.fromARGB(255, 226, 46, 46),
+                              width: 1.2,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.error_outline,
+                                color: Color.fromARGB(255, 226, 46, 46),
+                                size: 20,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(
+                                child: Text(
+                                  qstate.errorMessage ?? '',
+                                  style: TextStyle(
+                                    color: const Color.fromARGB(255, 226, 46, 46),
+                                    fontFamily: GoogleFonts.poppins().fontFamily,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      Expanded(
+                        child: switch (qstate.step) {
+                          0 => AgeQuestion(qstate: qstate, ref: ref),
+                          1 => GenderQuestion(qstate: qstate, ref: ref),
+                          2 => WeightQuestion(qstate: qstate, ref: ref),
+                          3 => HeightQuestion(qstate: qstate, ref: ref),
+                          4 => BodyTypeQuestion(qstate: qstate, ref: ref),
+                          _ => GoalQuestion(
+                            qstate: qstate,
+                            ref: ref,
+                            context: context,
+                          ),
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
@@ -182,6 +222,7 @@ Widget AgeQuestion({required Qstate qstate, required WidgetRef ref}) {
                 ),
                 onChanged: (value) {
                   ref.read(qprovider.notifier).setAge(value);
+                  ref.read(qprovider.notifier).clearError();
                 },
               ),
             ],
@@ -276,6 +317,7 @@ Widget GenderQuestion({required Qstate qstate, required WidgetRef ref}) {
         ),
         onPressed: () {
           ref.read(qprovider.notifier).setGender(label.toLowerCase());
+          ref.read(qprovider.notifier).clearError();
         },
         child: Text(
           label,
@@ -413,6 +455,7 @@ Widget WeightQuestion({required Qstate qstate, required WidgetRef ref}) {
           value: weight.toInt(),
           onChanged: (value) {
             ref.read(qprovider.notifier).setWeight(value.toDouble());
+            ref.read(qprovider.notifier).clearError();
           },
           axis: Axis.horizontal,
           selectedTextStyle: TextStyle(
@@ -532,6 +575,7 @@ Widget HeightQuestion({required Qstate qstate, required WidgetRef ref}) {
           value: height.toInt(),
           onChanged: (value) {
             ref.read(qprovider.notifier).setHeight(value.toDouble());
+            ref.read(qprovider.notifier).clearError();
           },
           axis: Axis.horizontal,
           selectedTextStyle: TextStyle(
@@ -629,6 +673,7 @@ Widget BodyTypeQuestion({required Qstate qstate, required WidgetRef ref}) {
         ),
         onPressed: () {
           ref.read(qprovider.notifier).setBodyType(label.toLowerCase());
+          ref.read(qprovider.notifier).clearError();
         },
         child: Text(
           label,
@@ -753,6 +798,7 @@ Widget GoalQuestion({
         ),
         onPressed: () {
           ref.read(qprovider.notifier).setGoal(label.toLowerCase());
+          ref.read(qprovider.notifier).clearError();
         },
         child: Text(
           label,
@@ -820,17 +866,29 @@ Widget GoalQuestion({
               child: // Inside GoalQuestion widget
               ElevatedButton(
                 onPressed: () async {
+                  final currentQ = ref.read(qprovider);
+                  
+                  // Validate before saving
+                  if (currentQ.goal == null) {
+                    ref.read(qprovider.notifier).setError('Please select your fitness goal');
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Please select your fitness goal'),
+                        duration: Duration(seconds: 2),
+                      ),
+                    );
+                    return;
+                  }
+                  
                   // 1. Manually trigger the save
                   try {
-                    final currentQ = ref.read(qprovider);
                     await QRepo().saveProfile(
-                      age: currentQ.age!,
-                      gender: currentQ.gender!,
-                      weight: currentQ.weight!,
+                      age: currentQ.age ?? 18,
+                      gender: currentQ.gender ?? "male",
+                      weight: currentQ.weight ?? 70,
                       height: currentQ.height!,
                       bodyType: currentQ.bodyType!,
-                      goal: currentQ
-                          .goal!, // Ensure the goal is set before clicking
+                      goal: currentQ.goal!,
                     );
 
                     // 2. Mark locally
@@ -841,7 +899,7 @@ Widget GoalQuestion({
                   } catch (e) {
                     ScaffoldMessenger.of(
                       context,
-                    ).showSnackBar(SnackBar(content: Text("Error saving: $e")));
+                    ).showSnackBar(SnackBar(content: Text("Error: Please complete all fields")));
                   }
                 },
                 child: const Text("Finish"),
