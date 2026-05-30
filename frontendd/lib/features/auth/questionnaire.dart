@@ -863,46 +863,64 @@ Widget GoalQuestion({
             ),
             const SizedBox(width: 12),
             Expanded(
-              child: // Inside GoalQuestion widget
-              ElevatedButton(
+              child: ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color.fromARGB(255, 226, 46, 46),
+                  foregroundColor: Colors.white,
+                  padding: const EdgeInsets.symmetric(vertical: 14),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                ),
                 onPressed: () async {
                   final currentQ = ref.read(qprovider);
-                  
-                  // Validate before saving
+
                   if (currentQ.goal == null) {
                     ref.read(qprovider.notifier).setError('Please select your fitness goal');
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Please select your fitness goal'),
-                        duration: Duration(seconds: 2),
+                      SnackBar(
+                        content: Text(
+                          'Please select your fitness goal',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                        duration: const Duration(seconds: 2),
+                        backgroundColor: const Color.fromARGB(255, 18, 18, 18),
                       ),
                     );
                     return;
                   }
-                  
-                  // 1. Manually trigger the save
+
                   try {
                     await QRepo().saveProfile(
                       age: currentQ.age ?? 18,
-                      gender: currentQ.gender ?? "male",
+                      gender: currentQ.gender ?? 'male',
                       weight: currentQ.weight ?? 70,
                       height: currentQ.height!,
                       bodyType: currentQ.bodyType!,
                       goal: currentQ.goal!,
                     );
 
-                    // 2. Mark locally
                     await OnboardingStorage.markCompleted();
-
-                    // 3. Refresh Auth State - This is what makes HomeScreen appear
                     await ref.read(authProvider.notifier).fetchUser();
                   } catch (e) {
-                    ScaffoldMessenger.of(
-                      context,
-                    ).showSnackBar(SnackBar(content: Text("Error: Please complete all fields")));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          'Error: Please complete all fields',
+                          style: GoogleFonts.poppins(color: Colors.white),
+                        ),
+                        backgroundColor: const Color.fromARGB(255, 40, 40, 40),
+                      ),
+                    );
                   }
                 },
-                child: const Text("Finish"),
+                child: Text(
+                  'Finish',
+                  style: TextStyle(
+                    fontFamily: GoogleFonts.poppins().fontFamily,
+                    fontSize: 14,
+                  ),
+                ),
               ),
             ),
           ],

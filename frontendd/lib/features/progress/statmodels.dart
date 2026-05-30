@@ -157,7 +157,7 @@ class StatsService {
   }
 
   Future<HeatMapData> getHeatMapData(String token) async {
-    final data = await api.get('/workout/stats/', token: token);
+    final data = await api.get('/workout/stats/heatmap', token: token);
     return HeatMapData.fromJson(data as List);
   }
 }

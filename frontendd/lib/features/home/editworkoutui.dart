@@ -233,17 +233,12 @@ class EditWorkoutUI extends ConsumerWidget {
                                     SnackBar(
                                       content: Text(
                                         '${days[index]} updated to ${Workoutmapper.getDisplayName(newValue)}',
-                                        style: GoogleFonts.poppins(),
+                                        style: GoogleFonts.poppins(color: Colors.white),
                                       ),
                                       duration: const Duration(
                                         milliseconds: 1000,
                                       ),
-                                      backgroundColor: const Color.fromARGB(
-                                        255,
-                                        20,
-                                        80,
-                                        100,
-                                      ),
+                                      backgroundColor: const Color.fromARGB(255, 13, 13, 13),
                                     ),
                                   );
                                 }
