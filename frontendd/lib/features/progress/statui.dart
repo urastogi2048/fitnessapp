@@ -7,7 +7,7 @@ import 'package:frontendd/features/progress/statmodels.dart';
 import 'package:frontendd/features/progress/statprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
-
+import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 class StatsUI extends ConsumerStatefulWidget {
   const StatsUI({Key? key}) : super(key: key);
 
@@ -126,6 +126,7 @@ class _StatsUIState extends ConsumerState<StatsUI> {
     //final WeeklyDaywiseAsync = ref.watch(weeklyDaywiseProvider);
     final weeklybodypartwiseasync = ref.watch(weeklyBodyPartwiseProvider);
     final monthlyBodyPartwiseasync = ref.watch(monthlyBodyPartwiseProvider);
+    final heatmapDataasync=ref.watch(heatmapDataProvider);
 
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 27, 27, 27),
@@ -603,6 +604,75 @@ class _StatsUIState extends ConsumerState<StatsUI> {
                   ),
                 ),
                 SizedBox(height: 24),
+                Card(
+                  color: const Color.fromARGB(255, 8, 13, 30),
+                  child: Padding(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'HEATMAP',
+                              style: TextStyle(
+                                fontSize: 15,
+                                color: const Color.fromARGB(172, 0, 243, 12),
+                                fontFamily: GoogleFonts.manrope(
+                                  fontWeight: FontWeight.bold,
+                                ).fontFamily,
+                              ),
+                            ),
+                            Opacity(
+                              opacity: 0.5,
+                              child: Icon(
+                                FontAwesomeIcons.solidCalendarDays,
+                                size: 40,
+                                color: const Color.fromARGB(255, 0, 243, 12).withOpacity(0.6),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 15.0),
+                        Text(
+                          'DayWise Activity Heatmap',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.white,
+                            fontFamily: GoogleFonts.manrope().fontFamily,
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        SizedBox(
+                          height: 300,
+                          width: double.infinity,
+                          child: heatmapDataasync.when(
+                            data: (heatmapdata) => HeatMap(colorsets: {
+                              60:const Color.fromARGB(255, 0, 243, 12),
+                              120:const Color.fromARGB(255, 0, 243, 12).withOpacity(0.7),
+                              180:const Color.fromARGB(255, 0, 243, 12).withOpacity(0.5),
+                              240:const Color.fromARGB(255, 0, 243, 12
+                                  ).withOpacity(0.3),
+                              300:const Color.fromARGB(255, 0, 243, 12).withOpacity(0.1), 
+                              
+                            },
+                            datasets: {
+                              for(int i=0;i<heatmapdata.date.length;i++)
+                                heatmapdata.date[i]:heatmapdata.totalSeconds[i]
+                            }
+                              
+                            ),
+                            error: (error, stack) => Center(child: Text('Error: $error')),
+                            loading: () => const Center(child: CircularProgressIndicator()),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),

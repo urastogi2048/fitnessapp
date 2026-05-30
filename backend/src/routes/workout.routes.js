@@ -1,5 +1,5 @@
 import express from "express";
-import {logWorkout, getLast7Days, getbodypartstats, getStreak, getWeeklyDaywise, getWeeklyBodyPart, getGrowth30Day, getBodyPartDistribution } from "../controllers/workout.controller.js";
+import {logWorkout, getLast7Days, getbodypartstats, getStreak, getWeeklyDaywise, getWeeklyBodyPart, getGrowth30Day, getBodyPartDistribution, getHeatMapData } from "../controllers/workout.controller.js";
 import { protect } from "../middlewares/authmiddleware.js";
 
 const router = express.Router();
@@ -11,4 +11,5 @@ router.get("/stats/weekly-daywise", protect, getWeeklyDaywise);
 router.get("/stats/weekly-bodypart", protect, getWeeklyBodyPart);
 router.get("/stats/growth-30day", protect, getGrowth30Day);
 router.get("/stats/bodypart-distribution", protect, getBodyPartDistribution);
+router.get("/stats/heatmap", protect, getHeatMapData);
 export default router;

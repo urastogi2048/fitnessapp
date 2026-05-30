@@ -187,3 +187,40 @@ export const getBodyPartDistribution = async (req,res)=> {
     }
     
 }
+export const getHeatMapData = async (req, res) => {
+    try {
+        const user = await User.findById(req.user.id);
+
+        if (!user) {
+            return res.status(404).json({
+                message: "User not found"
+            });
+        }
+
+        const datemap = {};
+        const workouts = Array.isArray(user.workoutstat) ? user.workoutstat : [];
+
+        workouts.forEach((workout) => {
+            const date = new Date(workout.day);
+            if (isNaN(date.getTime())) return;
+            const dateStr = date.toISOString().split('T')[0];
+
+            datemap[dateStr] = (datemap[dateStr] || 0) + (Number(workout.duration) || 0);
+        });
+
+        const result = Object.entries(datemap)
+            .sort(([a], [b]) => new Date(a) - new Date(b))
+            .map(([date, totalSeconds]) => ({
+                date,
+                totalSeconds,
+                
+            }));
+
+        res.json(result);
+
+    } catch (e) {
+        res.status(500).json({
+            message: e.message
+        });
+    }
+};

@@ -109,6 +109,25 @@ class MonthlyBodyPartwise {
     );
   }
 }
+class HeatMapData{
+  List<DateTime> date;
+  List<int>totalSeconds;
+  HeatMapData({
+    required this.date,
+    required this.totalSeconds,
+
+
+  });
+  factory HeatMapData.fromJson(List<dynamic> jsonList){
+    List<DateTime> date=[];
+    List<int> totalSeconds=[];
+    for(var i in jsonList){
+      date.add(DateTime.parse(i['date']));
+      totalSeconds.add(i['totalSeconds']);
+    }
+    return HeatMapData(date: date, totalSeconds: totalSeconds);
+  }
+}
 
 class StatsService {
   final ApiService api;
@@ -135,5 +154,10 @@ class StatsService {
       token: token,
     );
     return MonthlyBodyPartwise.fromJson(data as List);
+  }
+
+  Future<HeatMapData> getHeatMapData(String token) async {
+    final data = await api.get('/workout/stats/', token: token);
+    return HeatMapData.fromJson(data as List);
   }
 }

@@ -41,3 +41,10 @@ final monthlyBodyPartwiseProvider =
       if (token == null) throw Exception('No token');
       return service.getMonthlyBodyPartwise(token);
     });
+final heatmapDataProvider= 
+    FutureProvider.autoDispose<HeatMapData>((ref) async {
+      final service=ref.read(statsServiceProvider);
+      final token=await TokenStorage.getToken();
+      if(token==null) throw Exception('No token');
+      return service.getHeatMapData(token);
+    });
