@@ -7,7 +7,6 @@ import 'package:frontendd/features/progress/statmodels.dart';
 import 'package:frontendd/features/progress/statprovider.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 class StatsUI extends ConsumerStatefulWidget {
   const StatsUI({Key? key}) : super(key: key);
 
