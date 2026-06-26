@@ -137,15 +137,23 @@ class ExerciseExecutionPage extends ConsumerWidget {
                             SizedBox(
                               width: 200.w,
                               height: 200.h,
-                              child: CircularProgressIndicator(
-                                value: progress,
-                                strokeWidth: 12.w,
-                                backgroundColor: trackColor,
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  progress > 0.3
-                                      ? const Color.fromARGB(255, 69, 188, 9)
-                                      : softAccent,
-                                ),
+                              child: TweenAnimationBuilder<double>(
+                                tween: Tween<double>(begin: 0, end: progress),
+                                duration: const Duration(milliseconds: 1000),
+                                curve: Curves.linear,
+                                builder: (BuildContext context, double value, Widget? child) {  
+                                  return  CircularProgressIndicator(
+                                  value: value,
+                                  strokeWidth: 12.w,
+                                  backgroundColor: trackColor,
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                    value > 0.3
+                                        ? const Color.fromARGB(255, 69, 188, 9)
+                                        : softAccent,
+                                  ),
+                                );
+                                },
+                              
                               ),
                             ),
                             Column(
@@ -568,13 +576,22 @@ class ExerciseExecutionPage extends ConsumerWidget {
         SizedBox(
           width: 200.w,
           height: 200.h,
-          child: CircularProgressIndicator(
-            value: progress,
-            strokeWidth: 12.w,
-            backgroundColor: trackColor,
-            valueColor: AlwaysStoppedAnimation<Color>(
-              progress > 0.3 ? const Color.fromARGB(255, 100, 220, 130) : accentGlow,
-            ),
+          child: TweenAnimationBuilder(
+            curve: Curves.fastOutSlowIn,
+            
+            tween: Tween<double>(begin: 0, end: progress),
+            duration: const Duration(milliseconds: 1000),
+            builder: (BuildContext context, double value, Widget? child) { 
+              return CircularProgressIndicator(
+              value: value,
+              strokeWidth: 12.w,
+              backgroundColor: trackColor,
+              valueColor: AlwaysStoppedAnimation<Color>(
+                value > 0.3 ? const Color.fromARGB(255, 100, 220, 130) : accentGlow,
+              ),
+            );
+             },
+            
           ),
         ),
         Column(
