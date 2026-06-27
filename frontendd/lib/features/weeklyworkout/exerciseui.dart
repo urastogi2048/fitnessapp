@@ -142,14 +142,13 @@ class ExerciseExecutionPage extends ConsumerWidget {
                                 duration: const Duration(milliseconds: 1000),
                                 curve: Curves.linear,
                                 builder: (BuildContext context, double value, Widget? child) {  
+                                  final color= Color.lerp(const Color.fromARGB(255, 242, 31, 16), const Color.fromARGB(255, 69, 188, 9), value)!;
                                   return  CircularProgressIndicator(
                                   value: value,
                                   strokeWidth: 12.w,
                                   backgroundColor: trackColor,
                                   valueColor: AlwaysStoppedAnimation<Color>(
-                                    value > 0.3
-                                        ? const Color.fromARGB(255, 69, 188, 9)
-                                        : softAccent,
+                                    color,
                                   ),
                                 );
                                 },
@@ -577,17 +576,19 @@ class ExerciseExecutionPage extends ConsumerWidget {
           width: 200.w,
           height: 200.h,
           child: TweenAnimationBuilder(
+            
             curve: Curves.fastOutSlowIn,
             
             tween: Tween<double>(begin: 0, end: progress),
             duration: const Duration(milliseconds: 1000),
-            builder: (BuildContext context, double value, Widget? child) { 
+            builder: (BuildContext context, double value, Widget? child) {
+              final color = Color.lerp(const Color.fromARGB(255, 242, 31, 16), const Color.fromARGB(255, 85, 229, 12), value)!; 
               return CircularProgressIndicator(
               value: value,
               strokeWidth: 12.w,
               backgroundColor: trackColor,
               valueColor: AlwaysStoppedAnimation<Color>(
-                value > 0.3 ? const Color.fromARGB(255, 100, 220, 130) : accentGlow,
+                color,
               ),
             );
              },
