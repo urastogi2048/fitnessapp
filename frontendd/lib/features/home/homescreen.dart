@@ -207,6 +207,12 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               borderRadius: BorderRadius.circular(12),
                               onTap: () {
                                 showDialog(
+                                  animationStyle: AnimationStyle (
+                                    duration: const Duration(milliseconds: 500),
+                                    reverseDuration: const Duration(milliseconds: 500),
+                                    curve: Curves.linear,
+                                    reverseCurve: Curves.easeInOut,
+                                  ),
                                   context: context,
                                   builder: (context) => AlertDialog(
                                     backgroundColor: const Color.fromARGB(

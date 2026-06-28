@@ -598,17 +598,23 @@ class ExerciseExecutionPage extends ConsumerWidget {
         Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
-              style: GoogleFonts.poppins(
-                color: Colors.white,
-                fontSize: 44.sp,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 0),
+              child: Text(
+                '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}',
+
+                key: ValueKey<int>(sessionState.timeRemaining),
+                style: GoogleFonts.poppins(
+                  color: Colors.white,
+                  fontSize: 44.sp,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
+                ),
               ),
             ),
             SizedBox(height: 4.h),
-            Container(
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 700),
               padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
               decoration: BoxDecoration(
                 color: sessionState.isPlaying
@@ -891,6 +897,14 @@ class ExerciseExecutionPage extends ConsumerWidget {
   ) {
     showDialog(
       context: context,
+      animationStyle: AnimationStyle (
+        duration: const Duration(milliseconds: 500),
+        reverseDuration: const Duration(milliseconds: 500),
+        curve: Curves.linear,
+        reverseCurve: Curves.easeInOut,
+
+      ),
+      
       builder: (context) => AlertDialog(
         backgroundColor: surfaceColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),

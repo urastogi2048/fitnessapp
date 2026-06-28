@@ -871,51 +871,58 @@ class _Recoveryreadinesscardstate extends ConsumerState<Recoveryreadinesscard> {
               ),
             ),
             SizedBox(height: 40.h),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                SizedBox(
-                  width: 240,
-                  height: 240,
-                  child: CircularProgressIndicator(
-                    value: overallscore! > 1
-                        ? overallscore! / 100
-                        : overallscore,
-                    strokeWidth: 18,
-                    backgroundColor: const Color.fromARGB(255, 23, 35, 68),
-                    color: statusColor,
-                    strokeCap: StrokeCap.round,
+            TweenAnimationBuilder(
+              tween: Tween<double>(
+                begin: 0,
+                end: scoreValue / 100,
+              ),
+              duration: const Duration(milliseconds: 1100),
+              curve: Curves.decelerate,
+              builder: (context, animatedValue, child) {
+                return Stack(
+                alignment: Alignment.center,
+                children: [
+                  SizedBox(
+                    width: 240,
+                    height: 240,
+                    child: CircularProgressIndicator(
+                      value: animatedValue,
+                      strokeWidth: 18,
+                      backgroundColor: const Color.fromARGB(255, 23, 35, 68),
+                      color: statusColor,
+                      strokeCap: StrokeCap.round,
+                    ),
                   ),
-                ),
-                Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      scoreValue.toStringAsFixed(1),
-                      style: TextStyle(
-                        fontSize: 72,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontFamily: GoogleFonts.poppins().fontFamily,
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                         (animatedValue * 100).toStringAsFixed(1),
+                        style: TextStyle(
+                          fontSize: 72,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontFamily: GoogleFonts.poppins().fontFamily,
+                        ),
                       ),
-                    ),
-                    Text(
-                      statusText,
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w600,
-                        color: statusColor,
-                        letterSpacing: 2,
-                        fontFamily: GoogleFonts.oswald().fontFamily,
+                      Text(
+                        statusText,
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: statusColor,
+                          letterSpacing: 2,
+                          fontFamily: GoogleFonts.oswald().fontFamily,
+                        ),
                       ),
-                    ),
-
-                    SizedBox(height: 10),
-                  ],
-                ),
-              ],
+              
+                      SizedBox(height: 10),
+                    ],
+                  ),
+                ],
+              );}, 
             ),
-            SizedBox(height: 30),
+           SizedBox(height: 30),
             if (overallscore! < 40)
               Text(
                 'Consider taking a rest day or engaging in light recovery activities.',
